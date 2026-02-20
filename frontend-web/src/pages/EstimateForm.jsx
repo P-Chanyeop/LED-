@@ -74,7 +74,7 @@ function EstimateForm() {
 
   const currentSpec = productSpecs[formData.productName]
   const labelCyan = { backgroundColor: '#25CAD2' }
-  const labelGreen = { backgroundColor: '#7CB342' }
+  const labelGreen = { backgroundColor: '#8cc63f' }
   const labelBlue = { backgroundColor: '#0071BC' }
 
   return (
@@ -204,7 +204,7 @@ function EstimateForm() {
                 <div className="form-label" style={labelGreen}>명함 촬영</div>
                 <div className="form-input file-input">
                   <input type="text" value={formData.businessCard} readOnly />
-                  <button className="camera-btn" style={{backgroundColor: '#7CB342'}}>사진찍기</button>
+                  <button className="camera-btn" style={{backgroundColor: '#8cc63f'}}>사진찍기</button>
                 </div>
               </div>
             </div>
