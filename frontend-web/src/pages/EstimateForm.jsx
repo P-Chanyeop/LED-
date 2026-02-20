@@ -11,7 +11,6 @@ function EstimateForm() {
     email: 'adcde@aaaa.co.kr',
     companyAddress: '경기도 남양주시 화도읍 재재기로 190번길 32 이지빌리지타워',
     attachment: '이지텍인터내셔널 e_브로슈어.pdf',
-    
     clientCompany: '갈더마코리아',
     clientDepartment: '영업부',
     clientManager: '홍길동',
@@ -19,20 +18,17 @@ function EstimateForm() {
     clientMobile: '010-1234-5678',
     clientEmail: 'adcde@aaaa.co.kr',
     businessCard: 'asdasd.jpg',
-    
     installDate: '2026.01.28',
     installPeriod: '2일',
-    installLocation: '안양 세마을금고',
+    installLocation: '안양 새마을금고',
     installDetailLocation: '실내 로비',
-    etcContent: '',
-    
+    etcContent: '———',
     productName: 'ETK-COB1.2',
     productSize: '600x337.5',
     pixel: '1.2 Pixel',
     brightness: '800 Nit',
     power: '75/25 W',
     resolution: '480x270 Dpi',
-    
     width: 7,
     height: 7,
     totalPanels: 49,
@@ -46,9 +42,22 @@ function EstimateForm() {
     processorQuantity: 1
   })
 
+  const productSpecs = {
+    'ETK-COB1.2': { size: '600x337.5', pixel: '1.2 Pixel', brightness: '800 Nit', power: '75/25 W', resolution: '480x270 Dpi', altPixel: '1.5 Pixel', altPower: '70/25 W', altRes: '384x216 Dpi' },
+    'ETK-COB1.5': { size: '600x337.5', pixel: '1.5 Pixel', brightness: '800 Nit', power: '70/25 W', resolution: '384x216 Dpi', altPixel: '1.2 Pixel', altPower: '75/25 W', altRes: '480x270 Dpi' }
+  }
+
   const handleChange = (field, value) => {
     setFormData(prev => {
       const newData = { ...prev, [field]: value }
+      if (field === 'productName' && productSpecs[value]) {
+        const spec = productSpecs[value]
+        newData.productSize = spec.size
+        newData.pixel = spec.pixel
+        newData.brightness = spec.brightness
+        newData.power = spec.power
+        newData.resolution = spec.resolution
+      }
       if (field === 'width' || field === 'height') {
         const w = field === 'width' ? parseInt(value) || 0 : prev.width
         const h = field === 'height' ? parseInt(value) || 0 : prev.height
@@ -63,50 +72,73 @@ function EstimateForm() {
     })
   }
 
-  const renderLabelInput = (label, value, onChange, type = 'text', options = null, readOnly = false) => (
-    <div className="form-row">
-      <div className="form-label">{label}</div>
-      <div className="form-input">
-        {options ? (
-          <select value={value} onChange={(e) => onChange(e.target.value)}>
-            {options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-          </select>
-        ) : (
-          <input 
-            type={type} 
-            value={value} 
-            onChange={(e) => onChange(e.target.value)}
-            readOnly={readOnly}
-          />
-        )}
-      </div>
-    </div>
-  )
+  const currentSpec = productSpecs[formData.productName]
+  const labelCyan = { backgroundColor: '#25CAD2' }
+  const labelGreen = { backgroundColor: '#7CB342' }
+  const labelBlue = { backgroundColor: '#0071BC' }
 
   return (
     <div className="estimate-page">
       <div className="main-content-area">
+        {/* ===== LEFT COLUMN ===== */}
         <div className="left-column">
           {/* 담당자 등록 */}
-          <div className="section-card">
+          <div className="section-card border-cyan">
             <div className="section-header cyan">
               <span>담당자 등록</span>
               <button className="reset-btn">Reset</button>
             </div>
             <div className="section-body">
-              {renderLabelInput('날짜', formData.date, (v) => handleChange('date', v), 'date')}
-              <div className="form-row-group">
-                {renderLabelInput('담당자', formData.manager, (v) => handleChange('manager', v), 'select', ['기영길', '김철수', '박영희'])}
-                {renderLabelInput('부서', formData.department, (v) => handleChange('department', v))}
+              <div className="form-row">
+                <div className="form-label" style={labelCyan}>날짜</div>
+                <div className="form-input">
+                  <input type="text" value={formData.date} onChange={(e) => handleChange('date', e.target.value)} />
+                </div>
               </div>
               <div className="form-row-group">
-                {renderLabelInput('회사 연락처', formData.companyPhone, (v) => handleChange('companyPhone', v))}
-                {renderLabelInput('핸드폰 번호', formData.mobilePhone, (v) => handleChange('mobilePhone', v))}
+                <div className="form-row">
+                  <div className="form-label" style={labelCyan}>담당자</div>
+                  <div className="form-input">
+                    <select value={formData.manager} onChange={(e) => handleChange('manager', e.target.value)}>
+                      <option>기영길</option><option>김철수</option><option>박영희</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="form-row">
+                  <div className="form-label" style={labelCyan}>부서</div>
+                  <div className="form-input">
+                    <input type="text" value={formData.department} onChange={(e) => handleChange('department', e.target.value)} />
+                  </div>
+                </div>
               </div>
-              {renderLabelInput('E-mail', formData.email, (v) => handleChange('email', v))}
-              {renderLabelInput('회사 주소', formData.companyAddress, (v) => handleChange('companyAddress', v))}
+              <div className="form-row-group">
+                <div className="form-row">
+                  <div className="form-label" style={labelCyan}>회사 연락처</div>
+                  <div className="form-input">
+                    <input type="text" value={formData.companyPhone} onChange={(e) => handleChange('companyPhone', e.target.value)} />
+                  </div>
+                </div>
+                <div className="form-row">
+                  <div className="form-label" style={labelCyan}>핸드폰 번호</div>
+                  <div className="form-input">
+                    <input type="text" value={formData.mobilePhone} onChange={(e) => handleChange('mobilePhone', e.target.value)} />
+                  </div>
+                </div>
+              </div>
+              <div className="form-row">
+                <div className="form-label" style={labelCyan}>E-mail</div>
+                <div className="form-input">
+                  <input type="text" value={formData.email} onChange={(e) => handleChange('email', e.target.value)} />
+                </div>
+              </div>
+              <div className="form-row">
+                <div className="form-label" style={labelCyan}>회사 주소</div>
+                <div className="form-input">
+                  <input type="text" value={formData.companyAddress} onChange={(e) => handleChange('companyAddress', e.target.value)} />
+                </div>
+              </div>
               <div className="form-row file-row">
-                <div className="form-label">첨부파일</div>
+                <div className="form-label" style={labelCyan}>첨부파일</div>
                 <div className="form-input file-input">
                   <input type="text" value={formData.attachment} readOnly />
                   <button className="attach-btn">첨부하기</button>
@@ -116,140 +148,260 @@ function EstimateForm() {
           </div>
 
           {/* 업체 담당자 등록 */}
-          <div className="section-card">
-            <div className="section-header lime">
+          <div className="section-card border-green">
+            <div className="section-header green">
               <span>업체 담당자 등록</span>
             </div>
             <div className="section-body">
-              {renderLabelInput('기관/업첼명', formData.clientCompany, (v) => handleChange('clientCompany', v))}
-              <div className="form-row-group">
-                {renderLabelInput('부서명', formData.clientDepartment, (v) => handleChange('clientDepartment', v))}
-                {renderLabelInput('업체 담당자', formData.clientManager, (v) => handleChange('clientManager', v))}
+              <div className="form-row">
+                <div className="form-label" style={labelGreen}>기관/업체명</div>
+                <div className="form-input">
+                  <input type="text" value={formData.clientCompany} onChange={(e) => handleChange('clientCompany', e.target.value)} />
+                </div>
               </div>
               <div className="form-row-group">
-                {renderLabelInput('회사 연락처', formData.clientPhone, (v) => handleChange('clientPhone', v))}
-                {renderLabelInput('핸드폰 번호', formData.clientMobile, (v) => handleChange('clientMobile', v))}
+                <div className="form-row">
+                  <div className="form-label" style={labelGreen}>부서명</div>
+                  <div className="form-input">
+                    <input type="text" value={formData.clientDepartment} onChange={(e) => handleChange('clientDepartment', e.target.value)} />
+                  </div>
+                </div>
+                <div className="form-row">
+                  <div className="form-label" style={labelGreen}>업체 담당자</div>
+                  <div className="form-input">
+                    <input type="text" value={formData.clientManager} onChange={(e) => handleChange('clientManager', e.target.value)} />
+                  </div>
+                </div>
               </div>
-              {renderLabelInput('E-mail', formData.clientEmail, (v) => handleChange('clientEmail', v))}
+              <div className="form-row-group">
+                <div className="form-row">
+                  <div className="form-label" style={labelGreen}>회사 연락처</div>
+                  <div className="form-input">
+                    <input type="text" value={formData.clientPhone} onChange={(e) => handleChange('clientPhone', e.target.value)} />
+                  </div>
+                </div>
+                <div className="form-row">
+                  <div className="form-label" style={labelGreen}>핸드폰 번호</div>
+                  <div className="form-input">
+                    <input type="text" value={formData.clientMobile} onChange={(e) => handleChange('clientMobile', e.target.value)} />
+                  </div>
+                </div>
+              </div>
+              <div className="form-row">
+                <div className="form-label" style={labelGreen}>E-mail</div>
+                <div className="form-input">
+                  <input type="text" value={formData.clientEmail} onChange={(e) => handleChange('clientEmail', e.target.value)} />
+                </div>
+              </div>
               <div className="form-row file-row">
-                <div className="form-label">명함 촬영</div>
+                <div className="form-label" style={labelGreen}>명함 촬영</div>
                 <div className="form-input file-input">
                   <input type="text" value={formData.businessCard} readOnly />
-                  <button className="camera-btn">사진찍기</button>
+                  <button className="camera-btn" style={{backgroundColor: '#7CB342'}}>사진찍기</button>
                 </div>
               </div>
             </div>
           </div>
 
           {/* 설치 정보 등록 */}
-          <div className="section-card">
+          <div className="section-card border-blue">
             <div className="section-header blue">
               <span>설치 정보 등록</span>
             </div>
             <div className="section-body">
               <div className="form-row-group">
-                {renderLabelInput('예상 설치일', formData.installDate, (v) => handleChange('installDate', v), 'date')}
-                {renderLabelInput('예상 설치기간', formData.installPeriod, (v) => handleChange('installPeriod', v), 'select',
-                  ['1일', '2일', '3일', '4일', '5일', '6일', '7일'])}
+                <div className="form-row">
+                  <div className="form-label" style={labelBlue}>예상 설치날짜</div>
+                  <div className="form-input">
+                    <input type="text" value={formData.installDate} onChange={(e) => handleChange('installDate', e.target.value)} />
+                  </div>
+                </div>
+                <div className="form-row">
+                  <div className="form-label" style={labelBlue}>예상 설치기간</div>
+                  <div className="form-input">
+                    <select value={formData.installPeriod} onChange={(e) => handleChange('installPeriod', e.target.value)}>
+                      {['1일','2일','3일','4일','5일','6일','7일'].map(v => <option key={v}>{v}</option>)}
+                    </select>
+                  </div>
+                </div>
               </div>
               <div className="form-row-group">
-                {renderLabelInput('설치 장소', formData.installLocation, (v) => handleChange('installLocation', v))}
-                {renderLabelInput('세부 장소', formData.installDetailLocation, (v) => handleChange('installDetailLocation', v))}
+                <div className="form-row">
+                  <div className="form-label" style={labelBlue}>설치 장소</div>
+                  <div className="form-input">
+                    <input type="text" value={formData.installLocation} onChange={(e) => handleChange('installLocation', e.target.value)} />
+                  </div>
+                </div>
+                <div className="form-row">
+                  <div className="form-label" style={labelBlue}>세부 장소</div>
+                  <div className="form-input">
+                    <input type="text" value={formData.installDetailLocation} onChange={(e) => handleChange('installDetailLocation', e.target.value)} />
+                  </div>
+                </div>
               </div>
-              {renderLabelInput('기타 내용', formData.etcContent, (v) => handleChange('etcContent', v))}
+              <div className="form-row">
+                <div className="form-label" style={labelBlue}>기타 내용</div>
+                <div className="form-input">
+                  <input type="text" value={formData.etcContent} onChange={(e) => handleChange('etcContent', e.target.value)} />
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
+
         <div className="right-column">
           {/* LED Display 제품 정보 */}
-          <div className="section-card">
+          <div className="section-card border-cyan">
             <div className="section-header cyan">
               <span>LED Display 제품 정보</span>
             </div>
             <div className="section-body">
-              {renderLabelInput('제품명', formData.productName, (v) => handleChange('productName', v), 'select',
-                ['ETK-COB1.2', 'ETK-COB1.5'])}
-              <div className="form-row-group">
-                {renderLabelInput('제품 사이즈', formData.productSize, () => {}, 'text', null, true)}
-                {renderLabelInput('픽셀', formData.pixel, () => {}, 'text', null, true)}
+              <div className="form-row">
+                <div className="form-label" style={labelCyan}>제품명</div>
+                <div className="form-input">
+                  <div style={{flex: 1, padding: '6px 10px'}}>
+                    <select value={formData.productName} onChange={(e) => handleChange('productName', e.target.value)} style={{border:'none',fontSize:'13px',outline:'none',width:'100%',background:'white'}}>
+                      <option>ETK-COB1.2</option><option>ETK-COB1.5</option>
+                    </select>
+                    <span className="sub-text">{formData.productName === 'ETK-COB1.2' ? 'ETK-COB1.5' : 'ETK-COB1.2'}</span>
+                  </div>
+                </div>
               </div>
               <div className="form-row-group">
-                {renderLabelInput('밝기', formData.brightness, () => {}, 'text', null, true)}
-                {renderLabelInput('전력', formData.power, () => {}, 'text', null, true)}
+                <div className="form-row">
+                  <div className="form-label" style={labelCyan}>제품 사이즈</div>
+                  <div className="form-input">
+                    <input type="text" value={formData.productSize} readOnly />
+                  </div>
+                </div>
+                <div className="form-row">
+                  <div className="form-label" style={labelCyan}>픽셀</div>
+                  <div className="form-input">
+                    <div style={{padding: '6px 10px'}}>
+                      {formData.pixel}
+                      {currentSpec && <span className="sub-text">{currentSpec.altPixel}</span>}
+                    </div>
+                  </div>
+                </div>
               </div>
-              {renderLabelInput('해상도', formData.resolution, () => {}, 'text', null, true)}
+              <div className="form-row-group">
+                <div className="form-row">
+                  <div className="form-label" style={labelCyan}>밝기</div>
+                  <div className="form-input">
+                    <input type="text" value={formData.brightness} readOnly />
+                  </div>
+                </div>
+                <div className="form-row">
+                  <div className="form-label" style={labelCyan}>전력</div>
+                  <div className="form-input">
+                    <div style={{padding: '6px 10px'}}>
+                      {formData.power}
+                      {currentSpec && <span className="sub-text">{currentSpec.altPower}</span>}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="form-row">
+                <div className="form-label" style={labelCyan}>해상도</div>
+                <div className="form-input">
+                  <div style={{padding: '6px 10px'}}>
+                    {formData.resolution}
+                    {currentSpec && <span className="sub-text">{currentSpec.altRes}</span>}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
           {/* LED Display 구매 수량 */}
-          <div className="section-card">
+          <div className="section-card border-cyan">
             <div className="section-header cyan">
               <span>LED Display 구매 수량</span>
             </div>
             <div className="section-body">
               <div className="form-row quantity-row">
-                <div className="form-label">수량</div>
+                <div className="form-label" style={labelCyan}>수량</div>
                 <div className="form-input quantity-input">
                   <span className="dim-label">W:</span>
                   <select value={formData.width} onChange={(e) => handleChange('width', e.target.value)}>
-                    {Array.from({length: 15}, (_, i) => i + 1).map(n => (
-                      <option key={n} value={n}>{n}</option>
-                    ))}
+                    {Array.from({length: 15}, (_, i) => i + 1).map(n => <option key={n} value={n}>{n}</option>)}
                   </select>
+                  <span className="quantity-range">1 ~ 15</span>
                   <span className="dim-label">X H:</span>
                   <select value={formData.height} onChange={(e) => handleChange('height', e.target.value)}>
-                    {Array.from({length: 15}, (_, i) => i + 1).map(n => (
-                      <option key={n} value={n}>{n}</option>
-                    ))}
+                    {Array.from({length: 15}, (_, i) => i + 1).map(n => <option key={n} value={n}>{n}</option>)}
                   </select>
+                  <span className="quantity-range">1 ~ 15</span>
                   <span className="equals">=</span>
                   <input type="text" className="result-field" value={formData.totalPanels} readOnly />
                   <span className="unit">EA</span>
                 </div>
               </div>
+              <div className="form-row">
+                <div className="form-label" style={labelCyan}>LED 사이즈</div>
+                <div className="split-input">
+                  <input type="text" value={formData.ledSizeW} readOnly />
+                  <span className="x-mark">X</span>
+                  <input type="text" value={formData.ledSizeH} readOnly />
+                </div>
+              </div>
+              <div className="form-row">
+                <div className="form-label" style={labelCyan}>LED 해상도</div>
+                <div className="split-input">
+                  <input type="text" value={formData.ledResW} readOnly />
+                  <span className="x-mark">X</span>
+                  <input type="text" value={formData.ledResH} readOnly />
+                </div>
+              </div>
               <div className="form-row-group">
                 <div className="form-row">
-                  <div className="form-label">LED 사이즈</div>
-                  <div className="form-input split-input">
-                    <input type="text" value={formData.ledSizeW} readOnly />
-                    <span className="x-mark">X</span>
-                    <input type="text" value={formData.ledSizeH} readOnly />
+                  <div className="form-label" style={labelCyan}>전체 전력</div>
+                  <div className="form-input">
+                    <input type="text" value={formData.totalPower + ' Kw'} readOnly />
+                  </div>
+                </div>
+                <div className="form-row">
+                  <div className="form-label" style={labelCyan}>설치인원</div>
+                  <div className="form-input">
+                    <select value={formData.installPersonnel} onChange={(e) => handleChange('installPersonnel', e.target.value)}>
+                      {[1,2,3,4,5,6,7,8,9,10].map(n => <option key={n} value={n}>{n}명</option>)}
+                    </select>
                   </div>
                 </div>
               </div>
               <div className="form-row-group">
                 <div className="form-row">
-                  <div className="form-label">LED 해상도</div>
-                  <div className="form-input split-input">
-                    <input type="text" value={formData.ledResW} readOnly />
-                    <span className="x-mark">X</span>
-                    <input type="text" value={formData.ledResH} readOnly />
+                  <div className="form-label" style={labelCyan}>프로세스 사양</div>
+                  <div className="form-input">
+                    <select value={formData.processorModel} onChange={(e) => handleChange('processorModel', e.target.value)}>
+                      <option>VX400</option><option>VX600</option><option>VX600 Pro</option><option>VX1000</option><option>VX2000</option>
+                    </select>
                   </div>
                 </div>
-              </div>
-              <div className="form-row-group">
-                {renderLabelInput('전체 전력', formData.totalPower + ' Kw', () => {}, 'text', null, true)}
-                {renderLabelInput('설치인원', formData.installPersonnel, (v) => handleChange('installPersonnel', v), 'select',
-                  [1,2,3,4,5,6,7,8,9,10])}
-              </div>
-              <div className="form-row-group">
-                {renderLabelInput('프로세스 사양', formData.processorModel, (v) => handleChange('processorModel', v), 'select',
-                  ['VX400', 'VX600', 'VX1000', 'VX2000'])}
-                {renderLabelInput('수량', formData.processorQuantity, (v) => handleChange('processorQuantity', v), 'select',
-                  [1,2,3,4,5,6,7,8,9,10])}
+                <div className="form-row">
+                  <div className="form-label" style={labelCyan}>수량</div>
+                  <div className="form-input">
+                    <select value={formData.processorQuantity} onChange={(e) => handleChange('processorQuantity', e.target.value)}>
+                      {[1,2,3,4,5,6,7,8,9,10].map(n => <option key={n} value={n}>{n}</option>)}
+                    </select>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
           {/* LED Display 예상도 */}
-          <div className="section-card">
+          <div className="section-card border-cyan">
             <div className="section-header cyan">
               <span>LED Display 예상도</span>
             </div>
             <div className="section-body preview-body">
-              <div className="led-preview-container">
-                <div className="led-dimension-v">{formData.ledSizeH}mm</div>
+              <div className="led-preview-border">
+                <div className="led-dimension-v">
+                  <div className="led-dimension-v-line"></div>
+                  <div className="led-dimension-v-text">{formData.ledSizeH}mm</div>
+                </div>
                 <div className="led-grid-wrapper">
                   <div className="led-grid" style={{
                     gridTemplateColumns: `repeat(${formData.width}, 1fr)`,
@@ -259,7 +411,10 @@ function EstimateForm() {
                       <div key={i} className="led-panel"></div>
                     ))}
                   </div>
-                  <div className="led-dimension-h">{formData.ledSizeW}mm</div>
+                  <div className="led-dimension-h">
+                    <div className="led-dimension-h-line"></div>
+                    <div className="led-dimension-h-text">{formData.ledSizeW}mm</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -268,7 +423,7 @@ function EstimateForm() {
       </div>
 
       <div className="bottom-actions">
-        <button className="btn-view-saved">저장 내용 보기</button>
+        <button className="btn-view-saved">전체 내용 보기</button>
         <button className="btn-view-quote">견적서 보기</button>
       </div>
     </div>
