@@ -278,7 +278,7 @@ function EstimateForm() {
                 <div className="form-row">
                   <div className="form-label" style={labelCyan}>픽셀</div>
                   <div className="form-input">
-                    <div style={{padding: '6px 10px'}}>
+                    <div style={{padding: '6px 10px', background: '#f5f5f5', borderRadius: '4px', width: '100%'}}>
                       {formData.pixel}
                     </div>
                   </div>
@@ -294,7 +294,7 @@ function EstimateForm() {
                 <div className="form-row">
                   <div className="form-label" style={labelCyan}>전력</div>
                   <div className="form-input">
-                    <div style={{padding: '6px 10px'}}>
+                    <div style={{padding: '6px 10px', background: '#f5f5f5', borderRadius: '4px', width: '100%'}}>
                       {formData.power}
                     </div>
                   </div>
@@ -303,7 +303,7 @@ function EstimateForm() {
               <div className="form-row">
                 <div className="form-label" style={labelCyan}>해상도</div>
                 <div className="form-input">
-                  <div style={{padding: '6px 10px'}}>
+                  <div style={{padding: '6px 10px', background: '#f5f5f5', borderRadius: '4px', width: '100%'}}>
                     {formData.resolution}
                   </div>
                 </div>

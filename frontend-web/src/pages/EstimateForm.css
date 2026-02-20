@@ -1,6 +1,6 @@
 /* ============================================
    LED Estimate Form - Matching Design Mockup
-   Mint: #25CAD2, Green: #7CB342, Blue: #0071BC
+   Mint: #25CAD2, Green: #8cc63f, Blue: #0071BC
    Background: WHITE
    Each section: individual colored rounded border
    ============================================ */
@@ -47,7 +47,7 @@
 }
 
 .section-card.border-cyan { border: 2px solid #25CAD2; }
-.section-card.border-green { border: 2px solid #7CB342; }
+.section-card.border-green { border: 2px solid #8cc63f; }
 .section-card.border-blue { border: 2px solid #0071BC; }
 
 /* Section Headers */
@@ -62,7 +62,7 @@
 }
 
 .section-header.cyan { background-color: #25CAD2; }
-.section-header.green { background-color: #7CB342; }
+.section-header.green { background-color: #8cc63f; }
 .section-header.blue { background-color: #0071BC; }
 
 .reset-btn {
@@ -139,8 +139,25 @@
   border-radius: 4px;
 }
 
-.form-input select { cursor: pointer; appearance: auto; }
-.form-input input[readonly] { background: white; color: #333; }
+.form-input input[type="date"] {
+  cursor: pointer;
+}
+
+.form-input input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: invert(0);
+}
+
+.form-input select { 
+  cursor: pointer; 
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2325CAD2' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 30px;
+}
+
+.form-input input[readonly] { background: #f5f5f5; color: #333; }
 
 /* Sub text (pink/magenta) */
 .sub-text {
@@ -183,7 +200,7 @@
 }
 
 .attach-btn { background-color: #25CAD2; }
-.camera-btn { background-color: #7CB342; }
+.camera-btn { background-color: #8cc63f; }
 .attach-btn:hover, .camera-btn:hover { opacity: 0.85; }
 
 /* Quantity Row */
@@ -234,7 +251,7 @@
 .split-input input {
   flex: 1;
   border: 1px solid #ddd !important;
-  text-align: center;
+  text-align: left;
   background: #fafafa;
   padding: 5px;
   font-size: 14px;
@@ -374,8 +391,8 @@
   border-radius: 5px;
 }
 
-.btn-view-saved { background-color: #7CB342; color: white; }
-.btn-view-saved:hover { background-color: #6da236; }
+.btn-view-saved { background-color: #8cc63f; color: white; }
+.btn-view-saved:hover { background-color: #7ab52f; }
 .btn-view-quote { background-color: #25CAD2; color: white; }
 .btn-view-quote:hover { background-color: #1fb8c0; }
 
