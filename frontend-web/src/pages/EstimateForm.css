@@ -14,17 +14,21 @@
 
 .main-content-area {
   flex: 1;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
   gap: 24px;
   padding: 16px 24px;
+  align-items: stretch;
 }
 
 .left-column,
 .right-column {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 24px;
+  border: 2px solid #25CAD2;
+  border-radius: 12px;
+  padding: 14px;
 }
 
 /* Section Card - each has its own colored rounded border */
@@ -233,67 +237,67 @@
 }
 
 .led-preview-border {
-  border: 1px solid #25CAD2;
-  border-radius: 8px;
   padding: 20px;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
   width: 100%;
   min-height: 260px;
+}
+
+.led-preview-layout {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
 }
 
 .led-preview-container { display: flex; align-items: flex-end; position: relative; }
 
 .led-dimension-v {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-right: 6px;
-  height: 100%;
+  align-items: stretch;
+  width: 20px;
 }
 
 .led-dimension-v-line {
   width: 1px;
-  background: #333;
-  flex: 1;
+  background: #25CAD2;
   position: relative;
-  min-height: 50px;
+  margin: 0 auto;
+  min-height: 100%;
 }
 
 .led-dimension-v-line::before,
 .led-dimension-v-line::after {
   content: '';
   position: absolute;
-  left: -3px;
-  width: 7px;
+  left: -4px;
+  width: 9px;
   height: 1px;
-  background: #333;
+  background: #25CAD2;
 }
 
 .led-dimension-v-line::before { top: 0; }
 .led-dimension-v-line::after { bottom: 0; }
 
 .led-dimension-v-text {
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-  transform: rotate(180deg);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) rotate(-90deg);
   background: #25CAD2;
   color: white;
-  padding: 6px 3px;
+  padding: 2px 8px;
   font-size: 11px;
   white-space: nowrap;
+  border-radius: 3px;
 }
 
 .led-grid-wrapper { display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .led-grid { display: grid; gap: 2px; background: #333; padding: 3px; }
-.led-panel { width: 32px; height: 32px; background: #1a1a2e; }
+.led-panel { width: 40px; height: 28px; background: #1a1a2e; }
 
 .led-dimension-h {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   width: 100%;
   padding-top: 8px;
 }
@@ -301,18 +305,21 @@
 .led-dimension-h-line {
   width: 100%;
   height: 1px;
-  background: #333;
+  background: #25CAD2;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .led-dimension-h-line::before,
 .led-dimension-h-line::after {
   content: '';
   position: absolute;
-  top: -3px;
+  top: -4px;
   width: 1px;
-  height: 7px;
-  background: #333;
+  height: 9px;
+  background: #25CAD2;
 }
 
 .led-dimension-h-line::before { left: 0; }
@@ -321,10 +328,14 @@
 .led-dimension-h-text {
   background: #25CAD2;
   color: white;
-  padding: 3px 10px;
+  padding: 2px 10px;
   font-size: 11px;
   white-space: nowrap;
-  margin-top: 4px;
+  border-radius: 3px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 /* Bottom Actions */
@@ -354,7 +365,7 @@
 
 /* Responsive */
 @media (max-width: 1200px) {
-  .main-content-area { grid-template-columns: 1fr; gap: 12px; padding: 12px; }
+  .main-content-area { flex-direction: column; gap: 12px; padding: 12px; }
   .form-row-group { grid-template-columns: 1fr; }
 }
 

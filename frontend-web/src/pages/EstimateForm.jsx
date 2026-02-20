@@ -398,22 +398,26 @@ function EstimateForm() {
             </div>
             <div className="section-body preview-body">
               <div className="led-preview-border">
-                <div className="led-dimension-v">
-                  <div className="led-dimension-v-line"></div>
-                  <div className="led-dimension-v-text">{formData.ledSizeH}mm</div>
-                </div>
-                <div className="led-grid-wrapper">
-                  <div className="led-grid" style={{
-                    gridTemplateColumns: `repeat(${formData.width}, 1fr)`,
-                    gridTemplateRows: `repeat(${formData.height}, 1fr)`
-                  }}>
-                    {Array.from({length: formData.totalPanels}).map((_, i) => (
-                      <div key={i} className="led-panel"></div>
-                    ))}
+                <div className="led-preview-layout">
+                  <div className="led-dimension-v">
+                    <div className="led-dimension-v-line">
+                      <span className="led-dimension-v-text">{formData.ledSizeH}mm</span>
+                    </div>
                   </div>
-                  <div className="led-dimension-h">
-                    <div className="led-dimension-h-line"></div>
-                    <div className="led-dimension-h-text">{formData.ledSizeW}mm</div>
+                  <div className="led-grid-wrapper">
+                    <div className="led-grid" style={{
+                      gridTemplateColumns: `repeat(${formData.width}, 1fr)`,
+                      gridTemplateRows: `repeat(${formData.height}, 1fr)`
+                    }}>
+                      {Array.from({length: formData.totalPanels}).map((_, i) => (
+                        <div key={i} className="led-panel"></div>
+                      ))}
+                    </div>
+                    <div className="led-dimension-h">
+                      <div className="led-dimension-h-line">
+                        <span className="led-dimension-h-text">{formData.ledSizeW}mm</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
