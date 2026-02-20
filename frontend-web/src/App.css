@@ -10,7 +10,7 @@
 }
 
 body {
-  font-family: 'Malgun Gothic', '맑은 고딕', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+  font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
   background-color: #e8e8e8;
   color: #333;
   line-height: 1.4;
@@ -42,12 +42,36 @@ body {
 .logo-area {
   display: flex;
   align-items: center;
-  gap: 0;
+  gap: 8px;
 }
 
-.logo-area img {
-  height: 36px;
-  object-fit: contain;
+.logo-icon {
+  width: 32px;
+  height: 32px;
+}
+
+.logo-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.logo-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.logo-sub {
+  font-size: 9px;
+  color: rgba(255,255,255,0.85);
+  letter-spacing: 1px;
+  font-weight: 400;
+}
+
+.logo-main {
+  font-size: 16px;
+  color: white;
+  font-weight: 700;
+  letter-spacing: 1.5px;
 }
 
 /* Header Navigation */
@@ -57,23 +81,23 @@ body {
 }
 
 .header-nav a {
-  color: rgba(255, 255, 255, 0.9);
+  color: #333;
   text-decoration: none;
   padding: 6px 14px;
   border-radius: 4px;
   font-size: 12px;
   font-weight: 500;
   transition: all 0.2s;
-  background: rgba(255, 255, 255, 0.15);
+  background: #f0f0f0;
 }
 
 .header-nav a:hover {
-  background: rgba(255, 255, 255, 0.25);
-  color: white;
+  background: #e0e0e0;
+  color: #333;
 }
 
 .header-nav a.active {
-  background: rgba(255, 255, 255, 0.3);
+  background: #25CAD2;
   color: white;
   font-weight: 600;
 }

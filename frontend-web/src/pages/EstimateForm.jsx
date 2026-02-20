@@ -249,6 +249,7 @@ function EstimateForm() {
           </div>
         </div>
 
+        <div className="center-divider"></div>
 
         <div className="right-column">
           {/* LED Display 제품 정보 */}
