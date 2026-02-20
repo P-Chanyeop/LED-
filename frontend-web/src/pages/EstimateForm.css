@@ -16,7 +16,7 @@
   flex: 1;
   display: flex;
   gap: 0;
-  padding: 16px 16px;
+  padding: 40px 16px;
   align-items: stretch;
 }
 
@@ -66,16 +66,16 @@
 .section-header.blue { background-color: #0071BC; }
 
 .reset-btn {
-  background: rgba(255,255,255,0.3);
-  border: 1px solid rgba(255,255,255,0.6);
-  color: white;
+  background: white;
+  border: 1px solid #25CAD2;
+  color: #25CAD2;
   padding: 3px 12px;
   border-radius: 3px;
   cursor: pointer;
   font-size: 12px;
 }
 
-.reset-btn:hover { background: rgba(255,255,255,0.4); }
+.reset-btn:hover { background: #f0f0f0; }
 
 /* Section Body */
 .section-body {
@@ -90,6 +90,7 @@
   display: flex;
   min-height: 34px;
   height: 34px;
+  gap: 8px;
 }
 
 .form-row-group {
@@ -128,13 +129,14 @@
 .form-input select {
   flex: 1;
   padding: 8px 10px;
-  border: none;
+  border: 1px solid #ddd;
   font-size: 14px;
   background: white;
   outline: none;
   color: #333;
   height: 100%;
   font-weight: 300;
+  border-radius: 4px;
 }
 
 .form-input select { cursor: pointer; appearance: auto; }

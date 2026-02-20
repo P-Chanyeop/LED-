@@ -265,7 +265,6 @@ function EstimateForm() {
                     <select value={formData.productName} onChange={(e) => handleChange('productName', e.target.value)} style={{border:'none',fontSize:'13px',outline:'none',width:'100%',background:'white'}}>
                       <option>ETK-COB1.2</option><option>ETK-COB1.5</option>
                     </select>
-                    <span className="sub-text">{formData.productName === 'ETK-COB1.2' ? 'ETK-COB1.5' : 'ETK-COB1.2'}</span>
                   </div>
                 </div>
               </div>
@@ -281,7 +280,6 @@ function EstimateForm() {
                   <div className="form-input">
                     <div style={{padding: '6px 10px'}}>
                       {formData.pixel}
-                      {currentSpec && <span className="sub-text">{currentSpec.altPixel}</span>}
                     </div>
                   </div>
                 </div>
@@ -298,7 +296,6 @@ function EstimateForm() {
                   <div className="form-input">
                     <div style={{padding: '6px 10px'}}>
                       {formData.power}
-                      {currentSpec && <span className="sub-text">{currentSpec.altPower}</span>}
                     </div>
                   </div>
                 </div>
@@ -308,7 +305,6 @@ function EstimateForm() {
                 <div className="form-input">
                   <div style={{padding: '6px 10px'}}>
                     {formData.resolution}
-                    {currentSpec && <span className="sub-text">{currentSpec.altRes}</span>}
                   </div>
                 </div>
               </div>
