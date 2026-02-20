@@ -91,7 +91,7 @@ function EstimateForm() {
             <div className="section-body">
               <div className="form-row">
                 <div className="form-label" style={labelCyan}>날짜</div>
-                <div className="form-input" style={{position: 'relative'}}>
+                <div className="form-input" style={{position: 'relative', maxWidth: '37.2%'}}>
                   <input type="text" value={formData.date} onChange={(e) => handleChange('date', e.target.value)} style={{paddingRight: '35px'}} />
                   <input type="date" onChange={(e) => handleChange('date', e.target.value.replace(/-/g, '.'))} style={{position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', width: '20px', height: '20px', opacity: 0, cursor: 'pointer'}} />
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none'}}>
@@ -267,12 +267,10 @@ function EstimateForm() {
             <div className="section-body">
               <div className="form-row">
                 <div className="form-label" style={labelCyan}>제품명</div>
-                <div className="form-input">
-                  <div style={{flex: 1, padding: '6px 10px'}}>
-                    <select value={formData.productName} onChange={(e) => handleChange('productName', e.target.value)} style={{border:'none',fontSize:'13px',outline:'none',width:'100%',background:'white'}}>
-                      <option>ETK-COB1.2</option><option>ETK-COB1.5</option>
-                    </select>
-                  </div>
+                <div className="form-input" style={{maxWidth: '37.2%'}}>
+                  <select value={formData.productName} onChange={(e) => handleChange('productName', e.target.value)}>
+                    <option>ETK-COB1.2</option><option>ETK-COB1.5</option>
+                  </select>
                 </div>
               </div>
               <div className="form-row-group">
@@ -309,7 +307,7 @@ function EstimateForm() {
               </div>
               <div className="form-row">
                 <div className="form-label" style={labelCyan}>해상도</div>
-                <div className="form-input">
+                <div className="form-input" style={{maxWidth: '37.2%'}}>
                   <div style={{padding: '6px 10px', background: '#f5f5f5', borderRadius: '4px', width: '100%'}}>
                     {formData.resolution}
                   </div>
