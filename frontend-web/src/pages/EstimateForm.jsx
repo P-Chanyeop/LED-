@@ -1,875 +1,983 @@
-import { useState } from 'react'
-import { createPortal } from 'react-dom'
+import {useState} from 'react'
+import {createPortal} from 'react-dom'
 import './EstimateForm.css'
 import modalLogoImg from '../assets/modal-logo2.png'
 import modalLogoImg1 from '../assets/modal-logo.png'
 import printIconImg from '../assets/print-icon.png'
 
-function QuoteModal({ formData, onClose }) {
-  const unitPrice = 950000
-  const sqmPrice = 4691358
-  const ledQty = formData.totalPanels
-  const ledSqm = Math.round((formData.ledSizeW * formData.ledSizeH) / 1000000 * 100) / 100
-  const ledTotal = unitPrice * ledQty
-  const processorPrice = 3000000
-  const laborPrice = 300000
-  const etcPrice = 100000
-  const laborQty = formData.installPersonnel
-  const sub1 = ledTotal
-  const sub2 = processorPrice
-  const sub3 = laborPrice * laborQty
-  const sub4 = etcPrice * 2
-  const grandTotal = sub1 + sub2 + sub3 + sub4
-  const addCost = 2200000
+function QuoteModal({formData, onClose}) {
+    const unitPrice = 950000
+    const sqmPrice = 4691358
+    const ledQty = formData.totalPanels
+    const ledSqm = Math.round((formData.ledSizeW * formData.ledSizeH) / 1000000 * 100) / 100
+    const ledTotal = unitPrice * ledQty
+    const processorPrice = 3000000
+    const laborPrice = 300000
+    const etcPrice = 100000
+    const laborQty = formData.installPersonnel
+    const sub1 = ledTotal
+    const sub2 = processorPrice
+    const sub3 = laborPrice * laborQty
+    const sub4 = etcPrice * 2
+    const grandTotal = sub1 + sub2 + sub3 + sub4
+    const addCost = 2200000
 
-  const fmt = (n) => n.toLocaleString()
+    const fmt = (n) => n.toLocaleString()
 
-  return createPortal(
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="quote-wrapper" onClick={e => e.stopPropagation()}>
-        <div className="quote-outer">
-        {/* 헤더 */}
-        <div className="quote-header">
-          <button className="modal-print-btn" title="인쇄하기" style={{flexShrink:0}}>
-            <img src={printIconImg} alt="인쇄하기" style={{height:'44px'}} />
-          </button>
-          <div className="quote-title-text">견 적 서</div>
-          <div className="quote-header-logo">
-            <img src={modalLogoImg1} alt="logo" style={{height:'56px', imageRendering:'crisp-edges'}} />
-          </div>
-        </div>
+    return createPortal(
+        <div className="modal-overlay" onClick={onClose}>
+            <div className="quote-wrapper" onClick={e => e.stopPropagation()}>
+                <div className="quote-outer">
+                    {/* 헤더 */}
+                    <div className="quote-header">
+                        <button className="modal-print-btn" title="인쇄하기" style={{flexShrink: 0}}>
+                            <img src={printIconImg} alt="인쇄하기" style={{height: '44px'}}/>
+                        </button>
+                        <div className="quote-title-text">견 적 서</div>
+                        <div className="quote-header-logo">
+                            <img src={modalLogoImg1} alt="logo"
+                                 style={{height: '56px', imageRendering: 'crisp-edges'}}/>
+                        </div>
+                    </div>
 
-        <div className="quote-date">DATE : {formData.date}</div>
+                    <div className="quote-date">DATE : {formData.date}</div>
 
-        {/* 판매 견적서 타이틀바 */}
-        <div className="quote-section-title">판매 견적서</div>
+                    {/* 판매 견적서 타이틀바 */}
+                    <div className="section">
+                        <div className="quote-section-title">판매 견적서</div>
 
-        {/* 업체 정보 */}
-        <table className="quote-client-table">
-          <tbody>
-            <tr>
-              <td className="qct-label">기관/업체명</td>
-              <td className="qct-value" colSpan={3}>{formData.clientCompany}</td>
-            </tr>
-            <tr>
-              <td className="qct-label">부서명</td>
-              <td className="qct-value">{formData.clientDepartment}</td>
-              <td className="qct-label">업체 담당자</td>
-              <td className="qct-value">{formData.clientManager}</td>
-            </tr>
-            <tr>
-              <td className="qct-label">회사 연락처</td>
-              <td className="qct-value">{formData.clientPhone}</td>
-              <td className="qct-label">핸드폰 번호</td>
-              <td className="qct-value">{formData.clientMobile}</td>
-            </tr>
-          </tbody>
-        </table>
+                        {/* 업체 정보 */}
+                        <table className="quote-client-table">
+                            <tbody>
+                            <tr>
+                                <td className="qct-label">기관/업체명</td>
+                                <td className="qct-value" colSpan={3}>{formData.clientCompany}</td>
+                            </tr>
+                            <tr>
+                                <td className="qct-label">부서명</td>
+                                <td className="qct-value">{formData.clientDepartment}</td>
+                                <td className="qct-label">업체 담당자</td>
+                                <td className="qct-value">{formData.clientManager}</td>
+                            </tr>
+                            <tr>
+                                <td className="qct-label">회사 연락처</td>
+                                <td className="qct-value">{formData.clientPhone}</td>
+                                <td className="qct-label">핸드폰 번호</td>
+                                <td className="qct-value">{formData.clientMobile}</td>
+                            </tr>
+                            </tbody>
+                        </table>
 
-        <div className="quote-divider"></div>
+                        <div className="quote-divider"></div>
+                        {/* 상품 테이블 */}
+                        <table className="quote-items-table">
+                            <thead>
+                            <tr>
+                                <th>순번</th>
+                                <th>품명</th>
+                                <th>규격</th>
+                                <th>수량</th>
+                                <th>단가</th>
+                                <th>가격</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {/* 1. LED */}
+                            <tr style={{borderTop: 'none'}}>
+                                <td rowSpan={2} className="qi-center">1</td>
+                                <td rowSpan={2} className="qi-product">
+                                    <div className="qi-product-inner">
+                                        <div className="qi-product-img">ETK</div>
+                                        <div>{formData.productName}</div>
+                                    </div>
+                                </td>
+                                <td>{formData.productSize}</td>
+                                <td className="qi-center">{ledQty}</td>
+                                <td className="qi-right">₩ {fmt(unitPrice)}</td>
+                                <td className="qi-right" rowSpan={2}>₩ {fmt(ledTotal)}</td>
+                            </tr>
+                            <tr>
+                                <td>sqm</td>
+                                <td className="qi-center">{ledSqm}</td>
+                                <td className="qi-right">₩ {fmt(sqmPrice)}</td>
+                            </tr>
+                            <tr className="qi-subtotal">
+                                <td colSpan={5} className="qi-center">소계</td>
+                                <td className="qi-right">₩ {fmt(sub1)}</td>
+                            </tr>
+                            {/* 2. 프로세서 */}
+                            <tr>
+                                <td className="qi-center">2</td>
+                                <td className="qi-product">
+                                    <div className="qi-product-inner">
+                                        <div className="qi-product-img qi-proc-img"></div>
+                                        <div>{formData.processorModel}</div>
+                                    </div>
+                                </td>
+                                <td>—</td>
+                                <td className="qi-center">{formData.processorQuantity}</td>
+                                <td className="qi-right">₩ {fmt(processorPrice)}</td>
+                                <td className="qi-right">₩ {fmt(sub2)}</td>
+                            </tr>
+                            <tr className="qi-subtotal">
+                                <td colSpan={5} className="qi-center">소계</td>
+                                <td className="qi-right">₩ {fmt(sub2)}</td>
+                            </tr>
+                            {/* 3. 시공 인건비 */}
+                            <tr>
+                                <td className="qi-center">3</td>
+                                <td className="qi-product">시공 인건비</td>
+                                <td>인</td>
+                                <td className="qi-center">{laborQty}</td>
+                                <td className="qi-right">₩ {fmt(laborPrice)}</td>
+                                <td className="qi-right">₩ {fmt(sub3)}</td>
+                            </tr>
+                            <tr className="qi-subtotal">
+                                <td colSpan={5} className="qi-center">소계</td>
+                                <td className="qi-right">₩ {fmt(sub3)}</td>
+                            </tr>
+                            {/* 4. 기타 비용 */}
+                            <tr>
+                                <td className="qi-center">4</td>
+                                <td className="qi-product">기타 비용</td>
+                                <td>—</td>
+                                <td className="qi-center">2</td>
+                                <td className="qi-right">₩ {fmt(etcPrice)}</td>
+                                <td className="qi-right">₩ {fmt(sub4)}</td>
+                            </tr>
+                            <tr className="qi-subtotal">
+                                <td colSpan={5} className="qi-center">소계</td>
+                                <td className="qi-right">₩ {fmt(sub4)}</td>
+                            </tr>
+                            </tbody>
+                        </table>
 
-        {/* 상품 테이블 */}
-        <table className="quote-items-table">
-          <thead>
-            <tr>
-              <th>순번</th>
-              <th>품명</th>
-              <th>규격</th>
-              <th>단위</th>
-              <th>수량</th>
-              <th>단가</th>
-              <th>가격</th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* 1. LED */}
-            <tr>
-              <td rowSpan={2} className="qi-center">1</td>
-              <td rowSpan={2} className="qi-product">
-                <div className="qi-product-img">ETK</div>
-                <div>{formData.productName}</div>
-              </td>
-              <td className="qi-center">EA</td>
-              <td>{formData.productSize}</td>
-              <td className="qi-center">{ledQty}</td>
-              <td className="qi-right">W {fmt(unitPrice)}</td>
-              <td className="qi-right" rowSpan={2}>W {fmt(ledTotal)}</td>
-            </tr>
-            <tr>
-              <td>sqm</td>
-              <td className="qi-center">{ledSqm}</td>
-              <td className="qi-right">W {fmt(sqmPrice)}</td>
-            </tr>
-            <tr className="qi-subtotal">
-              <td colSpan={6} className="qi-center">소계</td>
-              <td className="qi-right">W {fmt(sub1)}</td>
-            </tr>
-            {/* 2. 프로세서 */}
-            <tr>
-              <td className="qi-center">2</td>
-              <td className="qi-product">
-                <div className="qi-product-img qi-proc-img"></div>
-                <div>{formData.processorModel}</div>
-              </td>
-              <td>—</td>
-              <td className="qi-center">{formData.processorQuantity}</td>
-              <td className="qi-right">W {fmt(processorPrice)}</td>
-              <td className="qi-right">W {fmt(sub2)}</td>
-            </tr>
-            <tr className="qi-subtotal">
-              <td colSpan={6} className="qi-center">소계</td>
-              <td className="qi-right">W {fmt(sub2)}</td>
-            </tr>
-            {/* 3. 시공 인건비 */}
-            <tr>
-              <td className="qi-center">3</td>
-              <td className="qi-product">시공 인건비</td>
-              <td>인</td>
-              <td className="qi-center">{laborQty}</td>
-              <td className="qi-right">W {fmt(laborPrice)}</td>
-              <td className="qi-right">W {fmt(sub3)}</td>
-            </tr>
-            <tr className="qi-subtotal">
-              <td colSpan={6} className="qi-center">소계</td>
-              <td className="qi-right">W {fmt(sub3)}</td>
-            </tr>
-            {/* 4. 기타 비용 */}
-            <tr>
-              <td className="qi-center">4</td>
-              <td className="qi-product">기타 비용</td>
-              <td>—</td>
-              <td className="qi-center">2</td>
-              <td className="qi-right">W {fmt(etcPrice)}</td>
-              <td className="qi-right">W {fmt(sub4)}</td>
-            </tr>
-            <tr className="qi-subtotal">
-              <td colSpan={6} className="qi-center">소계</td>
-              <td className="qi-right">W {fmt(sub4)}</td>
-            </tr>
-          </tbody>
-        </table>
+                        <div className="quote-note">*설치 구조물 / UTP케이블 작업 / 전기 공사 비용은 현장실측 이후 측정 합니다.</div>
 
-        <div className="quote-note">*설치 구조물 / UTP케이블 작업 / 전기 공사 비용은 현장실측 이후 측정 합니다.</div>
+                        {/* 합계 */}
+                        <table className="quote-total-table">
+                            <tbody>
+                            <tr className="qt-mint-row">
+                                <td className="qt-label">판매</td>
+                                <td className="qt-desc">LED 디스플레이 판매가 (1+2)</td>
+                                <td className="qt-amount"><span className="qt-won">₩</span><span
+                                    className="qt-num">{fmt(sub1 + sub2)}</span></td>
+                            </tr>
+                            <tr className="qt-green-row">
+                                <td className="qt-label">추가</td>
+                                <td className="qt-desc">시공비 + 기타 비용</td>
+                                <td className="qt-amount"><span className="qt-won">₩</span><span
+                                    className="qt-num">{fmt(addCost)}</span></td>
+                            </tr>
+                            <tr className="qt-grand">
+                                <td colSpan={2} className="qt-grand-label">합 계</td>
+                                <td className="qt-amount"><span className="qt-won">₩</span><span
+                                    className="qt-num">{fmt(sub1 + sub2)}</span></td>
+                            </tr>
+                            </tbody>
+                        </table>
 
-        {/* 합계 */}
-        <table className="quote-total-table">
-          <tbody>
-            <tr className="qt-mint-row">
-              <td className="qt-label">판매</td>
-              <td className="qt-desc">LED 디스플레이 판매가 (1+2)</td>
-              <td className="qt-val">W</td>
-              <td className="qt-amount">{fmt(sub1 + sub2)}</td>
-            </tr>
-            <tr className="qt-green-row">
-              <td className="qt-label">추가</td>
-              <td className="qt-desc">시공비 + 기타 비용</td>
-              <td className="qt-val">W</td>
-              <td className="qt-amount">{fmt(addCost)}</td>
-            </tr>
-            <tr className="qt-grand">
-              <td colSpan={2} className="qt-grand-label">합 계</td>
-              <td className="qt-val">W</td>
-              <td className="qt-amount">{fmt(sub1 + sub2)}</td>
-            </tr>
-          </tbody>
-        </table>
+                        {/* 약관 + 도장 */}
+                        <div className="quote-terms">
+                            <div className="quote-terms-text">
+                                <p className="qt-bold">◎ 견적조건</p>
+                                <p>1. 견적서 발행 후 추가 사항(제품, 인원 증가 및 현장 여건 변경 등)이 발생할 경우,<br/>
+                                    금액 및 공정 일정이 변경 될 수 있음을 알려드립니다.</p>
+                                <p>2. 설치 공정 이후 하자 보증은 LED Display 부품 기준 1년 동안 무상 보증 해드립니다.</p>
+                                <p>3. 전산 오류로 인한 실수가 있을 경우 양측 합의 후 정정 처리 됩니다.</p>
+                                <p className="qt-bold">◎ 결제조건 : 발주서 접수 후 선금 60% / 잔금 40% (납품 후)</p>
+                                <p>◎ 납품기간 : 발주서 접수 후 5주 이내</p>
+                                <p className="qt-sub">* 위에 명시된 가격 외 추가 비용은 발생 하지 않을 것을 확인 합니다.</p>
+                                <p className="qt-sub">◎ A/S 기간 : 납기일로부터 최대 2년 유상 A/S, 전력선관련 및 교류 부품(교류 전원 계통 포함)은 시ㅂ장이
+                                    없을 경우 유상처리함.</p>
+                                <p className="qt-sub">◎ 해당의 견적서는 의뢰 제품 사양을 설치 받을 경우 적용 받을 수 있습니다.</p>
+                                <p className="qt-sub">◎ 업체명 : 이지텍인터내셔널 사업자번호 : 471-81-01014~90734 대표번호 : (주)이지텍인터내셔널</p>
+                            </div>
+                            <div className="quote-stamp">
+                                <div className="quote-stamp-text">(주)이지텍인터내셔널</div>
+                            </div>
+                        </div>
 
-        {/* 약관 + 도장 */}
-        <div className="quote-terms">
-          <div className="quote-terms-text">
-            <p className="qt-bold">◎ 견적조건</p>
-            <p>1. 견적서 발행 후 추가 사항(제품, 인원 증가 및 현장 여건 변경 등)이 발생할 경우,<br/>
-            금액 및 공정 일정이 변경 될 수 있음을 알려드립니다.</p>
-            <p>2. 설치 공정 이후 하자 보증은 LED Display 부품 기준 1년 동안 무상 보증 해드립니다.</p>
-            <p>3. 전산 오류로 인한 실수가 있을 경우 양측 합의 후 정정 처리 됩니다.</p>
-            <p className="qt-bold">◎ 결제조건 : 발주서 접수 후 선금 60% / 잔금 40% (납품 후)</p>
-            <p>◎ 납품기간 : 발주서 접수 후 5주 이내</p>
-            <p className="qt-sub">* 위에 명시된 가격 외 추가 비용은 발생 하지 않을 것을 확인 합니다.</p>
-            <p className="qt-sub">◎ A/S 기간 : 납기일로부터 최대 2년 유상 A/S, 전력선관련 및 교류 부품(교류 전원 계통 포함)은 시ㅂ장이 없을 경우 유상처리함.</p>
-            <p className="qt-sub">◎ 해당의 견적서는 의뢰 제품 사양을 설치 받을 경우 적용 받을 수 있습니다.</p>
-            <p className="qt-sub">◎ 업체명 : 이지텍인터내셔널 사업자번호 : 471-81-01014~90734 대표번호 : (주)이지텍인터내셔널</p>
-          </div>
-          <div className="quote-stamp">
-            <div className="quote-stamp-text">(주)이지텍인터내셔널</div>
-          </div>
-        </div>
+                        {/* 하단 버튼 */}
+                        <div className="quote-footer">
+                            <button className="modal-btn-close" onClick={onClose}>닫기</button>
+                            <button className="quote-btn-email">메일 보내기</button>
+                        </div>
+                        <div className="quote-footer-note">
+                            <span style={{color: '#E91E63'}}>내용 보기 버튼 클릭 / LED Display 전체 내용 보기에서</span><br/>
+                            <span style={{color: '#E91E63'}}>견적서 보기 버튼 클릭</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>,
 
-        {/* 하단 버튼 */}
-        <div className="quote-footer">
-          <button className="modal-btn-close" onClick={onClose}>닫기</button>
-          <button className="quote-btn-email">이메일 보내기</button>
-        </div>
-        <div className="quote-footer-note">
-          <span style={{color:'#E91E63'}}>내용 보기 버튼 클릭 / LED Display 전체 내용 보기에서</span><br/>
-          <span style={{color:'#E91E63'}}>견적서 보기 버튼 클릭</span>
-        </div>
-        </div>
-      </div>
-    </div>,
-    document.body
-  )
+        document.body
+    )
 }
 
-function ViewModal({ formData, onClose, onQuote }) {
-  const panelW = 28
-  const panelH = 20
-  const gap = 2
-  const padding = 2
-  const gridW = formData.width * panelW + (formData.width - 1) * gap + padding * 2
-  const gridH = formData.height * panelH + (formData.height - 1) * gap + padding * 2
 
-  return createPortal(
-    <div className="modal-overlay" onClick={onClose}>
-      {/* 바깥 흰 박스 */}
-      <div className="modal-outer" onClick={e => e.stopPropagation()}>
-        {/* 큰 민트 테두리 - 전체 감쌈 */}
-        <div className="modal-border-outer">
-          {/* 헤더: 인쇄버튼(좌 끝) + 로고(중앙 왼쪽) */}
-          <div className="modal-header">
-            <button className="modal-print-btn" title="인쇄하기">
-              <img src={printIconImg} alt="인쇄하기" style={{height:'76px'}} />
-            </button>
-            <div className="modal-logo" style={{flex:1, display:'flex', justifyContent:'flex-start', paddingLeft:'20px'}}>
-              <img src={modalLogoImg} alt="logo" style={{height:'72px', imageRendering:'crisp-edges'}} />
-            </div>
-          </div>
+function ViewModal({formData, onClose, onQuote}) {
+    const panelW = 28
+    const panelH = 20
+    const gap = 2
+    const padding = 2
+    const gridW = formData.width * panelW + (formData.width - 1) * gap + padding * 2
+    const gridH = formData.height * panelH + (formData.height - 1) * gap + padding * 2
 
-          {/* 작은 민트 테두리 - 타이틀 + 내용 감쌈 */}
-          <div className="modal-inner">
-          {/* 청록 타이틀바 */}
-          <div className="modal-title">LED Display 전체 내용 보기</div>
+    return createPortal(
+        <div className="modal-overlay" onClick={onClose}>
+            {/* 바깥 흰 박스 */}
+            <div className="modal-outer" onClick={e => e.stopPropagation()}>
+                {/* 큰 민트 테두리 - 전체 감쌈 */}
+                <div className="modal-border-outer">
+                    {/* 헤더: 인쇄버튼(좌 끝) + 로고(중앙 왼쪽) */}
+                    <div className="modal-header">
+                        <button className="modal-print-btn" title="인쇄하기">
+                            <img src={printIconImg} alt="인쇄하기" style={{height: '76px'}}/>
+                        </button>
+                        <div className="modal-logo"
+                             style={{flex: 1, display: 'flex', justifyContent: 'flex-start', paddingLeft: '20px'}}>
+                            <img src={modalLogoImg} alt="logo" style={{height: '72px', imageRendering: 'crisp-edges'}}/>
+                        </div>
+                    </div>
 
-          {/* 내용 */}
-          <div className="modal-content">
-          {/* 날짜 */}
-          <div className="modal-row full">
-            <div className="modal-label">날짜</div>
-            <div className="modal-value modal-value-cyan">{formData.date}</div>
-          </div>
-          {/* 담당자 / 부서 */}
-          <div className="modal-row-group">
-            <div className="modal-row">
-              <div className="modal-label">담당자</div>
-              <div className="modal-value modal-value-cyan">{formData.manager}</div>
-            </div>
-            <div className="modal-row">
-              <div className="modal-label">부서</div>
-              <div className="modal-value modal-value-cyan">{formData.department}</div>
-            </div>
-          </div>
-          {/* 회사 연락처 / 핸드폰 */}
-          <div className="modal-row-group">
-            <div className="modal-row">
-              <div className="modal-label">회사 연락처</div>
-              <div className="modal-value modal-value-cyan">{formData.companyPhone}</div>
-            </div>
-            <div className="modal-row">
-              <div className="modal-label">핸드폰 번호</div>
-              <div className="modal-value modal-value-cyan">{formData.mobilePhone}</div>
-            </div>
-          </div>
-          {/* E-mail */}
-          <div className="modal-row full">
-            <div className="modal-label">E-mail</div>
-            <div className="modal-value modal-value-cyan">{formData.email}</div>
-          </div>
-          {/* 회사 주소 */}
-          <div className="modal-row full">
-            <div className="modal-label">회사 주소</div>
-            <div className="modal-value modal-value-cyan">{formData.companyAddress}</div>
-          </div>
-          {/* 첨부파일 */}
-          <div className="modal-row full">
-            <div className="modal-label">첨부파일</div>
-            <div className="modal-value modal-value-cyan">
-              <a href="#" style={{color:'#25CAD2', textDecoration:'underline'}}>{formData.attachment}</a>
-            </div>
-          </div>
+                    {/* 작은 민트 테두리 - 타이틀 + 내용 감쌈 */}
+                    <div className="modal-inner">
+                        {/* 청록 타이틀바 */}
+                        <div className="modal-title">LED Display 전체 내용 보기</div>
 
-          <div className="modal-divider"></div>
+                        {/* 내용 */}
+                        <div className="modal-content">
+                            {/* 날짜 */}
+                            <div className="modal-row full">
+                                <div className="modal-label">날짜</div>
+                                <div className="modal-value modal-value-cyan">{formData.date}</div>
+                            </div>
+                            {/* 담당자 / 부서 */}
+                            <div className="modal-row-group">
+                                <div className="modal-row">
+                                    <div className="modal-label">담당자</div>
+                                    <div className="modal-value modal-value-cyan">{formData.manager}</div>
+                                </div>
+                                <div className="modal-row">
+                                    <div className="modal-label">부서</div>
+                                    <div className="modal-value modal-value-cyan">{formData.department}</div>
+                                </div>
+                            </div>
+                            {/* 회사 연락처 / 핸드폰 */}
+                            <div className="modal-row-group">
+                                <div className="modal-row">
+                                    <div className="modal-label">회사 연락처</div>
+                                    <div className="modal-value modal-value-cyan">{formData.companyPhone}</div>
+                                </div>
+                                <div className="modal-row">
+                                    <div className="modal-label">핸드폰 번호</div>
+                                    <div className="modal-value modal-value-cyan">{formData.mobilePhone}</div>
+                                </div>
+                            </div>
+                            {/* E-mail */}
+                            <div className="modal-row full">
+                                <div className="modal-label">E-mail</div>
+                                <div className="modal-value modal-value-cyan">{formData.email}</div>
+                            </div>
+                            {/* 회사 주소 */}
+                            <div className="modal-row full">
+                                <div className="modal-label">회사 주소</div>
+                                <div className="modal-value modal-value-cyan">{formData.companyAddress}</div>
+                            </div>
+                            {/* 첨부파일 */}
+                            <div className="modal-row full">
+                                <div className="modal-label">첨부파일</div>
+                                <div className="modal-value modal-value-cyan">
+                                    <a href="#"
+                                       style={{color: '#25CAD2', textDecoration: 'underline'}}>{formData.attachment}</a>
+                                </div>
+                            </div>
 
-          {/* 예상 설치날짜 / 설치기간 */}
-          <div className="modal-row-group">
-            <div className="modal-row">
-              <div className="modal-label modal-label-blue">예상 설치날짜</div>
-              <div className="modal-value modal-value-blue">{formData.installDate}</div>
-            </div>
-            <div className="modal-row">
-              <div className="modal-label modal-label-blue">예상 설치기간</div>
-              <div className="modal-value modal-value-blue">{formData.installPeriod}</div>
-            </div>
-          </div>
-          {/* 설치 장소 / 세부 장소 */}
-          <div className="modal-row-group">
-            <div className="modal-row">
-              <div className="modal-label modal-label-blue">설치 장소</div>
-              <div className="modal-value modal-value-blue">{formData.installLocation}</div>
-            </div>
-            <div className="modal-row">
-              <div className="modal-label modal-label-blue">세부 장소</div>
-              <div className="modal-value modal-value-blue">{formData.installDetailLocation}</div>
-            </div>
-          </div>
-          {/* 기타 내용 */}
-          <div className="modal-row full">
-            <div className="modal-label modal-label-blue">기타 내용</div>
-            <div className="modal-value modal-value-blue">{formData.etcContent}</div>
-          </div>
+                            <div className="modal-divider"></div>
 
-          <div className="modal-divider"></div>
+                            {/* 예상 설치날짜 / 설치기간 */}
+                            <div className="modal-row-group">
+                                <div className="modal-row">
+                                    <div className="modal-label modal-label-blue">예상 설치날짜</div>
+                                    <div className="modal-value modal-value-blue">{formData.installDate}</div>
+                                </div>
+                                <div className="modal-row">
+                                    <div className="modal-label modal-label-blue">예상 설치기간</div>
+                                    <div className="modal-value modal-value-blue">{formData.installPeriod}</div>
+                                </div>
+                            </div>
+                            {/* 설치 장소 / 세부 장소 */}
+                            <div className="modal-row-group">
+                                <div className="modal-row">
+                                    <div className="modal-label modal-label-blue">설치 장소</div>
+                                    <div className="modal-value modal-value-blue">{formData.installLocation}</div>
+                                </div>
+                                <div className="modal-row">
+                                    <div className="modal-label modal-label-blue">세부 장소</div>
+                                    <div className="modal-value modal-value-blue">{formData.installDetailLocation}</div>
+                                </div>
+                            </div>
+                            {/* 기타 내용 */}
+                            <div className="modal-row full">
+                                <div className="modal-label modal-label-blue">기타 내용</div>
+                                <div className="modal-value modal-value-blue">{formData.etcContent}</div>
+                            </div>
 
-          {/* 제품명 */}
-          <div className="modal-row full">
-            <div className="modal-label">제품명</div>
-            <div className="modal-value modal-value-cyan">{formData.productName}</div>
-          </div>
-          {/* 제품 사이즈 / 픽셀 */}
-          <div className="modal-row-group">
-            <div className="modal-row">
-              <div className="modal-label">제품 사이즈</div>
-              <div className="modal-value modal-value-cyan">{formData.productSize}</div>
-            </div>
-            <div className="modal-row">
-              <div className="modal-label">픽셀</div>
-              <div className="modal-value modal-value-cyan">{formData.pixel}</div>
-            </div>
-          </div>
-          {/* 밝기 / 전력 */}
-          <div className="modal-row-group">
-            <div className="modal-row">
-              <div className="modal-label">밝기</div>
-              <div className="modal-value modal-value-cyan">{formData.brightness}</div>
-            </div>
-            <div className="modal-row">
-              <div className="modal-label">전력</div>
-              <div className="modal-value modal-value-cyan">{formData.power}</div>
-            </div>
-          </div>
-          {/* 해상도 */}
-          <div className="modal-row full">
-            <div className="modal-label">해상도</div>
-            <div className="modal-value modal-value-cyan" style={{maxWidth:'37%'}}>{formData.resolution}</div>
-          </div>
+                            <div className="modal-divider"></div>
 
-          <div className="modal-divider"></div>
+                            {/* 제품명 */}
+                            <div className="modal-row full">
+                                <div className="modal-label">제품명</div>
+                                <div className="modal-value modal-value-cyan">{formData.productName}</div>
+                            </div>
+                            {/* 제품 사이즈 / 픽셀 */}
+                            <div className="modal-row-group">
+                                <div className="modal-row">
+                                    <div className="modal-label">제품 사이즈</div>
+                                    <div className="modal-value modal-value-cyan">{formData.productSize}</div>
+                                </div>
+                                <div className="modal-row">
+                                    <div className="modal-label">픽셀</div>
+                                    <div className="modal-value modal-value-cyan">{formData.pixel}</div>
+                                </div>
+                            </div>
+                            {/* 밝기 / 전력 */}
+                            <div className="modal-row-group">
+                                <div className="modal-row">
+                                    <div className="modal-label">밝기</div>
+                                    <div className="modal-value modal-value-cyan">{formData.brightness}</div>
+                                </div>
+                                <div className="modal-row">
+                                    <div className="modal-label">전력</div>
+                                    <div className="modal-value modal-value-cyan">{formData.power}</div>
+                                </div>
+                            </div>
+                            {/* 해상도 */}
+                            <div className="modal-row full">
+                                <div className="modal-label">해상도</div>
+                                <div className="modal-value modal-value-cyan"
+                                     style={{maxWidth: '37%'}}>{formData.resolution}</div>
+                            </div>
 
-          {/* 수량 */}
-          <div className="modal-row full">
-            <div className="modal-label">수량</div>
-            <div className="modal-value modal-value-cyan">W : {formData.width} X H : {formData.height} = {formData.totalPanels}EA</div>
-          </div>
-          {/* LED 사이즈 */}
-          <div className="modal-row full">
-            <div className="modal-label">LED 사이즈</div>
-            <div className="modal-value modal-value-cyan">{formData.ledSizeW} × {formData.ledSizeH}</div>
-          </div>
-          {/* LED 해상도 */}
-          <div className="modal-row full">
-            <div className="modal-label">LED 해상도</div>
-            <div className="modal-value modal-value-cyan">{formData.ledResW} × {formData.ledResH}</div>
-          </div>
-          {/* 전체 전력 */}
-          <div className="modal-row full">
-            <div className="modal-label">전체 전력</div>
-            <div className="modal-value modal-value-cyan">{formData.totalPower * 1000} W</div>
-          </div>
-          {/* 프로세스 사양 / 설치인원 */}
-          <div className="modal-row-group">
-            <div className="modal-row">
-              <div className="modal-label">프로세스 사양</div>
-              <div className="modal-value modal-value-cyan">{formData.processorModel}</div>
-            </div>
-            <div className="modal-row">
-              <div className="modal-label">설치인원</div>
-              <div className="modal-value modal-value-cyan">{formData.installPersonnel}명</div>
-            </div>
-          </div>
+                            <div className="modal-divider"></div>
 
-          {/* LED 예상도 */}
-          <div className="modal-preview-wrap">
-            <div className="modal-preview-inner">
-              <div className="modal-preview-v-dim">
-                <div className="modal-preview-v-line">
-                  <span className="modal-preview-v-text">{formData.ledSizeH}mm</span>
+                            {/* 수량 */}
+                            <div className="modal-row full">
+                                <div className="modal-label">수량</div>
+                                <div className="modal-value modal-value-cyan">W : {formData.width} X H
+                                    : {formData.height} = {formData.totalPanels}EA
+                                </div>
+                            </div>
+                            {/* LED 사이즈 */}
+                            <div className="modal-row full">
+                                <div className="modal-label">LED 사이즈</div>
+                                <div
+                                    className="modal-value modal-value-cyan">{formData.ledSizeW} × {formData.ledSizeH}</div>
+                            </div>
+                            {/* LED 해상도 */}
+                            <div className="modal-row full">
+                                <div className="modal-label">LED 해상도</div>
+                                <div
+                                    className="modal-value modal-value-cyan">{formData.ledResW} × {formData.ledResH}</div>
+                            </div>
+                            {/* 전체 전력 */}
+                            <div className="modal-row full">
+                                <div className="modal-label">전체 전력</div>
+                                <div className="modal-value modal-value-cyan">{formData.totalPower * 1000} W</div>
+                            </div>
+                            {/* 프로세스 사양 / 설치인원 */}
+                            <div className="modal-row-group">
+                                <div className="modal-row">
+                                    <div className="modal-label">프로세스 사양</div>
+                                    <div className="modal-value modal-value-cyan">{formData.processorModel}</div>
+                                </div>
+                                <div className="modal-row">
+                                    <div className="modal-label">설치인원</div>
+                                    <div className="modal-value modal-value-cyan">{formData.installPersonnel}명</div>
+                                </div>
+                            </div>
+
+                            {/* LED 예상도 */}
+                            <div className="modal-preview-wrap">
+                                <div className="modal-preview-inner">
+                                    <div className="modal-preview-v-dim">
+                                        <div className="modal-preview-v-line">
+                                            <span className="modal-preview-v-text">{formData.ledSizeH}mm</span>
+                                        </div>
+                                    </div>
+                                    <div className="modal-preview-grid-wrap">
+                                        <div
+                                            className="modal-led-grid"
+                                            style={{
+                                                gridTemplateColumns: `repeat(${formData.width}, ${panelW}px)`,
+                                                gridTemplateRows: `repeat(${formData.height}, ${panelH}px)`,
+                                                width: gridW,
+                                                height: gridH,
+                                            }}
+                                        >
+                                            {Array.from({length: formData.totalPanels}).map((_, i) => (
+                                                <div key={i} className="modal-led-panel"></div>
+                                            ))}
+                                        </div>
+                                        <div className="modal-preview-h-dim" style={{width: gridW}}>
+                                            <div className="modal-preview-h-line">
+                                                <span className="modal-preview-h-text">{formData.ledSizeW}mm</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        {/* modal-content 끝 */}
+
+                    </div>
+                    {/* modal-inner 끝 */}
+
+                    {/* 하단 버튼 - modal-inner 밖, modal-border-outer 안 */}
+                    <div className="modal-footer">
+                        <button className="modal-btn-close" onClick={onClose}>닫기</button>
+                        <button className="modal-btn-quote" onClick={onQuote}>견적서 보기</button>
+                    </div>
                 </div>
-              </div>
-              <div className="modal-preview-grid-wrap">
-                <div
-                  className="modal-led-grid"
-                  style={{
-                    gridTemplateColumns: `repeat(${formData.width}, ${panelW}px)`,
-                    gridTemplateRows: `repeat(${formData.height}, ${panelH}px)`,
-                    width: gridW,
-                    height: gridH,
-                  }}
-                >
-                  {Array.from({length: formData.totalPanels}).map((_, i) => (
-                    <div key={i} className="modal-led-panel"></div>
-                  ))}
-                </div>
-                <div className="modal-preview-h-dim" style={{width: gridW}}>
-                  <div className="modal-preview-h-line">
-                    <span className="modal-preview-h-text">{formData.ledSizeW}mm</span>
-                  </div>
-                </div>
-              </div>
+                {/* modal-border-outer 끝 */}
             </div>
-          </div>
-
-          </div>{/* modal-content 끝 */}
-
-          </div>{/* modal-inner 끝 */}
-
-          {/* 하단 버튼 - modal-inner 밖, modal-border-outer 안 */}
-          <div className="modal-footer">
-            <button className="modal-btn-close" onClick={onClose}>닫기</button>
-            <button className="modal-btn-quote" onClick={onQuote}>견적서 보기</button>
-          </div>
-        </div>{/* modal-border-outer 끝 */}
-      </div>
-    </div>,
-    document.body
-  )
+        </div>,
+        document.body
+    )
 }
 
 function EstimateForm() {
-  const [formData, setFormData] = useState({
-    date: '2026.01.28',
-    manager: '기영길',
-    department: '기획팀',
-    companyPhone: '02-6258-1600',
-    mobilePhone: '010-1234-5678',
-    email: 'adcde@aaaa.co.kr',
-    companyAddress: '경기도 남양주시 화도읍 재재기로 190번길 32 이지빌리지타워',
-    attachment: '이지텍인터내셔널 e_브로슈어.pdf',
-    clientCompany: '갈더마코리아',
-    clientDepartment: '영업부',
-    clientManager: '홍길동',
-    clientPhone: '02-1111-3333',
-    clientMobile: '010-1234-5678',
-    clientEmail: 'adcde@aaaa.co.kr',
-    businessCard: 'asdasd.jpg',
-    installDate: '2026.01.28',
-    installPeriod: '2일',
-    installLocation: '안양 새마을금고',
-    installDetailLocation: '실내 로비',
-    etcContent: '———',
-    productName: 'ETK-COB1.2',
-    productSize: '600x337.5',
-    pixel: '1.2 Pixel',
-    brightness: '800 Nit',
-    power: '75/25 W',
-    resolution: '480x270 Dpi',
-    width: 7,
-    height: 7,
-    totalPanels: 49,
-    ledSizeW: '4200',
-    ledSizeH: '2363',
-    ledResW: '3360',
-    ledResH: '1890',
-    totalPower: 3.7,
-    installPersonnel: 3,
-    processorModel: 'VX600 Pro',
-    processorQuantity: 1
-  })
-
-  const productSpecs = {
-    'ETK-COB1.2': { size: '600x337.5', pixel: '1.2 Pixel', brightness: '800 Nit', power: '75/25 W', resolution: '480x270 Dpi', altPixel: '1.5 Pixel', altPower: '70/25 W', altRes: '384x216 Dpi' },
-    'ETK-COB1.5': { size: '600x337.5', pixel: '1.5 Pixel', brightness: '800 Nit', power: '70/25 W', resolution: '384x216 Dpi', altPixel: '1.2 Pixel', altPower: '75/25 W', altRes: '480x270 Dpi' }
-  }
-
-  const handleChange = (field, value) => {
-    setFormData(prev => {
-      const newData = { ...prev, [field]: value }
-      if (field === 'productName' && productSpecs[value]) {
-        const spec = productSpecs[value]
-        newData.productSize = spec.size
-        newData.pixel = spec.pixel
-        newData.brightness = spec.brightness
-        newData.power = spec.power
-        newData.resolution = spec.resolution
-      }
-      if (field === 'width' || field === 'height') {
-        const w = field === 'width' ? parseInt(value) || 0 : prev.width
-        const h = field === 'height' ? parseInt(value) || 0 : prev.height
-        newData.totalPanels = w * h
-        newData.ledSizeW = w * 600
-        newData.ledSizeH = Math.round(h * 337.5)
-        newData.ledResW = w * 480
-        newData.ledResH = h * 270
-        newData.totalPower = Math.round((w * h * 75 / 1000) * 10) / 10
-      }
-      return newData
+    const [formData, setFormData] = useState({
+        date: '2026.01.28',
+        manager: '기영길',
+        department: '기획팀',
+        companyPhone: '02-6258-1600',
+        mobilePhone: '010-1234-5678',
+        email: 'adcde@aaaa.co.kr',
+        companyAddress: '경기도 남양주시 화도읍 재재기로 190번길 32 이지빌리지타워',
+        attachment: '이지텍인터내셔널 e_브로슈어.pdf',
+        clientCompany: '갈더마코리아',
+        clientDepartment: '영업부',
+        clientManager: '홍길동',
+        clientPhone: '02-1111-3333',
+        clientMobile: '010-1234-5678',
+        clientEmail: 'adcde@aaaa.co.kr',
+        businessCard: 'asdasd.jpg',
+        installDate: '2026.01.28',
+        installPeriod: '2일',
+        installLocation: '안양 새마을금고',
+        installDetailLocation: '실내 로비',
+        etcContent: '———',
+        productName: 'ETK-COB1.2',
+        productSize: '600x337.5',
+        pixel: '1.2 Pixel',
+        brightness: '800 Nit',
+        power: '75/25 W',
+        resolution: '480x270 Dpi',
+        width: 7,
+        height: 7,
+        totalPanels: 49,
+        ledSizeW: '4200',
+        ledSizeH: '2363',
+        ledResW: '3360',
+        ledResH: '1890',
+        totalPower: 3.7,
+        installPersonnel: 3,
+        processorModel: 'VX600 Pro',
+        processorQuantity: 1
     })
-  }
 
-  const [showModal, setShowModal] = useState(false)
-  const [showQuote, setShowQuote] = useState(false)
+    const productSpecs = {
+        'ETK-COB1.2': {
+            size: '600x337.5',
+            pixel: '1.2 Pixel',
+            brightness: '800 Nit',
+            power: '75/25 W',
+            resolution: '480x270 Dpi',
+            altPixel: '1.5 Pixel',
+            altPower: '70/25 W',
+            altRes: '384x216 Dpi'
+        },
+        'ETK-COB1.5': {
+            size: '600x337.5',
+            pixel: '1.5 Pixel',
+            brightness: '800 Nit',
+            power: '70/25 W',
+            resolution: '384x216 Dpi',
+            altPixel: '1.2 Pixel',
+            altPower: '75/25 W',
+            altRes: '480x270 Dpi'
+        }
+    }
 
-  const currentSpec = productSpecs[formData.productName]
-  const labelCyan = { backgroundColor: '#25CAD2' }
-  const labelGreen = { backgroundColor: '#8cc63f' }
-  const labelBlue = { backgroundColor: '#0071BC' }
+    const handleChange = (field, value) => {
+        setFormData(prev => {
+            const newData = {...prev, [field]: value}
+            if (field === 'productName' && productSpecs[value]) {
+                const spec = productSpecs[value]
+                newData.productSize = spec.size
+                newData.pixel = spec.pixel
+                newData.brightness = spec.brightness
+                newData.power = spec.power
+                newData.resolution = spec.resolution
+            }
+            if (field === 'width' || field === 'height') {
+                const w = field === 'width' ? parseInt(value) || 0 : prev.width
+                const h = field === 'height' ? parseInt(value) || 0 : prev.height
+                newData.totalPanels = w * h
+                newData.ledSizeW = w * 600
+                newData.ledSizeH = Math.round(h * 337.5)
+                newData.ledResW = w * 480
+                newData.ledResH = h * 270
+                newData.totalPower = Math.round((w * h * 75 / 1000) * 10) / 10
+            }
+            return newData
+        })
+    }
 
-  return (
-    <div className="estimate-page">
-      {showModal && <ViewModal formData={formData} onClose={() => setShowModal(false)} onQuote={() => { setShowModal(false); setShowQuote(true) }} />}
-      {showQuote && <QuoteModal formData={formData} onClose={() => setShowQuote(false)} />}
-      <div className="main-content-area">
-        {/* ===== LEFT COLUMN ===== */}
-        <div className="left-column">
-          {/* 담당자 등록 */}
-          <div className="section-card border-cyan">
-            <div className="section-header cyan">
-              <span>담당자 등록</span>
-              <button className="reset-btn">Reset</button>
-            </div>
-            <div className="section-body">
-              <div className="form-row">
-                <div className="form-label" style={labelCyan}>날짜</div>
-                <div className="form-input" style={{position: 'relative', maxWidth: '37.2%'}}>
-                  <input type="text" value={formData.date} onChange={(e) => handleChange('date', e.target.value)} style={{paddingRight: '35px'}} />
-                  <input type="date" onChange={(e) => handleChange('date', e.target.value.replace(/-/g, '.'))} style={{position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)', width: '20px', height: '20px', opacity: 0, cursor: 'pointer'}} />
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none'}}>
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                    <line x1="16" y1="2" x2="16" y2="6"></line>
-                    <line x1="8" y1="2" x2="8" y2="6"></line>
-                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                  </svg>
-                </div>
-              </div>
-              <div className="form-row-group">
-                <div className="form-row">
-                  <div className="form-label" style={labelCyan}>담당자</div>
-                  <div className="form-input">
-                    <select value={formData.manager} onChange={(e) => handleChange('manager', e.target.value)}>
-                      <option>기영길</option><option>김철수</option><option>박영희</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="form-row">
-                  <div className="form-label" style={labelCyan}>부서</div>
-                  <div className="form-input">
-                    <input type="text" value={formData.department} onChange={(e) => handleChange('department', e.target.value)} />
-                  </div>
-                </div>
-              </div>
-              <div className="form-row-group">
-                <div className="form-row">
-                  <div className="form-label" style={labelCyan}>회사 연락처</div>
-                  <div className="form-input">
-                    <input type="text" value={formData.companyPhone} onChange={(e) => handleChange('companyPhone', e.target.value)} />
-                  </div>
-                </div>
-                <div className="form-row">
-                  <div className="form-label" style={labelCyan}>핸드폰 번호</div>
-                  <div className="form-input">
-                    <input type="text" value={formData.mobilePhone} onChange={(e) => handleChange('mobilePhone', e.target.value)} />
-                  </div>
-                </div>
-              </div>
-              <div className="form-row">
-                <div className="form-label" style={labelCyan}>E-mail</div>
-                <div className="form-input">
-                  <input type="text" value={formData.email} onChange={(e) => handleChange('email', e.target.value)} />
-                </div>
-              </div>
-              <div className="form-row">
-                <div className="form-label" style={labelCyan}>회사 주소</div>
-                <div className="form-input">
-                  <input type="text" value={formData.companyAddress} onChange={(e) => handleChange('companyAddress', e.target.value)} />
-                </div>
-              </div>
-              <div className="form-row file-row">
-                <div className="form-label" style={labelCyan}>첨부파일</div>
-                <div className="form-input file-input">
-                  <input type="text" value={formData.attachment} readOnly />
-                  <button className="attach-btn">첨부하기</button>
-                </div>
-              </div>
-            </div>
-          </div>
+    const [showModal, setShowModal] = useState(false)
+    const [showQuote, setShowQuote] = useState(false)
 
-          {/* 업체 담당자 등록 */}
-          <div className="section-card border-green">
-            <div className="section-header green">
-              <span>업체 담당자 등록</span>
-            </div>
-            <div className="section-body">
-              <div className="form-row">
-                <div className="form-label" style={labelGreen}>기관/업체명</div>
-                <div className="form-input">
-                  <input type="text" value={formData.clientCompany} onChange={(e) => handleChange('clientCompany', e.target.value)} />
-                </div>
-              </div>
-              <div className="form-row-group">
-                <div className="form-row">
-                  <div className="form-label" style={labelGreen}>부서명</div>
-                  <div className="form-input">
-                    <input type="text" value={formData.clientDepartment} onChange={(e) => handleChange('clientDepartment', e.target.value)} />
-                  </div>
-                </div>
-                <div className="form-row">
-                  <div className="form-label" style={labelGreen}>업체 담당자</div>
-                  <div className="form-input">
-                    <input type="text" value={formData.clientManager} onChange={(e) => handleChange('clientManager', e.target.value)} />
-                  </div>
-                </div>
-              </div>
-              <div className="form-row-group">
-                <div className="form-row">
-                  <div className="form-label" style={labelGreen}>회사 연락처</div>
-                  <div className="form-input">
-                    <input type="text" value={formData.clientPhone} onChange={(e) => handleChange('clientPhone', e.target.value)} />
-                  </div>
-                </div>
-                <div className="form-row">
-                  <div className="form-label" style={labelGreen}>핸드폰 번호</div>
-                  <div className="form-input">
-                    <input type="text" value={formData.clientMobile} onChange={(e) => handleChange('clientMobile', e.target.value)} />
-                  </div>
-                </div>
-              </div>
-              <div className="form-row">
-                <div className="form-label" style={labelGreen}>E-mail</div>
-                <div className="form-input">
-                  <input type="text" value={formData.clientEmail} onChange={(e) => handleChange('clientEmail', e.target.value)} />
-                </div>
-              </div>
-              <div className="form-row file-row">
-                <div className="form-label" style={labelGreen}>명함 촬영</div>
-                <div className="form-input file-input">
-                  <input type="text" value={formData.businessCard} readOnly />
-                  <button className="camera-btn" style={{backgroundColor: '#8cc63f'}}>사진찍기</button>
-                </div>
-              </div>
-            </div>
-          </div>
+    const currentSpec = productSpecs[formData.productName]
+    const labelCyan = {backgroundColor: '#25CAD2'}
+    const labelGreen = {backgroundColor: '#8cc63f'}
+    const labelBlue = {backgroundColor: '#0071BC'}
 
-          {/* 설치 정보 등록 */}
-          <div className="section-card border-blue">
-            <div className="section-header blue">
-              <span>설치 정보 등록</span>
+    return (
+        <div className="estimate-page">
+            {showModal && <ViewModal formData={formData} onClose={() => setShowModal(false)} onQuote={() => {
+                setShowModal(false);
+                setShowQuote(true)
+            }}/>}
+            {showQuote && <QuoteModal formData={formData} onClose={() => setShowQuote(false)}/>}
+            <div className="main-content-area">
+                {/* ===== LEFT COLUMN ===== */}
+                <div className="left-column">
+                    {/* 담당자 등록 */}
+                    <div className="section-card border-cyan">
+                        <div className="section-header cyan">
+                            <span>담당자 등록</span>
+                            <button className="reset-btn">Reset</button>
+                        </div>
+                        <div className="section-body">
+                            <div className="form-row">
+                                <div className="form-label" style={labelCyan}>날짜</div>
+                                <div className="form-input" style={{position: 'relative', maxWidth: '37.2%'}}>
+                                    <input type="text" value={formData.date}
+                                           onChange={(e) => handleChange('date', e.target.value)}
+                                           style={{paddingRight: '35px'}}/>
+                                    <input type="date"
+                                           onChange={(e) => handleChange('date', e.target.value.replace(/-/g, '.'))}
+                                           style={{
+                                               position: 'absolute',
+                                               right: '8px',
+                                               top: '50%',
+                                               transform: 'translateY(-50%)',
+                                               width: '20px',
+                                               height: '20px',
+                                               opacity: 0,
+                                               cursor: 'pointer'
+                                           }}/>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                         fill="none" stroke="currentColor" strokeWidth="2" style={{
+                                        position: 'absolute',
+                                        right: '12px',
+                                        top: '50%',
+                                        transform: 'translateY(-50%)',
+                                        pointerEvents: 'none'
+                                    }}>
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div className="form-row-group">
+                                <div className="form-row">
+                                    <div className="form-label" style={labelCyan}>담당자</div>
+                                    <div className="form-input">
+                                        <select value={formData.manager}
+                                                onChange={(e) => handleChange('manager', e.target.value)}>
+                                            <option>기영길</option>
+                                            <option>김철수</option>
+                                            <option>박영희</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className="form-row">
+                                    <div className="form-label" style={labelCyan}>부서</div>
+                                    <div className="form-input">
+                                        <input type="text" value={formData.department}
+                                               onChange={(e) => handleChange('department', e.target.value)}/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="form-row-group">
+                                <div className="form-row">
+                                    <div className="form-label" style={labelCyan}>회사 연락처</div>
+                                    <div className="form-input">
+                                        <input type="text" value={formData.companyPhone}
+                                               onChange={(e) => handleChange('companyPhone', e.target.value)}/>
+                                    </div>
+                                </div>
+                                <div className="form-row">
+                                    <div className="form-label" style={labelCyan}>핸드폰 번호</div>
+                                    <div className="form-input">
+                                        <input type="text" value={formData.mobilePhone}
+                                               onChange={(e) => handleChange('mobilePhone', e.target.value)}/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="form-row">
+                                <div className="form-label" style={labelCyan}>E-mail</div>
+                                <div className="form-input">
+                                    <input type="text" value={formData.email}
+                                           onChange={(e) => handleChange('email', e.target.value)}/>
+                                </div>
+                            </div>
+                            <div className="form-row">
+                                <div className="form-label" style={labelCyan}>회사 주소</div>
+                                <div className="form-input">
+                                    <input type="text" value={formData.companyAddress}
+                                           onChange={(e) => handleChange('companyAddress', e.target.value)}/>
+                                </div>
+                            </div>
+                            <div className="form-row file-row">
+                                <div className="form-label" style={labelCyan}>첨부파일</div>
+                                <div className="form-input file-input">
+                                    <input type="text" value={formData.attachment} readOnly/>
+                                    <button className="attach-btn">첨부하기</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 업체 담당자 등록 */}
+                    <div className="section-card border-green">
+                        <div className="section-header green">
+                            <span>업체 담당자 등록</span>
+                        </div>
+                        <div className="section-body">
+                            <div className="form-row">
+                                <div className="form-label" style={labelGreen}>기관/업체명</div>
+                                <div className="form-input">
+                                    <input type="text" value={formData.clientCompany}
+                                           onChange={(e) => handleChange('clientCompany', e.target.value)}/>
+                                </div>
+                            </div>
+                            <div className="form-row-group">
+                                <div className="form-row">
+                                    <div className="form-label" style={labelGreen}>부서명</div>
+                                    <div className="form-input">
+                                        <input type="text" value={formData.clientDepartment}
+                                               onChange={(e) => handleChange('clientDepartment', e.target.value)}/>
+                                    </div>
+                                </div>
+                                <div className="form-row">
+                                    <div className="form-label" style={labelGreen}>업체 담당자</div>
+                                    <div className="form-input">
+                                        <input type="text" value={formData.clientManager}
+                                               onChange={(e) => handleChange('clientManager', e.target.value)}/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="form-row-group">
+                                <div className="form-row">
+                                    <div className="form-label" style={labelGreen}>회사 연락처</div>
+                                    <div className="form-input">
+                                        <input type="text" value={formData.clientPhone}
+                                               onChange={(e) => handleChange('clientPhone', e.target.value)}/>
+                                    </div>
+                                </div>
+                                <div className="form-row">
+                                    <div className="form-label" style={labelGreen}>핸드폰 번호</div>
+                                    <div className="form-input">
+                                        <input type="text" value={formData.clientMobile}
+                                               onChange={(e) => handleChange('clientMobile', e.target.value)}/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="form-row">
+                                <div className="form-label" style={labelGreen}>E-mail</div>
+                                <div className="form-input">
+                                    <input type="text" value={formData.clientEmail}
+                                           onChange={(e) => handleChange('clientEmail', e.target.value)}/>
+                                </div>
+                            </div>
+                            <div className="form-row file-row">
+                                <div className="form-label" style={labelGreen}>명함 촬영</div>
+                                <div className="form-input file-input">
+                                    <input type="text" value={formData.businessCard} readOnly/>
+                                    <button className="camera-btn" style={{backgroundColor: '#8cc63f'}}>사진찍기</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 설치 정보 등록 */}
+                    <div className="section-card border-blue">
+                        <div className="section-header blue">
+                            <span>설치 정보 등록</span>
+                        </div>
+                        <div className="section-body">
+                            <div className="form-row-group">
+                                <div className="form-row">
+                                    <div className="form-label" style={labelBlue}>예상 설치날짜</div>
+                                    <div className="form-input">
+                                        <input type="text" value={formData.installDate}
+                                               onChange={(e) => handleChange('installDate', e.target.value)}/>
+                                    </div>
+                                </div>
+                                <div className="form-row">
+                                    <div className="form-label" style={labelBlue}>예상 설치기간</div>
+                                    <div className="form-input">
+                                        <select value={formData.installPeriod}
+                                                onChange={(e) => handleChange('installPeriod', e.target.value)}>
+                                            {['1일', '2일', '3일', '4일', '5일', '6일', '7일'].map(v => <option
+                                                key={v}>{v}</option>)}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="form-row-group">
+                                <div className="form-row">
+                                    <div className="form-label" style={labelBlue}>설치 장소</div>
+                                    <div className="form-input">
+                                        <input type="text" value={formData.installLocation}
+                                               onChange={(e) => handleChange('installLocation', e.target.value)}/>
+                                    </div>
+                                </div>
+                                <div className="form-row">
+                                    <div className="form-label" style={labelBlue}>세부 장소</div>
+                                    <div className="form-input">
+                                        <input type="text" value={formData.installDetailLocation}
+                                               onChange={(e) => handleChange('installDetailLocation', e.target.value)}/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="form-row">
+                                <div className="form-label" style={labelBlue}>기타 내용</div>
+                                <div className="form-input">
+                                    <input type="text" value={formData.etcContent}
+                                           onChange={(e) => handleChange('etcContent', e.target.value)}/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="center-divider"></div>
+
+                <div className="right-column">
+                    {/* LED Display 제품 정보 */}
+                    <div className="section-card border-cyan">
+                        <div className="section-header cyan">
+                            <span>LED Display 제품 정보</span>
+                        </div>
+                        <div className="section-body">
+                            <div className="form-row">
+                                <div className="form-label" style={labelCyan}>제품명</div>
+                                <div className="form-input" style={{maxWidth: '37.2%'}}>
+                                    <select value={formData.productName}
+                                            onChange={(e) => handleChange('productName', e.target.value)}>
+                                        <option>ETK-COB1.2</option>
+                                        <option>ETK-COB1.5</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="form-row-group">
+                                <div className="form-row">
+                                    <div className="form-label" style={labelCyan}>제품 사이즈</div>
+                                    <div className="form-input">
+                                        <input type="text" value={formData.productSize} readOnly/>
+                                    </div>
+                                </div>
+                                <div className="form-row">
+                                    <div className="form-label" style={labelCyan}>픽셀</div>
+                                    <div className="form-input">
+                                        <div style={{
+                                            padding: '6px 10px',
+                                            background: '#f5f5f5',
+                                            borderRadius: '4px',
+                                            width: '100%'
+                                        }}>
+                                            {formData.pixel}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="form-row-group">
+                                <div className="form-row">
+                                    <div className="form-label" style={labelCyan}>밝기</div>
+                                    <div className="form-input">
+                                        <input type="text" value={formData.brightness} readOnly/>
+                                    </div>
+                                </div>
+                                <div className="form-row">
+                                    <div className="form-label" style={labelCyan}>전력</div>
+                                    <div className="form-input">
+                                        <div style={{
+                                            padding: '6px 10px',
+                                            background: '#f5f5f5',
+                                            borderRadius: '4px',
+                                            width: '100%'
+                                        }}>
+                                            {formData.power}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="form-row">
+                                <div className="form-label" style={labelCyan}>해상도</div>
+                                <div className="form-input" style={{maxWidth: '37.2%'}}>
+                                    <div style={{
+                                        padding: '6px 10px',
+                                        background: '#f5f5f5',
+                                        borderRadius: '4px',
+                                        width: '100%'
+                                    }}>
+                                        {formData.resolution}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* LED Display 구매 수량 */}
+                    <div className="section-card border-cyan">
+                        <div className="section-header cyan">
+                            <span>LED Display 구매 수량</span>
+                        </div>
+                        <div className="section-body">
+                            <div className="form-row quantity-row">
+                                <div className="form-label" style={labelCyan}>수량</div>
+                                <div className="form-input quantity-input">
+                                    <span className="dim-label">W:</span>
+                                    <select value={formData.width}
+                                            onChange={(e) => handleChange('width', e.target.value)}>
+                                        {Array.from({length: 15}, (_, i) => i + 1).map(n => <option key={n}
+                                                                                                    value={n}>{n}</option>)}
+                                    </select>
+                                    <span className="quantity-range">1 ~ 15</span>
+                                    <span className="dim-label">X H:</span>
+                                    <select value={formData.height}
+                                            onChange={(e) => handleChange('height', e.target.value)}>
+                                        {Array.from({length: 15}, (_, i) => i + 1).map(n => <option key={n}
+                                                                                                    value={n}>{n}</option>)}
+                                    </select>
+                                    <span className="quantity-range">1 ~ 15</span>
+                                    <span className="equals">=</span>
+                                    <input type="text" className="result-field" value={formData.totalPanels} readOnly/>
+                                    <span className="unit">EA</span>
+                                </div>
+                            </div>
+                            <div className="form-row">
+                                <div className="form-label" style={labelCyan}>LED 사이즈</div>
+                                <div className="split-input">
+                                    <input type="text" value={formData.ledSizeW} readOnly/>
+                                    <span className="x-mark">X</span>
+                                    <input type="text" value={formData.ledSizeH} readOnly/>
+                                </div>
+                            </div>
+                            <div className="form-row">
+                                <div className="form-label" style={labelCyan}>LED 해상도</div>
+                                <div className="split-input">
+                                    <input type="text" value={formData.ledResW} readOnly/>
+                                    <span className="x-mark">X</span>
+                                    <input type="text" value={formData.ledResH} readOnly/>
+                                </div>
+                            </div>
+                            <div className="form-row-group">
+                                <div className="form-row">
+                                    <div className="form-label" style={labelCyan}>전체 전력</div>
+                                    <div className="form-input">
+                                        <input type="text" value={formData.totalPower + ' Kw'} readOnly/>
+                                    </div>
+                                </div>
+                                <div className="form-row">
+                                    <div className="form-label" style={labelCyan}>설치인원</div>
+                                    <div className="form-input">
+                                        <select value={formData.installPersonnel}
+                                                onChange={(e) => handleChange('installPersonnel', e.target.value)}>
+                                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => <option key={n}
+                                                                                              value={n}>{n}명</option>)}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="form-row-group">
+                                <div className="form-row">
+                                    <div className="form-label" style={labelCyan}>프로세스 사양</div>
+                                    <div className="form-input">
+                                        <select value={formData.processorModel}
+                                                onChange={(e) => handleChange('processorModel', e.target.value)}>
+                                            <option>VX400</option>
+                                            <option>VX600</option>
+                                            <option>VX600 Pro</option>
+                                            <option>VX1000</option>
+                                            <option>VX2000</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className="form-row">
+                                    <div className="form-label" style={labelCyan}>수량</div>
+                                    <div className="form-input">
+                                        <select value={formData.processorQuantity}
+                                                onChange={(e) => handleChange('processorQuantity', e.target.value)}>
+                                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => <option key={n}
+                                                                                              value={n}>{n}</option>)}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* LED Display 예상도 */}
+                    <div className="section-card border-cyan">
+                        <div className="section-header cyan">
+                            <span>LED Display 예상도</span>
+                        </div>
+                        <div className="section-body preview-body">
+                            <div className="led-preview-border">
+                                <div className="led-preview-layout">
+                                    <div className="led-dimension-v">
+                                        <div className="led-dimension-v-line">
+                                            <span className="led-dimension-v-text">{formData.ledSizeH}mm</span>
+                                        </div>
+                                    </div>
+                                    <div className="led-grid-wrapper">
+                                        <div className="led-grid" style={{
+                                            gridTemplateColumns: `repeat(${formData.width}, 1fr)`,
+                                            gridTemplateRows: `repeat(${formData.height}, 1fr)`
+                                        }}>
+                                            {Array.from({length: formData.totalPanels}).map((_, i) => (
+                                                <div key={i} className="led-panel"></div>
+                                            ))}
+                                        </div>
+                                        <div className="led-dimension-h">
+                                            <div className="led-dimension-h-line">
+                                                <span className="led-dimension-h-text">{formData.ledSizeW}mm</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div className="section-body">
-              <div className="form-row-group">
-                <div className="form-row">
-                  <div className="form-label" style={labelBlue}>예상 설치날짜</div>
-                  <div className="form-input">
-                    <input type="text" value={formData.installDate} onChange={(e) => handleChange('installDate', e.target.value)} />
-                  </div>
-                </div>
-                <div className="form-row">
-                  <div className="form-label" style={labelBlue}>예상 설치기간</div>
-                  <div className="form-input">
-                    <select value={formData.installPeriod} onChange={(e) => handleChange('installPeriod', e.target.value)}>
-                      {['1일','2일','3일','4일','5일','6일','7일'].map(v => <option key={v}>{v}</option>)}
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div className="form-row-group">
-                <div className="form-row">
-                  <div className="form-label" style={labelBlue}>설치 장소</div>
-                  <div className="form-input">
-                    <input type="text" value={formData.installLocation} onChange={(e) => handleChange('installLocation', e.target.value)} />
-                  </div>
-                </div>
-                <div className="form-row">
-                  <div className="form-label" style={labelBlue}>세부 장소</div>
-                  <div className="form-input">
-                    <input type="text" value={formData.installDetailLocation} onChange={(e) => handleChange('installDetailLocation', e.target.value)} />
-                  </div>
-                </div>
-              </div>
-              <div className="form-row">
-                <div className="form-label" style={labelBlue}>기타 내용</div>
-                <div className="form-input">
-                  <input type="text" value={formData.etcContent} onChange={(e) => handleChange('etcContent', e.target.value)} />
-                </div>
-              </div>
+
+            <div className="bottom-actions">
+                <button className="btn-view-saved" onClick={() => setShowModal(true)}>전체 내용 보기</button>
+                <button className="btn-view-quote" onClick={() => setShowQuote(true)}>견적서 보기</button>
             </div>
-          </div>
         </div>
-
-        <div className="center-divider"></div>
-
-        <div className="right-column">
-          {/* LED Display 제품 정보 */}
-          <div className="section-card border-cyan">
-            <div className="section-header cyan">
-              <span>LED Display 제품 정보</span>
-            </div>
-            <div className="section-body">
-              <div className="form-row">
-                <div className="form-label" style={labelCyan}>제품명</div>
-                <div className="form-input" style={{maxWidth: '37.2%'}}>
-                  <select value={formData.productName} onChange={(e) => handleChange('productName', e.target.value)}>
-                    <option>ETK-COB1.2</option><option>ETK-COB1.5</option>
-                  </select>
-                </div>
-              </div>
-              <div className="form-row-group">
-                <div className="form-row">
-                  <div className="form-label" style={labelCyan}>제품 사이즈</div>
-                  <div className="form-input">
-                    <input type="text" value={formData.productSize} readOnly />
-                  </div>
-                </div>
-                <div className="form-row">
-                  <div className="form-label" style={labelCyan}>픽셀</div>
-                  <div className="form-input">
-                    <div style={{padding: '6px 10px', background: '#f5f5f5', borderRadius: '4px', width: '100%'}}>
-                      {formData.pixel}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="form-row-group">
-                <div className="form-row">
-                  <div className="form-label" style={labelCyan}>밝기</div>
-                  <div className="form-input">
-                    <input type="text" value={formData.brightness} readOnly />
-                  </div>
-                </div>
-                <div className="form-row">
-                  <div className="form-label" style={labelCyan}>전력</div>
-                  <div className="form-input">
-                    <div style={{padding: '6px 10px', background: '#f5f5f5', borderRadius: '4px', width: '100%'}}>
-                      {formData.power}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="form-row">
-                <div className="form-label" style={labelCyan}>해상도</div>
-                <div className="form-input" style={{maxWidth: '37.2%'}}>
-                  <div style={{padding: '6px 10px', background: '#f5f5f5', borderRadius: '4px', width: '100%'}}>
-                    {formData.resolution}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* LED Display 구매 수량 */}
-          <div className="section-card border-cyan">
-            <div className="section-header cyan">
-              <span>LED Display 구매 수량</span>
-            </div>
-            <div className="section-body">
-              <div className="form-row quantity-row">
-                <div className="form-label" style={labelCyan}>수량</div>
-                <div className="form-input quantity-input">
-                  <span className="dim-label">W:</span>
-                  <select value={formData.width} onChange={(e) => handleChange('width', e.target.value)}>
-                    {Array.from({length: 15}, (_, i) => i + 1).map(n => <option key={n} value={n}>{n}</option>)}
-                  </select>
-                  <span className="quantity-range">1 ~ 15</span>
-                  <span className="dim-label">X H:</span>
-                  <select value={formData.height} onChange={(e) => handleChange('height', e.target.value)}>
-                    {Array.from({length: 15}, (_, i) => i + 1).map(n => <option key={n} value={n}>{n}</option>)}
-                  </select>
-                  <span className="quantity-range">1 ~ 15</span>
-                  <span className="equals">=</span>
-                  <input type="text" className="result-field" value={formData.totalPanels} readOnly />
-                  <span className="unit">EA</span>
-                </div>
-              </div>
-              <div className="form-row">
-                <div className="form-label" style={labelCyan}>LED 사이즈</div>
-                <div className="split-input">
-                  <input type="text" value={formData.ledSizeW} readOnly />
-                  <span className="x-mark">X</span>
-                  <input type="text" value={formData.ledSizeH} readOnly />
-                </div>
-              </div>
-              <div className="form-row">
-                <div className="form-label" style={labelCyan}>LED 해상도</div>
-                <div className="split-input">
-                  <input type="text" value={formData.ledResW} readOnly />
-                  <span className="x-mark">X</span>
-                  <input type="text" value={formData.ledResH} readOnly />
-                </div>
-              </div>
-              <div className="form-row-group">
-                <div className="form-row">
-                  <div className="form-label" style={labelCyan}>전체 전력</div>
-                  <div className="form-input">
-                    <input type="text" value={formData.totalPower + ' Kw'} readOnly />
-                  </div>
-                </div>
-                <div className="form-row">
-                  <div className="form-label" style={labelCyan}>설치인원</div>
-                  <div className="form-input">
-                    <select value={formData.installPersonnel} onChange={(e) => handleChange('installPersonnel', e.target.value)}>
-                      {[1,2,3,4,5,6,7,8,9,10].map(n => <option key={n} value={n}>{n}명</option>)}
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div className="form-row-group">
-                <div className="form-row">
-                  <div className="form-label" style={labelCyan}>프로세스 사양</div>
-                  <div className="form-input">
-                    <select value={formData.processorModel} onChange={(e) => handleChange('processorModel', e.target.value)}>
-                      <option>VX400</option><option>VX600</option><option>VX600 Pro</option><option>VX1000</option><option>VX2000</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="form-row">
-                  <div className="form-label" style={labelCyan}>수량</div>
-                  <div className="form-input">
-                    <select value={formData.processorQuantity} onChange={(e) => handleChange('processorQuantity', e.target.value)}>
-                      {[1,2,3,4,5,6,7,8,9,10].map(n => <option key={n} value={n}>{n}</option>)}
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* LED Display 예상도 */}
-          <div className="section-card border-cyan">
-            <div className="section-header cyan">
-              <span>LED Display 예상도</span>
-            </div>
-            <div className="section-body preview-body">
-              <div className="led-preview-border">
-                <div className="led-preview-layout">
-                  <div className="led-dimension-v">
-                    <div className="led-dimension-v-line">
-                      <span className="led-dimension-v-text">{formData.ledSizeH}mm</span>
-                    </div>
-                  </div>
-                  <div className="led-grid-wrapper">
-                    <div className="led-grid" style={{
-                      gridTemplateColumns: `repeat(${formData.width}, 1fr)`,
-                      gridTemplateRows: `repeat(${formData.height}, 1fr)`
-                    }}>
-                      {Array.from({length: formData.totalPanels}).map((_, i) => (
-                        <div key={i} className="led-panel"></div>
-                      ))}
-                    </div>
-                    <div className="led-dimension-h">
-                      <div className="led-dimension-h-line">
-                        <span className="led-dimension-h-text">{formData.ledSizeW}mm</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="bottom-actions">
-        <button className="btn-view-saved" onClick={() => setShowModal(true)}>전체 내용 보기</button>
-        <button className="btn-view-quote" onClick={() => setShowQuote(true)}>견적서 보기</button>
-      </div>
-    </div>
-  )
+    )
 }
 
 export default EstimateForm

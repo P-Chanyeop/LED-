@@ -1,6 +1,6 @@
 /* ============================================
    LED Estimate Form - Matching Design Mockup
-   Mint: #25CAD2, Green: #8cc63f, Blue: #0071BC
+   Mint: #3BC1CC, Green: #8cc63f, Blue: #0071BC
    Background: WHITE
    Each section: individual colored rounded border
    ============================================ */
@@ -26,14 +26,14 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  border: 2px solid #25CAD2;
+  border: 2px solid #3BC1CC;
   border-radius: 12px;
   padding: 14px;
 }
 
 .center-divider {
   width: 1px;
-  background-color: #25CAD2;
+  background-color: #3BC1CC;
   align-self: stretch;
   margin: 0 24px;
   flex-shrink: 0;
@@ -46,7 +46,7 @@
   border-radius: 10px;
 }
 
-.section-card.border-cyan { border: 2px solid #25CAD2; }
+.section-card.border-cyan { border: 2px solid #3BC1CC; }
 .section-card.border-green { border: 2px solid #8cc63f; }
 .section-card.border-blue { border: 2px solid #0071BC; }
 
@@ -61,14 +61,14 @@
   align-items: center;
 }
 
-.section-header.cyan { background-color: #25CAD2; }
-.section-header.green { background-color: #25CAD2; }
+.section-header.cyan { background-color: #3BC1CC; }
+.section-header.green { background-color: #3BC1CC; }
 .section-header.blue { background-color: #0071BC; }
 
 .reset-btn {
   background: white;
-  border: 1px solid #25CAD2;
-  color: #25CAD2;
+  border: 1px solid #3BC1CC;
+  color: #3BC1CC;
   padding: 3px 12px;
   border-radius: 3px;
   cursor: pointer;
@@ -199,8 +199,8 @@
   border-radius: 5px;
 }
 
-.attach-btn { background-color: #25CAD2; }
-.camera-btn { background-color: #25CAD2; }
+.attach-btn { background-color: #3BC1CC; }
+.camera-btn { background-color: #3BC1CC; }
 .attach-btn:hover, .camera-btn:hover { opacity: 0.85; }
 
 /* Quantity Row */
@@ -216,13 +216,13 @@
 .quantity-select-wrap select {
   width: 55px;
   padding: 4px;
-  border: 1px solid #25CAD2;
+  border: 1px solid #3BC1CC;
   font-size: 13px;
   color: #333;
   background: white;
 }
 
-.quantity-range { font-size: 10px; color: #25CAD2; }
+.quantity-range { font-size: 10px; color: #3BC1CC; }
 .equals { color: #333; font-weight: bold; font-size: 16px; }
 
 .result-field {
@@ -294,7 +294,7 @@
 
 .led-dimension-v-line {
   width: 1px;
-  background: #25CAD2;
+  background: #3BC1CC;
   position: relative;
   margin: 0 auto;
   min-height: 100%;
@@ -307,7 +307,7 @@
   left: -4px;
   width: 9px;
   height: 1px;
-  background: #25CAD2;
+  background: #3BC1CC;
 }
 
 .led-dimension-v-line::before { top: 0; }
@@ -318,7 +318,7 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%) rotate(-90deg);
-  background: #25CAD2;
+  background: #3BC1CC;
   color: white;
   padding: 2px 8px;
   font-size: 11px;
@@ -338,7 +338,7 @@
 .led-dimension-h-line {
   width: 100%;
   height: 1px;
-  background: #25CAD2;
+  background: #3BC1CC;
   position: relative;
   display: flex;
   align-items: center;
@@ -352,14 +352,14 @@
   top: -4px;
   width: 1px;
   height: 9px;
-  background: #25CAD2;
+  background: #3BC1CC;
 }
 
 .led-dimension-h-line::before { left: 0; }
 .led-dimension-h-line::after { right: 0; }
 
 .led-dimension-h-text {
-  background: #25CAD2;
+  background: #3BC1CC;
   color: white;
   padding: 2px 10px;
   font-size: 11px;
@@ -391,9 +391,9 @@
   border-radius: 5px;
 }
 
-.btn-view-saved { background-color: #25CAD2; color: white; }
+.btn-view-saved { background-color: #3BC1CC; color: white; }
 .btn-view-saved:hover { background-color: #7ab52f; }
-.btn-view-quote { background-color: #25CAD2; color: white; }
+.btn-view-quote { background-color: #3BC1CC; color: white; }
 .btn-view-quote:hover { background-color: #1fb8c0; }
 
 /* ============================================
@@ -427,7 +427,7 @@
 
 /* 바깥 민트 테두리 박스 (인쇄버튼+로고+내용박스 전체 감쌈) */
 .modal-border-outer {
-  border: 1px solid #25CAD2;
+  border: 1px solid #3BC1CC;
   border-radius: 6px;
   display: flex;
   flex-direction: column;
@@ -440,7 +440,7 @@
 
 /* 안쪽 민트 테두리 박스 (타이틀 + 내용 감쌈) */
 .modal-inner {
-  border: 1px solid #25CAD2;
+  border: 1px solid #3BC1CC;
   border-radius: 4px;
   display: flex;
   flex-direction: column;
@@ -483,7 +483,7 @@
 
 /* 청록 타이틀바 */
 .modal-title {
-  background: #25CAD2;
+  background: #3BC1CC;
   color: white;
   text-align: center;
   font-size: 13px;
@@ -518,7 +518,7 @@
 }
 
 .modal-label {
-  background: #25CAD2;
+  background: #3BC1CC;
   color: white;
   font-size: 11px;
   font-weight: 600;
@@ -552,7 +552,7 @@
 }
 
 .modal-value.modal-value-cyan {
-  border-color: #25CAD2;
+  border-color: #3BC1CC;
   background: white;
 }
 .modal-value.modal-value-blue {
@@ -562,7 +562,7 @@
 
 .modal-divider {
   border: none;
-  border-top: 1px dashed #25CAD2;
+  border-top: 1px dashed #3BC1CC;
   margin: 3px 0;
 }
 
@@ -588,7 +588,7 @@
 
 .modal-preview-v-line {
   width: 1px;
-  background: #25CAD2;
+  background: #3BC1CC;
   position: relative;
   margin: 0 auto;
   min-height: 100%;
@@ -600,7 +600,7 @@
   left: -3px;
   width: 7px;
   height: 1px;
-  background: #25CAD2;
+  background: #3BC1CC;
 }
 .modal-preview-v-line::before { top: 0; }
 .modal-preview-v-line::after { bottom: 0; }
@@ -610,7 +610,7 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%) rotate(-90deg);
-  background: #25CAD2;
+  background: #3BC1CC;
   color: white;
   padding: 1px 6px;
   font-size: 9px;
@@ -642,7 +642,7 @@
 .modal-preview-h-line {
   width: 100%;
   height: 1px;
-  background: #25CAD2;
+  background: #3BC1CC;
   position: relative;
   display: flex;
   align-items: center;
@@ -655,13 +655,13 @@
   top: -3px;
   width: 1px;
   height: 7px;
-  background: #25CAD2;
+  background: #3BC1CC;
 }
 .modal-preview-h-line::before { left: 0; }
 .modal-preview-h-line::after { right: 0; }
 
 .modal-preview-h-text {
-  background: #25CAD2;
+  background: #3BC1CC;
   color: white;
   padding: 1px 8px;
   font-size: 9px;
@@ -696,7 +696,7 @@
 .modal-btn-close:hover { background: #7ab52f; }
 
 .modal-btn-quote {
-  background: #25CAD2;
+  background: #3BC1CC;
   color: white;
   border: none;
   padding: 8px 30px;
@@ -712,14 +712,14 @@
    ============================================ */
 .quote-wrapper {
   background: white;
-  padding: 30px;
+  padding: 20px;
   border-radius: 12px;
-  border: 1px solid #25CAD2;
+  border: 1px solid #3BC1CC;
   box-shadow: 0 8px 40px rgba(0,0,0,0.3);
 }
 
 .quote-outer {
-  border: 1px solid #25CAD2;
+  border: 1px solid #3BC1CC;
   border-radius: 8px;
   
   width: 620px;
@@ -741,10 +741,10 @@
 .quote-title-text {
   flex: 1;
   text-align: center;
-  font-size: 32px;
+  font-size: 40px;
   font-weight: 900;
-  color: #25CAD2;
-  letter-spacing: 6px;
+  color: #3BC1CC;
+  letter-spacing: 8px;
 }
 
 .quote-header-logo {
@@ -760,26 +760,35 @@
   padding-left: 2px;
 }
 
+div.section {
+  border-radius: 12px;
+  border: 1px solid #3BC1CC;
+}
+
 .quote-section-title {
-  background: #25CAD2;
+  background: #3BC1CC;
   color: white;
   text-align: center;
   font-size: 12px;
   font-weight: 700;
-  padding: 4px 0;
+  border-spacing : 3px;
+  padding: 4px;
+  border-top-left-radius: 11px;
+  border-top-right-radius: 11px;
   margin-bottom: 4px;
 }
 
 /* 업체 정보 테이블 */
 .quote-client-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 3px;
   margin-bottom: 4px;
   font-size: 11px;
 }
 
 .quote-client-table td {
-  border: 1px solid #25CAD2;
+  border: 1px solid #8cc63f;
   padding: 4px 8px;
   height: 24px;
 }
@@ -800,30 +809,31 @@
 
 .quote-divider {
   border: none;
-  border-top: 1px dashed #25CAD2;
+  border-top: 1px dashed #3BC1CC;
   margin: 4px 0;
 }
 
 /* 상품 테이블 */
 .quote-items-table {
-  width: 100%;
+  width: calc(100% - 6px);
+  margin: 0 3px 2px;
   border-collapse: collapse;
+  table-layout: fixed;
   font-size: 11px;
-  margin-bottom: 2px;
 }
 
 .quote-items-table th {
-  background: #25CAD2;
+  background: #3BC1CC;
   color: white;
   padding: 4px 6px;
   text-align: center;
-  border: 1px solid #25CAD2;
+  /*border: 1px solid #3BC1CC;*/
   font-weight: 600;
 }
 
 .quote-items-table td {
   border: 1px solid #ddd;
-  padding: 3px 6px;
+  padding: 4px 6px;
   color: #333;
   vertical-align: middle;
 }
@@ -832,14 +842,23 @@
 .qi-right { text-align: right; }
 
 .qi-product {
+  text-align: center;
+  vertical-align: middle;
+  font-size: 10px;
+}
+
+.qi-product:not([rowspan]) {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 2px;
-  text-align: center;
-  font-size: 10px;
 }
+
+.qi-product-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 
 .qi-product-img {
   width: 50px;
@@ -849,7 +868,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #25CAD2;
+  color: #3BC1CC;
   font-size: 9px;
   font-weight: 700;
 }
@@ -859,10 +878,16 @@
 }
 
 .qi-subtotal td {
-  background: #25CAD2;
+  background: white;
   font-weight: 700;
-  color: white;
+  color: #333;
+  text-align: center;
+}
+
+.qi-subtotal td:last-child {
   text-align: right;
+  background: #41C1CC;
+  color: white;
 }
 
 /* 합계 테이블 */
@@ -896,7 +921,7 @@
 
 .qt-desc {
   color: #333;
-  padding-left: 10px;
+  text-align: center;
 }
 
 .qt-val {
@@ -906,28 +931,52 @@
 }
 
 .qt-amount {
-  text-align: right;
   font-weight: 600;
   color: #333;
-  width: 100px;
+  width: 180px;
+  padding: 4px 8px;
+  overflow: hidden;
+}
+
+.qt-amount .qt-won {
+  float: left;
+}
+
+.qt-amount .qt-num {
+  float: right;
 }
 
 .qt-mint-row td {
-  background: #25CAD2;
-  color: white;
+  background: #E1FEFF;
+  color: #333;
   font-weight: 600;
+}
+
+.qt-mint-row td.qt-amount {
+  background: #41C1CC !important;
+  color: white !important;
 }
 
 .qt-green-row td {
-  background: #8cc63f;
-  color: white;
+  background: #EAFFCA;
+  color: #333;
   font-weight: 600;
 }
 
+.qt-green-row td.qt-amount {
+  background: #8CC63F !important;
+  color: white !important;
+}
+
 .qt-grand td {
-  background: #F47D35;
-  color: white;
+  background: #FFEDE1;
+  color: #333;
   font-weight: 700;
+}
+
+.qt-grand td.qt-amount {
+  background: #F47921 !important;
+  color: white !important;
 }
 
 .qt-grand-label {
@@ -980,7 +1029,7 @@
 }
 
 .quote-btn-email {
-  background: #25CAD2;
+  background: #3BC1CC;
   color: white;
   border: none;
   padding: 8px 24px;
@@ -1016,4 +1065,15 @@
   .led-panel { width: 22px; height: 22px; }
   .bottom-actions { flex-direction: column; padding: 10px; }
   .btn-view-saved, .btn-view-quote { width: 100%; }
+}
+
+.qi-center:first-child {
+  background: #3BC1CC;
+  color: white;
+  font-weight: 600;
+}
+
+.qi-subtotal td:first-child {
+  background: white;
+  color: #333;
 }
