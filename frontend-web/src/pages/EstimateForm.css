@@ -707,6 +707,276 @@
 }
 .modal-btn-quote:hover { background: #1fb8c0; }
 
+/* ============================================
+   견적서 모달
+   ============================================ */
+.quote-outer {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+  width: 600px;
+  max-width: 98vw;
+  max-height: 94vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 20px 10px;
+  border: 1px solid #ddd;
+}
+
+.quote-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.quote-title-text {
+  flex: 1;
+  text-align: center;
+  font-size: 32px;
+  font-weight: 900;
+  color: #25CAD2;
+  letter-spacing: 6px;
+}
+
+.quote-header-logo {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.quote-date {
+  font-size: 10px;
+  color: #555;
+  margin-bottom: 6px;
+  padding-left: 2px;
+}
+
+.quote-section-title {
+  background: #25CAD2;
+  color: white;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 0;
+  margin-bottom: 4px;
+}
+
+/* 업체 정보 테이블 */
+.quote-client-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 4px;
+  font-size: 11px;
+}
+
+.quote-client-table td {
+  border: 1px solid #25CAD2;
+  padding: 4px 8px;
+  height: 24px;
+}
+
+.qct-label {
+  background: #25CAD2;
+  color: white;
+  font-weight: 600;
+  width: 80px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.qct-value {
+  background: white;
+  color: #333;
+}
+
+.quote-divider {
+  border: none;
+  border-top: 1px dashed #25CAD2;
+  margin: 4px 0;
+}
+
+/* 상품 테이블 */
+.quote-items-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  margin-bottom: 2px;
+}
+
+.quote-items-table th {
+  background: #25CAD2;
+  color: white;
+  padding: 4px 6px;
+  text-align: center;
+  border: 1px solid #25CAD2;
+  font-weight: 600;
+}
+
+.quote-items-table td {
+  border: 1px solid #ddd;
+  padding: 3px 6px;
+  color: #333;
+  vertical-align: middle;
+}
+
+.qi-center { text-align: center; }
+.qi-right { text-align: right; }
+
+.qi-product {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  text-align: center;
+  font-size: 10px;
+}
+
+.qi-product-img {
+  width: 50px;
+  height: 30px;
+  background: #1a1a2e;
+  border: 1px solid #555;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #25CAD2;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.qi-proc-img {
+  background: #2a2a3e;
+}
+
+.qi-subtotal td {
+  background: #e8f9fa;
+  font-weight: 600;
+  color: #25CAD2;
+}
+
+/* 합계 테이블 */
+.quote-note {
+  font-size: 9px;
+  color: #555;
+  margin: 2px 0 4px;
+  text-align: right;
+}
+
+.quote-total-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  margin-bottom: 6px;
+}
+
+.quote-total-table td {
+  border: 1px solid #ddd;
+  padding: 4px 8px;
+  height: 24px;
+}
+
+.qt-label {
+  background: #25CAD2;
+  color: white;
+  font-weight: 700;
+  text-align: center;
+  width: 50px;
+}
+
+.qt-desc {
+  color: #333;
+  padding-left: 10px;
+}
+
+.qt-val {
+  color: #333;
+  text-align: center;
+  width: 20px;
+}
+
+.qt-amount {
+  text-align: right;
+  font-weight: 600;
+  color: #333;
+  width: 100px;
+}
+
+.qt-grand td {
+  background: #F47D35;
+  color: white;
+  font-weight: 700;
+}
+
+.qt-grand-label {
+  text-align: center;
+  letter-spacing: 4px;
+}
+
+/* 약관 */
+.quote-terms {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 6px;
+  align-items: flex-start;
+}
+
+.quote-terms-text {
+  flex: 1;
+  font-size: 8.5px;
+  color: #333;
+  line-height: 1.5;
+}
+
+.quote-terms-text p { margin: 0; }
+.qt-bold { font-weight: 700; margin-top: 2px !important; }
+.qt-sub { color: #555; }
+
+.quote-stamp {
+  width: 70px;
+  height: 70px;
+  border: 2px solid #c0392b;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #c0392b;
+  font-size: 9px;
+  font-weight: 700;
+  text-align: center;
+  flex-shrink: 0;
+  padding: 4px;
+  line-height: 1.4;
+}
+
+/* 하단 버튼 */
+.quote-footer {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 6px 0 2px;
+}
+
+.quote-btn-email {
+  background: #25CAD2;
+  color: white;
+  border: none;
+  padding: 8px 24px;
+  border-radius: 5px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.quote-btn-email:hover { background: #1fb8c0; }
+
+.quote-footer-note {
+  text-align: center;
+  font-size: 9px;
+  line-height: 1.4;
+  padding-bottom: 2px;
+}
+
 /* Responsive */
 @media (max-width: 1200px) {
   .main-content-area { flex-direction: column; gap: 12px; padding: 12px; }
