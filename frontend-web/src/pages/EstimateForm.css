@@ -62,7 +62,7 @@
 }
 
 .section-header.cyan { background-color: #25CAD2; }
-.section-header.green { background-color: #8cc63f; }
+.section-header.green { background-color: #25CAD2; }
 .section-header.blue { background-color: #0071BC; }
 
 .reset-btn {
@@ -200,7 +200,7 @@
 }
 
 .attach-btn { background-color: #25CAD2; }
-.camera-btn { background-color: #8cc63f; }
+.camera-btn { background-color: #25CAD2; }
 .attach-btn:hover, .camera-btn:hover { opacity: 0.85; }
 
 /* Quantity Row */
@@ -391,7 +391,7 @@
   border-radius: 5px;
 }
 
-.btn-view-saved { background-color: #8cc63f; color: white; }
+.btn-view-saved { background-color: #25CAD2; color: white; }
 .btn-view-saved:hover { background-color: #7ab52f; }
 .btn-view-quote { background-color: #25CAD2; color: white; }
 .btn-view-quote:hover { background-color: #1fb8c0; }
@@ -710,23 +710,31 @@
 /* ============================================
    견적서 모달
    ============================================ */
-.quote-outer {
+.quote-wrapper {
   background: white;
-  border-radius: 8px;
+  padding: 30px;
+  border-radius: 12px;
+  border: 1px solid #25CAD2;
   box-shadow: 0 8px 40px rgba(0,0,0,0.3);
-  width: 600px;
+}
+
+.quote-outer {
+  border: 1px solid #25CAD2;
+  border-radius: 8px;
+  
+  width: 620px;
   max-width: 98vw;
   max-height: 94vh;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  padding: 16px 20px 10px;
-  border: 1px solid #ddd;
+  padding: 20px;
+  
 }
 
 .quote-header {
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 60px 1fr 60px;
   margin-bottom: 4px;
 }
 
@@ -777,7 +785,7 @@
 }
 
 .qct-label {
-  background: #25CAD2;
+  background: #8cc63f;
   color: white;
   font-weight: 600;
   width: 80px;
@@ -851,9 +859,10 @@
 }
 
 .qi-subtotal td {
-  background: #e8f9fa;
-  font-weight: 600;
-  color: #25CAD2;
+  background: #25CAD2;
+  font-weight: 700;
+  color: white;
+  text-align: right;
 }
 
 /* 합계 테이블 */
@@ -878,7 +887,7 @@
 }
 
 .qt-label {
-  background: #25CAD2;
+  background: rgba(0,0,0,0.15);
   color: white;
   font-weight: 700;
   text-align: center;
@@ -901,6 +910,18 @@
   font-weight: 600;
   color: #333;
   width: 100px;
+}
+
+.qt-mint-row td {
+  background: #25CAD2;
+  color: white;
+  font-weight: 600;
+}
+
+.qt-green-row td {
+  background: #8cc63f;
+  color: white;
+  font-weight: 600;
 }
 
 .qt-grand td {

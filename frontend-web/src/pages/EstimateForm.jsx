@@ -26,15 +26,16 @@ function QuoteModal({ formData, onClose }) {
 
   return createPortal(
     <div className="modal-overlay" onClick={onClose}>
-      <div className="quote-outer" onClick={e => e.stopPropagation()}>
+      <div className="quote-wrapper" onClick={e => e.stopPropagation()}>
+        <div className="quote-outer">
         {/* 헤더 */}
         <div className="quote-header">
-          <button className="modal-print-btn" title="인쇄하기">
-            <img src={printIconImg} alt="인쇄하기" style={{height:'48px'}} />
+          <button className="modal-print-btn" title="인쇄하기" style={{flexShrink:0}}>
+            <img src={printIconImg} alt="인쇄하기" style={{height:'44px'}} />
           </button>
           <div className="quote-title-text">견 적 서</div>
           <div className="quote-header-logo">
-            <img src={modalLogoImg1} alt="logo" style={{height:'60px', imageRendering:'crisp-edges'}} />
+            <img src={modalLogoImg1} alt="logo" style={{height:'56px', imageRendering:'crisp-edges'}} />
           </div>
         </div>
 
@@ -74,6 +75,7 @@ function QuoteModal({ formData, onClose }) {
               <th>순번</th>
               <th>품명</th>
               <th>규격</th>
+              <th>단위</th>
               <th>수량</th>
               <th>단가</th>
               <th>가격</th>
@@ -87,6 +89,7 @@ function QuoteModal({ formData, onClose }) {
                 <div className="qi-product-img">ETK</div>
                 <div>{formData.productName}</div>
               </td>
+              <td className="qi-center">EA</td>
               <td>{formData.productSize}</td>
               <td className="qi-center">{ledQty}</td>
               <td className="qi-right">W {fmt(unitPrice)}</td>
@@ -98,7 +101,7 @@ function QuoteModal({ formData, onClose }) {
               <td className="qi-right">W {fmt(sqmPrice)}</td>
             </tr>
             <tr className="qi-subtotal">
-              <td colSpan={5} className="qi-center">소계</td>
+              <td colSpan={6} className="qi-center">소계</td>
               <td className="qi-right">W {fmt(sub1)}</td>
             </tr>
             {/* 2. 프로세서 */}
@@ -114,7 +117,7 @@ function QuoteModal({ formData, onClose }) {
               <td className="qi-right">W {fmt(sub2)}</td>
             </tr>
             <tr className="qi-subtotal">
-              <td colSpan={5} className="qi-center">소계</td>
+              <td colSpan={6} className="qi-center">소계</td>
               <td className="qi-right">W {fmt(sub2)}</td>
             </tr>
             {/* 3. 시공 인건비 */}
@@ -127,7 +130,7 @@ function QuoteModal({ formData, onClose }) {
               <td className="qi-right">W {fmt(sub3)}</td>
             </tr>
             <tr className="qi-subtotal">
-              <td colSpan={5} className="qi-center">소계</td>
+              <td colSpan={6} className="qi-center">소계</td>
               <td className="qi-right">W {fmt(sub3)}</td>
             </tr>
             {/* 4. 기타 비용 */}
@@ -140,7 +143,7 @@ function QuoteModal({ formData, onClose }) {
               <td className="qi-right">W {fmt(sub4)}</td>
             </tr>
             <tr className="qi-subtotal">
-              <td colSpan={5} className="qi-center">소계</td>
+              <td colSpan={6} className="qi-center">소계</td>
               <td className="qi-right">W {fmt(sub4)}</td>
             </tr>
           </tbody>
@@ -151,13 +154,13 @@ function QuoteModal({ formData, onClose }) {
         {/* 합계 */}
         <table className="quote-total-table">
           <tbody>
-            <tr>
+            <tr className="qt-mint-row">
               <td className="qt-label">판매</td>
               <td className="qt-desc">LED 디스플레이 판매가 (1+2)</td>
               <td className="qt-val">W</td>
               <td className="qt-amount">{fmt(sub1 + sub2)}</td>
             </tr>
-            <tr>
+            <tr className="qt-green-row">
               <td className="qt-label">추가</td>
               <td className="qt-desc">시공비 + 기타 비용</td>
               <td className="qt-val">W</td>
@@ -199,6 +202,7 @@ function QuoteModal({ formData, onClose }) {
         <div className="quote-footer-note">
           <span style={{color:'#E91E63'}}>내용 보기 버튼 클릭 / LED Display 전체 내용 보기에서</span><br/>
           <span style={{color:'#E91E63'}}>견적서 보기 버튼 클릭</span>
+        </div>
         </div>
       </div>
     </div>,
