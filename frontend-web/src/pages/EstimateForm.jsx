@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import './EstimateForm.css'
+import modalLogoImg from '../assets/modal-logo2.png'
+import printIconImg from '../assets/print-icon.png'
 
 function ViewModal({ formData, onClose }) {
   const panelW = 28
@@ -16,22 +18,13 @@ function ViewModal({ formData, onClose }) {
       <div className="modal-outer" onClick={e => e.stopPropagation()}>
         {/* 큰 민트 테두리 - 전체 감쌈 */}
         <div className="modal-border-outer">
-          {/* 헤더: 인쇄버튼(좌) + 로고(우) */}
+          {/* 헤더: 인쇄버튼(좌 끝) + 로고(중앙 왼쪽) */}
           <div className="modal-header">
-            <button className="modal-print-btn" title="인쇄">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <polyline points="6 9 6 2 18 2 18 9"></polyline>
-                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-                <rect x="6" y="14" width="12" height="8"></rect>
-              </svg>
+            <button className="modal-print-btn" title="인쇄하기">
+              <img src={printIconImg} alt="인쇄하기" style={{height:'76px'}} />
             </button>
-            <div className="modal-logo">
-              <img src="/logo.png" alt="logo" style={{height:'30px'}} onError={e=>{e.target.style.display='none'}} />
-              <div className="modal-logo-text">
-                <span style={{fontSize:'9px', color:'#aaa'}}>LED DISPLAY SOLUTION</span>
-                <span style={{fontSize:'17px', fontWeight:'900', color:'#25CAD2', lineHeight:'1'}}>LED<span style={{fontSize:'11px'}}>✦</span></span>
-                <span style={{fontSize:'8px', color:'#aaa'}}>EASY TECH INTERNATIONAL</span>
-              </div>
+            <div className="modal-logo" style={{flex:1, display:'flex', justifyContent:'flex-start', paddingLeft:'20px'}}>
+              <img src={modalLogoImg} alt="logo" style={{height:'72px', imageRendering:'crisp-edges'}} />
             </div>
           </div>
 
@@ -45,44 +38,44 @@ function ViewModal({ formData, onClose }) {
           {/* 날짜 */}
           <div className="modal-row full">
             <div className="modal-label">날짜</div>
-            <div className="modal-value">{formData.date}</div>
+            <div className="modal-value modal-value-cyan">{formData.date}</div>
           </div>
           {/* 담당자 / 부서 */}
           <div className="modal-row-group">
             <div className="modal-row">
               <div className="modal-label">담당자</div>
-              <div className="modal-value">{formData.manager}</div>
+              <div className="modal-value modal-value-cyan">{formData.manager}</div>
             </div>
             <div className="modal-row">
               <div className="modal-label">부서</div>
-              <div className="modal-value">{formData.department}</div>
+              <div className="modal-value modal-value-cyan">{formData.department}</div>
             </div>
           </div>
           {/* 회사 연락처 / 핸드폰 */}
           <div className="modal-row-group">
             <div className="modal-row">
               <div className="modal-label">회사 연락처</div>
-              <div className="modal-value">{formData.companyPhone}</div>
+              <div className="modal-value modal-value-cyan">{formData.companyPhone}</div>
             </div>
             <div className="modal-row">
               <div className="modal-label">핸드폰 번호</div>
-              <div className="modal-value">{formData.mobilePhone}</div>
+              <div className="modal-value modal-value-cyan">{formData.mobilePhone}</div>
             </div>
           </div>
           {/* E-mail */}
           <div className="modal-row full">
             <div className="modal-label">E-mail</div>
-            <div className="modal-value">{formData.email}</div>
+            <div className="modal-value modal-value-cyan">{formData.email}</div>
           </div>
           {/* 회사 주소 */}
           <div className="modal-row full">
             <div className="modal-label">회사 주소</div>
-            <div className="modal-value">{formData.companyAddress}</div>
+            <div className="modal-value modal-value-cyan">{formData.companyAddress}</div>
           </div>
           {/* 첨부파일 */}
           <div className="modal-row full">
             <div className="modal-label">첨부파일</div>
-            <div className="modal-value">
+            <div className="modal-value modal-value-cyan">
               <a href="#" style={{color:'#25CAD2', textDecoration:'underline'}}>{formData.attachment}</a>
             </div>
           </div>
@@ -93,28 +86,28 @@ function ViewModal({ formData, onClose }) {
           <div className="modal-row-group">
             <div className="modal-row">
               <div className="modal-label modal-label-blue">예상 설치날짜</div>
-              <div className="modal-value">{formData.installDate}</div>
+              <div className="modal-value modal-value-blue">{formData.installDate}</div>
             </div>
             <div className="modal-row">
               <div className="modal-label modal-label-blue">예상 설치기간</div>
-              <div className="modal-value">{formData.installPeriod}</div>
+              <div className="modal-value modal-value-blue">{formData.installPeriod}</div>
             </div>
           </div>
           {/* 설치 장소 / 세부 장소 */}
           <div className="modal-row-group">
             <div className="modal-row">
               <div className="modal-label modal-label-blue">설치 장소</div>
-              <div className="modal-value">{formData.installLocation}</div>
+              <div className="modal-value modal-value-blue">{formData.installLocation}</div>
             </div>
             <div className="modal-row">
               <div className="modal-label modal-label-blue">세부 장소</div>
-              <div className="modal-value">{formData.installDetailLocation}</div>
+              <div className="modal-value modal-value-blue">{formData.installDetailLocation}</div>
             </div>
           </div>
           {/* 기타 내용 */}
           <div className="modal-row full">
             <div className="modal-label modal-label-blue">기타 내용</div>
-            <div className="modal-value">{formData.etcContent}</div>
+            <div className="modal-value modal-value-blue">{formData.etcContent}</div>
           </div>
 
           <div className="modal-divider"></div>
@@ -122,34 +115,34 @@ function ViewModal({ formData, onClose }) {
           {/* 제품명 */}
           <div className="modal-row full">
             <div className="modal-label">제품명</div>
-            <div className="modal-value">{formData.productName}</div>
+            <div className="modal-value modal-value-cyan">{formData.productName}</div>
           </div>
           {/* 제품 사이즈 / 픽셀 */}
           <div className="modal-row-group">
             <div className="modal-row">
               <div className="modal-label">제품 사이즈</div>
-              <div className="modal-value">{formData.productSize}</div>
+              <div className="modal-value modal-value-cyan">{formData.productSize}</div>
             </div>
             <div className="modal-row">
               <div className="modal-label">픽셀</div>
-              <div className="modal-value">{formData.pixel}</div>
+              <div className="modal-value modal-value-cyan">{formData.pixel}</div>
             </div>
           </div>
           {/* 밝기 / 전력 */}
           <div className="modal-row-group">
             <div className="modal-row">
               <div className="modal-label">밝기</div>
-              <div className="modal-value">{formData.brightness}</div>
+              <div className="modal-value modal-value-cyan">{formData.brightness}</div>
             </div>
             <div className="modal-row">
               <div className="modal-label">전력</div>
-              <div className="modal-value">{formData.power}</div>
+              <div className="modal-value modal-value-cyan">{formData.power}</div>
             </div>
           </div>
           {/* 해상도 */}
           <div className="modal-row full">
             <div className="modal-label">해상도</div>
-            <div className="modal-value" style={{maxWidth:'37%'}}>{formData.resolution}</div>
+            <div className="modal-value modal-value-cyan" style={{maxWidth:'37%'}}>{formData.resolution}</div>
           </div>
 
           <div className="modal-divider"></div>
@@ -157,32 +150,32 @@ function ViewModal({ formData, onClose }) {
           {/* 수량 */}
           <div className="modal-row full">
             <div className="modal-label">수량</div>
-            <div className="modal-value">W : {formData.width} X H : {formData.height} = {formData.totalPanels}EA</div>
+            <div className="modal-value modal-value-cyan">W : {formData.width} X H : {formData.height} = {formData.totalPanels}EA</div>
           </div>
           {/* LED 사이즈 */}
           <div className="modal-row full">
             <div className="modal-label">LED 사이즈</div>
-            <div className="modal-value">{formData.ledSizeW} × {formData.ledSizeH}</div>
+            <div className="modal-value modal-value-cyan">{formData.ledSizeW} × {formData.ledSizeH}</div>
           </div>
           {/* LED 해상도 */}
           <div className="modal-row full">
             <div className="modal-label">LED 해상도</div>
-            <div className="modal-value">{formData.ledResW} × {formData.ledResH}</div>
+            <div className="modal-value modal-value-cyan">{formData.ledResW} × {formData.ledResH}</div>
           </div>
           {/* 전체 전력 */}
           <div className="modal-row full">
             <div className="modal-label">전체 전력</div>
-            <div className="modal-value">{formData.totalPower * 1000} W</div>
+            <div className="modal-value modal-value-cyan">{formData.totalPower * 1000} W</div>
           </div>
           {/* 프로세스 사양 / 설치인원 */}
           <div className="modal-row-group">
             <div className="modal-row">
               <div className="modal-label">프로세스 사양</div>
-              <div className="modal-value">{formData.processorModel}</div>
+              <div className="modal-value modal-value-cyan">{formData.processorModel}</div>
             </div>
             <div className="modal-row">
               <div className="modal-label">설치인원</div>
-              <div className="modal-value">{formData.installPersonnel}명</div>
+              <div className="modal-value modal-value-cyan">{formData.installPersonnel}명</div>
             </div>
           </div>
 
@@ -219,12 +212,13 @@ function ViewModal({ formData, onClose }) {
 
           </div>{/* modal-content 끝 */}
 
-          {/* 하단 버튼 */}
+          </div>{/* modal-inner 끝 */}
+
+          {/* 하단 버튼 - modal-inner 밖, modal-border-outer 안 */}
           <div className="modal-footer">
             <button className="modal-btn-close" onClick={onClose}>닫기</button>
             <button className="modal-btn-quote">견적서 보기</button>
           </div>
-          </div>{/* modal-inner 끝 */}
         </div>{/* modal-border-outer 끝 */}
       </div>
     </div>,
