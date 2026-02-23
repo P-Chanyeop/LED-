@@ -1,5 +1,236 @@
 import { useState } from 'react'
+import { createPortal } from 'react-dom'
 import './EstimateForm.css'
+
+function ViewModal({ formData, onClose }) {
+  const panelW = 28
+  const panelH = 20
+  const gap = 2
+  const padding = 2
+  const gridW = formData.width * panelW + (formData.width - 1) * gap + padding * 2
+  const gridH = formData.height * panelH + (formData.height - 1) * gap + padding * 2
+
+  return createPortal(
+    <div className="modal-overlay" onClick={onClose}>
+      {/* 바깥 흰 박스 */}
+      <div className="modal-outer" onClick={e => e.stopPropagation()}>
+        {/* 큰 민트 테두리 - 전체 감쌈 */}
+        <div className="modal-border-outer">
+          {/* 헤더: 인쇄버튼(좌) + 로고(우) */}
+          <div className="modal-header">
+            <button className="modal-print-btn" title="인쇄">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                <rect x="6" y="14" width="12" height="8"></rect>
+              </svg>
+            </button>
+            <div className="modal-logo">
+              <img src="/logo.png" alt="logo" style={{height:'30px'}} onError={e=>{e.target.style.display='none'}} />
+              <div className="modal-logo-text">
+                <span style={{fontSize:'9px', color:'#aaa'}}>LED DISPLAY SOLUTION</span>
+                <span style={{fontSize:'17px', fontWeight:'900', color:'#25CAD2', lineHeight:'1'}}>LED<span style={{fontSize:'11px'}}>✦</span></span>
+                <span style={{fontSize:'8px', color:'#aaa'}}>EASY TECH INTERNATIONAL</span>
+              </div>
+            </div>
+          </div>
+
+          {/* 작은 민트 테두리 - 타이틀 + 내용 감쌈 */}
+          <div className="modal-inner">
+          {/* 청록 타이틀바 */}
+          <div className="modal-title">LED Display 전체 내용 보기</div>
+
+          {/* 내용 */}
+          <div className="modal-content">
+          {/* 날짜 */}
+          <div className="modal-row full">
+            <div className="modal-label">날짜</div>
+            <div className="modal-value">{formData.date}</div>
+          </div>
+          {/* 담당자 / 부서 */}
+          <div className="modal-row-group">
+            <div className="modal-row">
+              <div className="modal-label">담당자</div>
+              <div className="modal-value">{formData.manager}</div>
+            </div>
+            <div className="modal-row">
+              <div className="modal-label">부서</div>
+              <div className="modal-value">{formData.department}</div>
+            </div>
+          </div>
+          {/* 회사 연락처 / 핸드폰 */}
+          <div className="modal-row-group">
+            <div className="modal-row">
+              <div className="modal-label">회사 연락처</div>
+              <div className="modal-value">{formData.companyPhone}</div>
+            </div>
+            <div className="modal-row">
+              <div className="modal-label">핸드폰 번호</div>
+              <div className="modal-value">{formData.mobilePhone}</div>
+            </div>
+          </div>
+          {/* E-mail */}
+          <div className="modal-row full">
+            <div className="modal-label">E-mail</div>
+            <div className="modal-value">{formData.email}</div>
+          </div>
+          {/* 회사 주소 */}
+          <div className="modal-row full">
+            <div className="modal-label">회사 주소</div>
+            <div className="modal-value">{formData.companyAddress}</div>
+          </div>
+          {/* 첨부파일 */}
+          <div className="modal-row full">
+            <div className="modal-label">첨부파일</div>
+            <div className="modal-value">
+              <a href="#" style={{color:'#25CAD2', textDecoration:'underline'}}>{formData.attachment}</a>
+            </div>
+          </div>
+
+          <div className="modal-divider"></div>
+
+          {/* 예상 설치날짜 / 설치기간 */}
+          <div className="modal-row-group">
+            <div className="modal-row">
+              <div className="modal-label modal-label-blue">예상 설치날짜</div>
+              <div className="modal-value">{formData.installDate}</div>
+            </div>
+            <div className="modal-row">
+              <div className="modal-label modal-label-blue">예상 설치기간</div>
+              <div className="modal-value">{formData.installPeriod}</div>
+            </div>
+          </div>
+          {/* 설치 장소 / 세부 장소 */}
+          <div className="modal-row-group">
+            <div className="modal-row">
+              <div className="modal-label modal-label-blue">설치 장소</div>
+              <div className="modal-value">{formData.installLocation}</div>
+            </div>
+            <div className="modal-row">
+              <div className="modal-label modal-label-blue">세부 장소</div>
+              <div className="modal-value">{formData.installDetailLocation}</div>
+            </div>
+          </div>
+          {/* 기타 내용 */}
+          <div className="modal-row full">
+            <div className="modal-label modal-label-blue">기타 내용</div>
+            <div className="modal-value">{formData.etcContent}</div>
+          </div>
+
+          <div className="modal-divider"></div>
+
+          {/* 제품명 */}
+          <div className="modal-row full">
+            <div className="modal-label">제품명</div>
+            <div className="modal-value">{formData.productName}</div>
+          </div>
+          {/* 제품 사이즈 / 픽셀 */}
+          <div className="modal-row-group">
+            <div className="modal-row">
+              <div className="modal-label">제품 사이즈</div>
+              <div className="modal-value">{formData.productSize}</div>
+            </div>
+            <div className="modal-row">
+              <div className="modal-label">픽셀</div>
+              <div className="modal-value">{formData.pixel}</div>
+            </div>
+          </div>
+          {/* 밝기 / 전력 */}
+          <div className="modal-row-group">
+            <div className="modal-row">
+              <div className="modal-label">밝기</div>
+              <div className="modal-value">{formData.brightness}</div>
+            </div>
+            <div className="modal-row">
+              <div className="modal-label">전력</div>
+              <div className="modal-value">{formData.power}</div>
+            </div>
+          </div>
+          {/* 해상도 */}
+          <div className="modal-row full">
+            <div className="modal-label">해상도</div>
+            <div className="modal-value" style={{maxWidth:'37%'}}>{formData.resolution}</div>
+          </div>
+
+          <div className="modal-divider"></div>
+
+          {/* 수량 */}
+          <div className="modal-row full">
+            <div className="modal-label">수량</div>
+            <div className="modal-value">W : {formData.width} X H : {formData.height} = {formData.totalPanels}EA</div>
+          </div>
+          {/* LED 사이즈 */}
+          <div className="modal-row full">
+            <div className="modal-label">LED 사이즈</div>
+            <div className="modal-value">{formData.ledSizeW} × {formData.ledSizeH}</div>
+          </div>
+          {/* LED 해상도 */}
+          <div className="modal-row full">
+            <div className="modal-label">LED 해상도</div>
+            <div className="modal-value">{formData.ledResW} × {formData.ledResH}</div>
+          </div>
+          {/* 전체 전력 */}
+          <div className="modal-row full">
+            <div className="modal-label">전체 전력</div>
+            <div className="modal-value">{formData.totalPower * 1000} W</div>
+          </div>
+          {/* 프로세스 사양 / 설치인원 */}
+          <div className="modal-row-group">
+            <div className="modal-row">
+              <div className="modal-label">프로세스 사양</div>
+              <div className="modal-value">{formData.processorModel}</div>
+            </div>
+            <div className="modal-row">
+              <div className="modal-label">설치인원</div>
+              <div className="modal-value">{formData.installPersonnel}명</div>
+            </div>
+          </div>
+
+          {/* LED 예상도 */}
+          <div className="modal-preview-wrap">
+            <div className="modal-preview-inner">
+              <div className="modal-preview-v-dim">
+                <div className="modal-preview-v-line">
+                  <span className="modal-preview-v-text">{formData.ledSizeH}mm</span>
+                </div>
+              </div>
+              <div className="modal-preview-grid-wrap">
+                <div
+                  className="modal-led-grid"
+                  style={{
+                    gridTemplateColumns: `repeat(${formData.width}, ${panelW}px)`,
+                    gridTemplateRows: `repeat(${formData.height}, ${panelH}px)`,
+                    width: gridW,
+                    height: gridH,
+                  }}
+                >
+                  {Array.from({length: formData.totalPanels}).map((_, i) => (
+                    <div key={i} className="modal-led-panel"></div>
+                  ))}
+                </div>
+                <div className="modal-preview-h-dim" style={{width: gridW}}>
+                  <div className="modal-preview-h-line">
+                    <span className="modal-preview-h-text">{formData.ledSizeW}mm</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          </div>{/* modal-content 끝 */}
+
+          {/* 하단 버튼 */}
+          <div className="modal-footer">
+            <button className="modal-btn-close" onClick={onClose}>닫기</button>
+            <button className="modal-btn-quote">견적서 보기</button>
+          </div>
+          </div>{/* modal-inner 끝 */}
+        </div>{/* modal-border-outer 끝 */}
+      </div>
+    </div>,
+    document.body
+  )
+}
 
 function EstimateForm() {
   const [formData, setFormData] = useState({
@@ -72,6 +303,8 @@ function EstimateForm() {
     })
   }
 
+  const [showModal, setShowModal] = useState(false)
+
   const currentSpec = productSpecs[formData.productName]
   const labelCyan = { backgroundColor: '#25CAD2' }
   const labelGreen = { backgroundColor: '#8cc63f' }
@@ -79,6 +312,7 @@ function EstimateForm() {
 
   return (
     <div className="estimate-page">
+      {showModal && <ViewModal formData={formData} onClose={() => setShowModal(false)} />}
       <div className="main-content-area">
         {/* ===== LEFT COLUMN ===== */}
         <div className="left-column">
@@ -429,7 +663,7 @@ function EstimateForm() {
       </div>
 
       <div className="bottom-actions">
-        <button className="btn-view-saved">전체 내용 보기</button>
+        <button className="btn-view-saved" onClick={() => setShowModal(true)}>전체 내용 보기</button>
         <button className="btn-view-quote">견적서 보기</button>
       </div>
     </div>
