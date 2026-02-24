@@ -900,13 +900,22 @@ div.section {
 
 .quote-total-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0 2px;
   font-size: 11px;
   margin-bottom: 6px;
 }
 
+.quote-total-table .qt-grand td {
+  margin-top: 4px;
+}
+
+.quote-total-table tr.qt-grand {
+  border-top: 4px solid transparent;
+}
+
 .quote-total-table td {
-  border: 1px solid #ddd;
+  border: none;
   padding: 4px 8px;
   height: 24px;
 }

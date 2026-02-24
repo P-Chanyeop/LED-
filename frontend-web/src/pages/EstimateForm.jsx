@@ -169,6 +169,7 @@ function QuoteModal({formData, onClose}) {
                                 <td className="qt-amount"><span className="qt-won">₩</span><span
                                     className="qt-num">{fmt(addCost)}</span></td>
                             </tr>
+                            <tr style={{height: '2px'}}><td colSpan={3}></td></tr>
                             <tr className="qt-grand">
                                 <td colSpan={2} className="qt-grand-label">합 계</td>
                                 <td className="qt-amount"><span className="qt-won">₩</span><span
