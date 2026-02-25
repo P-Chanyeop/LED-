@@ -84,70 +84,62 @@ function QuoteModal({formData, onClose}) {
                             <tbody>
                             {/* 1. LED */}
                             <tr style={{borderTop: 'none'}}>
-                                <td rowSpan={2} className="qi-center">1</td>
+                                <td rowSpan={2} style={{height: '50px'}} className="qi-center">1</td>
                                 <td rowSpan={2} className="qi-product">
-                                    <div className="qi-product-inner">
-                                        <div className="qi-product-img">ETK</div>
-                                        <div>{formData.productName}</div>
-                                    </div>
                                 </td>
                                 <td>{formData.productSize}</td>
                                 <td className="qi-center">{ledQty}</td>
-                                <td className="qi-right">₩ {fmt(unitPrice)}</td>
-                                <td className="qi-right" rowSpan={2}>₩ {fmt(ledTotal)}</td>
+                                <td className="qi-right">₩      {fmt(unitPrice)}</td>
+                                <td className="qi-right" rowSpan={2}>₩      {fmt(ledTotal)}</td>
                             </tr>
                             <tr>
-                                <td>sqm</td>
+                                <td style={{textAlign: "center"}}>sqm</td>
                                 <td className="qi-center">{ledSqm}</td>
-                                <td className="qi-right">₩ {fmt(sqmPrice)}</td>
+                                <td className="qi-right">₩      {fmt(sqmPrice)}</td>
                             </tr>
                             <tr className="qi-subtotal">
                                 <td colSpan={5} className="qi-center">소계</td>
-                                <td className="qi-right">₩ {fmt(sub1)}</td>
+                                <td className="qi-right">₩      {fmt(sub1)}</td>
                             </tr>
                             {/* 2. 프로세서 */}
-                            <tr>
+                            <tr className="qi-item-after-subtotal" style={{height: '50px'}}>
                                 <td className="qi-center">2</td>
                                 <td className="qi-product">
-                                    <div className="qi-product-inner">
-                                        <div className="qi-product-img qi-proc-img"></div>
-                                        <div>{formData.processorModel}</div>
-                                    </div>
                                 </td>
                                 <td>—</td>
                                 <td className="qi-center">{formData.processorQuantity}</td>
-                                <td className="qi-right">₩ {fmt(processorPrice)}</td>
-                                <td className="qi-right">₩ {fmt(sub2)}</td>
+                                <td className="qi-right">₩      {fmt(processorPrice)}</td>
+                                <td className="qi-right">₩      {fmt(sub2)}</td>
                             </tr>
                             <tr className="qi-subtotal">
                                 <td colSpan={5} className="qi-center">소계</td>
-                                <td className="qi-right">₩ {fmt(sub2)}</td>
+                                <td className="qi-right">₩      {fmt(sub2)}</td>
                             </tr>
                             {/* 3. 시공 인건비 */}
-                            <tr>
+                            <tr className="qi-item-after-subtotal" style={{height: '50px'}}>
                                 <td className="qi-center">3</td>
                                 <td className="qi-product">시공 인건비</td>
                                 <td>인</td>
                                 <td className="qi-center">{laborQty}</td>
-                                <td className="qi-right">₩ {fmt(laborPrice)}</td>
-                                <td className="qi-right">₩ {fmt(sub3)}</td>
+                                <td className="qi-right">₩      {fmt(laborPrice)}</td>
+                                <td className="qi-right">₩      {fmt(sub3)}</td>
                             </tr>
                             <tr className="qi-subtotal">
                                 <td colSpan={5} className="qi-center">소계</td>
-                                <td className="qi-right">₩ {fmt(sub3)}</td>
+                                <td className="qi-right">₩      {fmt(sub3)}</td>
                             </tr>
                             {/* 4. 기타 비용 */}
-                            <tr>
+                            <tr className="qi-item-after-subtotal" style={{height: '50px'}}>
                                 <td className="qi-center">4</td>
                                 <td className="qi-product">기타 비용</td>
                                 <td>—</td>
                                 <td className="qi-center">2</td>
-                                <td className="qi-right">₩ {fmt(etcPrice)}</td>
-                                <td className="qi-right">₩ {fmt(sub4)}</td>
+                                <td className="qi-right">₩      {fmt(etcPrice)}</td>
+                                <td className="qi-right">₩      {fmt(sub4)}</td>
                             </tr>
                             <tr className="qi-subtotal">
                                 <td colSpan={5} className="qi-center">소계</td>
-                                <td className="qi-right">₩ {fmt(sub4)}</td>
+                                <td className="qi-right">₩      {fmt(sub4)}</td>
                             </tr>
                             </tbody>
                         </table>
