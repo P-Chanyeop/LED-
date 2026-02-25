@@ -31,12 +31,12 @@ function QuoteModal({formData, onClose}) {
                     {/* 헤더 */}
                     <div className="quote-header">
                         <button className="modal-print-btn" title="인쇄하기" style={{flexShrink: 0}}>
-                            <img src={printIconImg} alt="인쇄하기" style={{height: '44px'}}/>
+                            <img src={printIconImg} alt="인쇄하기" style={{height: '80px'}}/>
                         </button>
                         <div className="quote-title-text">견 적 서</div>
                         <div className="quote-header-logo">
                             <img src={modalLogoImg1} alt="logo"
-                                 style={{height: '56px', imageRendering: 'crisp-edges'}}/>
+                                 style={{height: '75px', verticalAlign: 'bottom', imageRendering: 'crisp-edges'}}/>
                         </div>
                     </div>
 
@@ -236,11 +236,11 @@ function ViewModal({formData, onClose, onQuote}) {
                     {/* 헤더: 인쇄버튼(좌 끝) + 로고(중앙 왼쪽) */}
                     <div className="modal-header">
                         <button className="modal-print-btn" title="인쇄하기">
-                            <img src={printIconImg} alt="인쇄하기" style={{height: '76px'}}/>
+                            <img src={printIconImg} alt="인쇄하기" style={{height: '80px'}}/>
                         </button>
                         <div className="modal-logo"
                              style={{flex: 1, display: 'flex', justifyContent: 'flex-start', paddingLeft: '20px'}}>
-                            <img src={modalLogoImg} alt="logo" style={{height: '72px', imageRendering: 'crisp-edges'}}/>
+                            <img src={modalLogoImg} alt="logo" style={{height: '75px', imageRendering: 'crisp-edges'}}/>
                         </div>
                     </div>
 

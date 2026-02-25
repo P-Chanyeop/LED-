@@ -415,14 +415,14 @@
 /* 바깥 흰 박스 (그림자, 둥근 테두리) */
 .modal-outer {
   background: white;
-  border-radius: 12px;
+  border-radius: 0;
   box-shadow: 0 8px 40px rgba(0,0,0,0.3);
   width: 720px;
   max-width: 98vw;
   max-height: 94vh;
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  padding: 40px;
 }
 
 /* 바깥 민트 테두리 박스 (인쇄버튼+로고+내용박스 전체 감쌈) */
@@ -452,9 +452,9 @@
 /* 헤더: 인쇄버튼(좌 끝에 붙임) + 로고(왼쪽) */
 .modal-header {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   padding: 4px 0;
-  margin: -10px -10px 10px -10px;
+  margin: -10px -10px 0 -10px;
   background: white;
   border-radius: 5px 5px 0 0;
 }
@@ -465,7 +465,8 @@
   padding: 0;
   cursor: pointer;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  margin-top: -10px;
 }
 .modal-print-btn:hover { opacity: 0.8; }
 
@@ -712,9 +713,9 @@
    ============================================ */
 .quote-wrapper {
   background: white;
-  padding: 20px;
+  padding: 40px;
   border-radius: 12px;
-  border: 1px solid #3BC1CC;
+  border: none;
   box-shadow: 0 8px 40px rgba(0,0,0,0.3);
 }
 
@@ -735,7 +736,8 @@
 .quote-header {
   display: grid;
   grid-template-columns: 60px 1fr 60px;
-  margin-bottom: 4px;
+  margin-bottom: 0;
+  align-items: flex-end;
 }
 
 .quote-title-text {
@@ -749,14 +751,19 @@
 
 .quote-header-logo {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: flex-end;
+  margin-bottom: -10px;
+}
+
+.quote-header-logo img {
+  display: block;
 }
 
 .quote-date {
   font-size: 10px;
   color: #555;
-  margin-bottom: 6px;
+  margin-bottom: 0;
   padding-left: 2px;
 }
 
