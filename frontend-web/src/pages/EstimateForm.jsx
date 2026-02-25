@@ -84,7 +84,7 @@ function QuoteModal({formData, onClose}) {
                             <tbody>
                             {/* 1. LED */}
                             <tr style={{borderTop: 'none'}}>
-                                <td rowSpan={2} style={{height: '50px'}} className="qi-center">1</td>
+                                <td rowSpan={2} style={{height: '60px'}} className="qi-center">1</td>
                                 <td rowSpan={2} className="qi-product">
                                 </td>
                                 <td>{formData.productSize}</td>
@@ -102,7 +102,7 @@ function QuoteModal({formData, onClose}) {
                                 <td colSpan={2} className="qi-right">₩      {fmt(sub1)}</td>
                             </tr>
                             {/* 2. 프로세서 */}
-                            <tr className="qi-item-after-subtotal" style={{height: '50px'}}>
+                            <tr className="qi-item-after-subtotal" style={{height: '60px'}}>
                                 <td className="qi-center">2</td>
                                 <td className="qi-product">
                                 </td>
@@ -116,7 +116,7 @@ function QuoteModal({formData, onClose}) {
                                 <td colSpan={2} className="qi-right">₩      {fmt(sub2)}</td>
                             </tr>
                             {/* 3. 시공 인건비 */}
-                            <tr className="qi-item-after-subtotal" style={{height: '50px'}}>
+                            <tr className="qi-item-after-subtotal" style={{height: '60px'}}>
                                 <td className="qi-center">3</td>
                                 <td className="qi-product">시공 인건비</td>
                                 <td>인</td>
@@ -129,7 +129,7 @@ function QuoteModal({formData, onClose}) {
                                 <td colSpan={2} className="qi-right">₩      {fmt(sub3)}</td>
                             </tr>
                             {/* 4. 기타 비용 */}
-                            <tr className="qi-item-after-subtotal" style={{height: '50px'}}>
+                            <tr className="qi-item-after-subtotal" style={{height: '60px'}}>
                                 <td className="qi-center">4</td>
                                 <td className="qi-product">기타 비용</td>
                                 <td>—</td>
