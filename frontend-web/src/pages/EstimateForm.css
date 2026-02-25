@@ -722,15 +722,11 @@
 .quote-outer {
   border: 1px solid #3BC1CC;
   border-radius: 8px;
-  
   width: 620px;
   max-width: 98vw;
-  max-height: 94vh;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
   padding: 20px;
-  
 }
 
 .quote-header {
@@ -817,7 +813,7 @@ div.section {
 .quote-divider {
   border: none;
   border-top: 1px dashed #3BC1CC;
-  margin: 4px 0;
+  margin: 12px 0;
 }
 
 /* 상품 테이블 */
