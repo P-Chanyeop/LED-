@@ -72,7 +72,7 @@ function TabletEstimateForm() {
                 <div className="tablet-step">
                     {/* 로고 */}
                     <div className="tablet-header">
-                        <img src={modalLogoImg} alt="logo" style={{height: '60px'}} />
+                        <img src={modalLogoImg} alt="logo" className="tablet-logo"  />
                     </div>
 
                     {/* 담당자 등록 */}
@@ -248,7 +248,7 @@ function TabletEstimateForm() {
             {step === 2 && (
                 <div className="tablet-step">
                     <div className="tablet-header">
-                        <img src={modalLogoImg} alt="logo" style={{height: '60px'}} />
+                        <img src={modalLogoImg} alt="logo" className="tablet-logo"  />
                     </div>
 
                     {/* LED Display 제품 정보 */}
@@ -409,7 +409,7 @@ function TabletEstimateForm() {
             {step === 3 && (
                 <div className="tablet-step">
                     <div className="tablet-header">
-                        <img src={modalLogoImg} alt="logo" style={{height: '60px'}} />
+                        <img src={modalLogoImg} alt="logo" className="tablet-logo"  />
                     </div>
 
                     {/* 전체 내용 보기 */}

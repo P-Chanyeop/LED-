@@ -22,11 +22,15 @@
 
 .tablet-header {
   text-align: center;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
 }
 
 .tablet-header img {
-  height: 60px !important;
+  width: 1000px !important;
+  height: auto !important;
+  max-width: none !important;
+  display: block !important;
+  margin: 0 auto !important;
 }
 
 .tablet-footer {
@@ -216,7 +220,8 @@
 }
 
 .tablet-container .quote-header-logo img {
-  height: 40px !important;
+  height: 120px !important;
+  width: auto !important;
 }
 
 .tablet-container .quote-date {
@@ -291,18 +296,19 @@
 
 /* 섹션 카드 여백 */
 .tablet-container .section-card {
-  margin: 45px 0;
+  margin: 10px 0;
+}
+
+.tablet-container .section-card:first-of-type {
+  margin-top: 0;
 }
 
 .tablet-container .tablet-header {
-  padding: 0 0 40px 0;
+  padding: 0;
 }
 
-.tablet-container .tablet-header img {
-  height: 100px !important;
-}
-
-.tablet-container .tablet-footer {
+.tablet-container 
+.tablet-footer {
   padding: 50px 0 0 0;
 }
 
