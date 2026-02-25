@@ -185,10 +185,10 @@ function QuoteModal({formData, onClose}) {
                         <div className="quote-terms">
                             <div className="quote-terms-text">
                                 <p className="qt-bold qt-icon">견적조건</p>
-                                <p className="qt-bold">1. 견적서 항목 외 추가 사항이나, 현장 추가 사항은 별도의 금액이 추가됩니다.</p>
-                                <p className="qt-bold">2. 전력 및 통신은 고객사가 기본 제공하며 , 미 제공시 증설 공사 금액이 추가됩니다.</p>
-                                <p className="qt-bold">3. 현장 상황에 따라 보강 구조물 필요시 제작 비용이 추가됩니다.</p>
-                                <p className="qt-bold">4. 인,허가 사항은 별도 입니다.</p>
+                                <p className="qt-bold qt-indent">1. 견적서 항목 외 추가 사항이나, 현장 추가 사항은 별도의 금액이 추가됩니다.</p>
+                                <p className="qt-bold qt-indent">2. 전력 및 통신은 고객사가 기본 제공하며 , 미 제공시 증설 공사 금액이 추가됩니다.</p>
+                                <p className="qt-bold qt-indent">3. 현장 상황에 따라 보강 구조물 필요시 제작 비용이 추가됩니다.</p>
+                                <p className="qt-bold qt-indent">4. 인,허가 사항은 별도 입니다.</p>
                                 <p className="qt-bold qt-icon">결제조건 : 발주시 계약금 60% , 잔금 40%로 진행 됩니다</p>
                                 <p className="qt-bold qt-icon">납  기  일: 발주일로 부터 30일 (모델 및 수량에 따라 변동 될 수 있습니다)</p>
                                 <p className="qt-bold qt-icon">A/S 기간 : 납기일로 부터 2년 무상 (단, 천재지변 및 고객 부주의로 인한 제품 파손 시 비용이 청구 됩니다)</p>

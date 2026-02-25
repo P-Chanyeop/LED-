@@ -1012,6 +1012,10 @@ div.section {
 .qt-bold { font-weight: 700; margin-top: 2px !important; }
 .qt-sub { color: #555; }
 
+.qt-indent {
+  padding-left: 25.5px;
+}
+
 .qt-icon::before {
   content: '';
   display: inline-block;
