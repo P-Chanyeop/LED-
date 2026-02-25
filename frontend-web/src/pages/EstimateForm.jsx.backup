@@ -184,16 +184,18 @@ function QuoteModal({formData, onClose}) {
                         {/* 약관 + 도장 */}
                         <div className="quote-terms">
                             <div className="quote-terms-text">
-                                <p className="qt-sub qt-icon">견적조건</p>
-                                <p className="qt-sub">1. 견적서 항목 외 추가 사항이나, 현장 추가 사항은 별도의 금액이 추가됩니다.</p>
-                                <p className="qt-sub">2. 전력 및 통신은 고객사가 기본 제공하며 , 미 제공시 증설 공사 금액이 추가됩니다.</p>
-                                <p className="qt-sub">3. 현장 상황에 따라 보강 구조물 필요시 제작 비용이 추가됩니다.</p>
-                                <p className="qt-sub">4. 인,허가 사항은 별도 입니다.</p>
-                                <p className="qt-bold qt-icon">결제조건 : 발주시 계약금 60% , 잔금 40%로 진행 됩니다</p>
-                                <p className="qt-bold qt-icon">납  기  일: 발주일로 부터 30일 (모델 및 수량에 따라 변동 될 수 있습니다)</p>
-                                <p className="qt-sub qt-icon">A/S 기간 : 납기일로 부터 2년 무상 (단, 천재지변 및 고객 부주의로 인한 제품 파손 시 비용이 청구 됩니다)</p>
-                                <p className="qt-sub qt-icon">제품의 성능 향상을 위해 제품 스펙은 일부 변경 될 수 있습니다.</p>
-                                <p className="qt-sub qt-icon">입금계좌 : 하나은행 471-910014-06704 예금주 : ㈜이지텍인터내셔널</p>
+                                <p className="qt-bold">◎ 견적조건</p>
+                                <p>1. 견적서 발행 후 추가 사항(제품, 인원 증가 및 현장 여건 변경 등)이 발생할 경우,<br/>
+                                    금액 및 공정 일정이 변경 될 수 있음을 알려드립니다.</p>
+                                <p>2. 설치 공정 이후 하자 보증은 LED Display 부품 기준 1년 동안 무상 보증 해드립니다.</p>
+                                <p>3. 전산 오류로 인한 실수가 있을 경우 양측 합의 후 정정 처리 됩니다.</p>
+                                <p className="qt-bold">◎ 결제조건 : 발주서 접수 후 선금 60% / 잔금 40% (납품 후)</p>
+                                <p>◎ 납품기간 : 발주서 접수 후 5주 이내</p>
+                                <p className="qt-sub">* 위에 명시된 가격 외 추가 비용은 발생 하지 않을 것을 확인 합니다.</p>
+                                <p className="qt-sub">◎ A/S 기간 : 납기일로부터 최대 2년 유상 A/S, 전력선관련 및 교류 부품(교류 전원 계통 포함)은 시ㅂ장이
+                                    없을 경우 유상처리함.</p>
+                                <p className="qt-sub">◎ 해당의 견적서는 의뢰 제품 사양을 설치 받을 경우 적용 받을 수 있습니다.</p>
+                                <p className="qt-sub">◎ 업체명 : 이지텍인터내셔널 사업자번호 : 471-81-01014~90734 대표번호 : (주)이지텍인터내셔널</p>
                             </div>
                             <div className="quote-stamp">
                                 <div className="quote-stamp-text">(주)이지텍인터내셔널</div>
