@@ -17,7 +17,7 @@
   flex: 1;
   display: flex;
   gap: 0;
-  padding: 40px 16px;
+  padding: 10px 16px;
   align-items: stretch;
 }
 
@@ -26,10 +26,10 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 8px;
   border: 2px solid #3BC1CC;
   border-radius: 12px;
-  padding: 14px;
+  padding: 8px;
 }
 
 .center-divider {
@@ -53,10 +53,10 @@
 
 /* Section Headers */
 .section-header {
-  padding: 10px 14px;
+  padding: 6px 10px;
   color: white;
   font-weight: 700;
-  font-size: 15px;
+  font-size: 13px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -70,47 +70,47 @@
   background: white;
   border: 1px solid #3BC1CC;
   color: #3BC1CC;
-  padding: 3px 12px;
+  padding: 2px 10px;
   border-radius: 3px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .reset-btn:hover { background: #f0f0f0; }
 
 /* Section Body */
 .section-body {
-  padding: 10px;
+  padding: 6px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 3px;
 }
 
 /* Form Row */
 .form-row {
   display: flex;
-  min-height: 34px;
-  height: 34px;
-  gap: 8px;
+  min-height: 28px;
+  height: 28px;
+  gap: 6px;
 }
 
 .form-row-group {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 5px;
+  gap: 4px;
 }
 
 /* Form Label - fixed width, rounded */
 .form-label {
   color: white;
-  padding: 7px 10px;
-  width: 100px;
-  min-width: 100px;
-  max-width: 100px;
+  padding: 5px 8px;
+  width: 90px;
+  min-width: 90px;
+  max-width: 90px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   white-space: nowrap;
   flex-shrink: 0;
@@ -123,15 +123,15 @@
   display: flex;
   align-items: center;
   border-bottom: 1px solid #eee;
-  height: 34px;
+  height: 28px;
 }
 
 .form-input input,
 .form-input select {
   flex: 1;
-  padding: 8px 10px;
+  padding: 6px 8px;
   border: 1px solid #ddd;
-  font-size: 14px;
+  font-size: 12px;
   background: white;
   outline: none;
   color: #333;
@@ -262,43 +262,56 @@
 
 /* Preview Section */
 .preview-body {
-  padding: 20px;
+  padding: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 300px;
+  min-height: 180px;
   background: white;
 }
 
 .led-preview-border {
-  padding: 20px;
+  padding: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  min-height: 260px;
+  min-height: 150px;
+  border: none !important;
 }
 
 .led-preview-layout {
   display: flex;
-  align-items: stretch;
+  align-items: center;
+  justify-content: center;
   gap: 8px;
+  border: none !important;
 }
 
-.led-preview-container { display: flex; align-items: flex-end; position: relative; }
+/* LED 그리드 스타일 - Updated 2026-02-26 16:40 */
+.led-grid-wrapper { 
+  display: flex; 
+  flex-direction: row; 
+  align-items: stretch; 
+  gap: 8px; 
+  border: none !important; 
+}
 
 .led-dimension-v {
   display: flex;
-  align-items: stretch;
-  width: 20px;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  position: relative;
 }
 
 .led-dimension-v-line {
   width: 1px;
   background: #3BC1CC;
-  position: relative;
-  margin: 0 auto;
-  min-height: 100%;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
 }
 
 .led-dimension-v-line::before,
@@ -318,18 +331,27 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%) rotate(-90deg);
+  transform: translate(-50%, -50%) rotate(0deg);
   background: #3BC1CC;
   color: white;
-  padding: 2px 8px;
-  font-size: 11px;
+  padding: 2px 6px;
+  font-size: 10px;
   white-space: nowrap;
   border-radius: 3px;
+  z-index: 1;
+  writing-mode: horizontal-tb;
 }
 
-.led-grid-wrapper { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-.led-grid { display: grid; gap: 2px; background: #333; padding: 3px; }
-.led-panel { width: 40px; height: 28px; background: #1a1a2e; }
+/* LED 그리드 스타일 - Updated 2026-02-26 16:40 */
+.led-grid-wrapper { 
+  display: flex; 
+  flex-direction: row; 
+  align-items: stretch; 
+  gap: 8px; 
+  border: none !important; 
+}
+.led-grid { display: grid; gap: 1px; background: #333; padding: 2px; border: none !important; }
+.led-panel { width: 55px !important; height: 30px !important; background: #1a1a2e; }
 
 .led-dimension-h {
   width: 100%;
@@ -362,8 +384,8 @@
 .led-dimension-h-text {
   background: #3BC1CC;
   color: white;
-  padding: 2px 10px;
-  font-size: 11px;
+  padding: 1px 8px;
+  font-size: 10px;
   white-space: nowrap;
   border-radius: 3px;
   position: absolute;
@@ -579,22 +601,31 @@
 
 .modal-preview-inner {
   display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.modal-preview-grid-wrap {
+  display: flex;
+  flex-direction: row;
   align-items: stretch;
   gap: 6px;
 }
 
 .modal-preview-v-dim {
   display: flex;
-  align-items: stretch;
+  align-items: center;
   width: 18px;
+  position: relative;
 }
 
 .modal-preview-v-line {
   width: 1px;
   background: #3BC1CC;
-  position: relative;
-  margin: 0 auto;
-  min-height: 100%;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
 }
 .modal-preview-v-line::before,
 .modal-preview-v-line::after {
@@ -612,20 +643,14 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%) rotate(-90deg);
+  transform: translate(-50%, -50%) rotate(0deg);
   background: #3BC1CC;
   color: white;
-  padding: 1px 6px;
+  padding: 1px 5px;
   font-size: 9px;
   white-space: nowrap;
+  writing-mode: horizontal-tb;
   border-radius: 3px;
-}
-
-.modal-preview-grid-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
 }
 
 .modal-led-grid {
@@ -634,9 +659,10 @@
   background: #333;
   padding: 2px;
 }
+/* LED 패널 크기 - 가로로 길게 (v2026-02-26-15:27) */
 .modal-led-panel {
-  width: 28px;
-  height: 20px;
+  width: 40px !important;
+  height: 24px !important;
   background: #1a1a2e;
 }
 

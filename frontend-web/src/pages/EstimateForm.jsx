@@ -211,8 +211,8 @@ function QuoteModal({formData, onClose}) {
 
 
 function ViewModal({formData, onClose, onQuote}) {
-    const panelW = 28
-    const panelH = 20
+    const panelW = 40
+    const panelH = 24
     const gap = 2
     const padding = 2
     const gridW = formData.width * panelW + (formData.width - 1) * gap + padding * 2
@@ -395,28 +395,30 @@ function ViewModal({formData, onClose, onQuote}) {
                             {/* LED 예상도 */}
                             <div className="modal-preview-wrap">
                                 <div className="modal-preview-inner">
-                                    <div className="modal-preview-v-dim">
-                                        <div className="modal-preview-v-line">
-                                            <span className="modal-preview-v-text">{formData.ledSizeH}mm</span>
-                                        </div>
-                                    </div>
                                     <div className="modal-preview-grid-wrap">
-                                        <div
-                                            className="modal-led-grid"
-                                            style={{
-                                                gridTemplateColumns: `repeat(${formData.width}, ${panelW}px)`,
-                                                gridTemplateRows: `repeat(${formData.height}, ${panelH}px)`,
-                                                width: gridW,
-                                                height: gridH,
-                                            }}
-                                        >
-                                            {Array.from({length: formData.totalPanels}).map((_, i) => (
-                                                <div key={i} className="modal-led-panel"></div>
-                                            ))}
+                                        <div className="modal-preview-v-dim">
+                                            <div className="modal-preview-v-line">
+                                                <span className="modal-preview-v-text">{formData.ledSizeH}mm</span>
+                                            </div>
                                         </div>
-                                        <div className="modal-preview-h-dim" style={{width: gridW}}>
-                                            <div className="modal-preview-h-line">
-                                                <span className="modal-preview-h-text">{formData.ledSizeW}mm</span>
+                                        <div>
+                                            <div
+                                                className="modal-led-grid"
+                                                style={{
+                                                    gridTemplateColumns: `repeat(${formData.width}, ${panelW}px)`,
+                                                    gridTemplateRows: `repeat(${formData.height}, ${panelH}px)`,
+                                                    width: gridW,
+                                                    height: gridH,
+                                                }}
+                                            >
+                                                {Array.from({length: formData.totalPanels}).map((_, i) => (
+                                                    <div key={i} className="modal-led-panel"></div>
+                                                ))}
+                                            </div>
+                                            <div className="modal-preview-h-dim" style={{width: gridW}}>
+                                                <div className="modal-preview-h-line">
+                                                    <span className="modal-preview-h-text">{formData.ledSizeW}mm</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -938,23 +940,25 @@ function EstimateForm() {
                         <div className="section-body preview-body">
                             <div className="led-preview-border">
                                 <div className="led-preview-layout">
-                                    <div className="led-dimension-v">
-                                        <div className="led-dimension-v-line">
-                                            <span className="led-dimension-v-text">{formData.ledSizeH}mm</span>
-                                        </div>
-                                    </div>
                                     <div className="led-grid-wrapper">
-                                        <div className="led-grid" style={{
-                                            gridTemplateColumns: `repeat(${formData.width}, 1fr)`,
-                                            gridTemplateRows: `repeat(${formData.height}, 1fr)`
-                                        }}>
-                                            {Array.from({length: formData.totalPanels}).map((_, i) => (
-                                                <div key={i} className="led-panel"></div>
-                                            ))}
+                                        <div className="led-dimension-v">
+                                            <div className="led-dimension-v-line">
+                                                <span className="led-dimension-v-text">{formData.ledSizeH}mm</span>
+                                            </div>
                                         </div>
-                                        <div className="led-dimension-h">
-                                            <div className="led-dimension-h-line">
-                                                <span className="led-dimension-h-text">{formData.ledSizeW}mm</span>
+                                        <div>
+                                            <div className="led-grid" style={{
+                                                gridTemplateColumns: `repeat(${formData.width}, 55px)`,
+                                                gridTemplateRows: `repeat(${formData.height}, 30px)`
+                                            }}>
+                                                {Array.from({length: formData.totalPanels}).map((_, i) => (
+                                                    <div key={i} className="led-panel"></div>
+                                                ))}
+                                            </div>
+                                            <div className="led-dimension-h">
+                                                <div className="led-dimension-h-line">
+                                                    <span className="led-dimension-h-text">{formData.ledSizeW}mm</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
