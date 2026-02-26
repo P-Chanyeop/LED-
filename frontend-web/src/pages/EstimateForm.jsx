@@ -4,6 +4,7 @@ import './EstimateForm.css'
 import modalLogoImg from '../assets/modal-logo2.png'
 import modalLogoImg1 from '../assets/modal-logo.png'
 import printIconImg from '../assets/print-icon.png'
+import stampImg from '../assets/stamp.png'
 
 function QuoteModal({formData, onClose}) {
     const unitPrice = 950000
@@ -174,6 +175,11 @@ function QuoteModal({formData, onClose}) {
                         </table>
 
                         {/* 약관 + 도장 */}
+                        <div className="quote-terms-wrapper">
+                        <div className="quote-stamp">
+                            <img src={stampImg} alt="stamp" className="quote-stamp-img" />
+                        </div>
+
                         <div className="quote-terms">
                             <div className="quote-terms-text">
                                 <p className="qt-bold qt-icon">견적조건</p>
@@ -187,18 +193,15 @@ function QuoteModal({formData, onClose}) {
                                 <p className="qt-bold qt-icon">제품의 성능 향상을 위해 제품 스펙은 일부 변경 될 수 있습니다.</p>
                                 <p className="qt-bold qt-icon">입금계좌 : 하나은행 471-910014-06704 예금주 : ㈜이지텍인터내셔널</p>
                             </div>
-                            <div className="quote-stamp">
-                                <div className="quote-stamp-text">(주)이지텍인터내셔널</div>
                             </div>
                         </div>
-
                         {/* 하단 버튼 */}
                         <div className="quote-footer">
                             <button className="modal-btn-close" onClick={onClose}>닫기</button>
                             <button className="quote-btn-email">메일 보내기</button>
                         </div>
-                    </div>
                 </div>
+                    </div>
             </div>
         </div>,
 
