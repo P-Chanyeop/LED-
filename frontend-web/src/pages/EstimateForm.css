@@ -421,7 +421,7 @@
   box-shadow: 0 8px 40px rgba(0,0,0,0.3);
   width: 620px;
   max-width: 98vw;
-  max-height: calc(100vh - 30px);
+  height: calc(100vh - 25px);
   display: flex;
   flex-direction: column;
   padding: 25px;
@@ -729,7 +729,7 @@
 .quote-outer {
   border: 1px solid #3BC1CC;
   border-radius: 8px;
-  width: 520px;
+  width: 570px;
   max-width: 98vw;
   flex: 1;
   overflow-y: auto;
