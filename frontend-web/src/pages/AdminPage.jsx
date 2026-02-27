@@ -3,6 +3,7 @@ import './AdminPage.css'
 
 function AdminPage() {
   const [activeTab, setActiveTab] = useState('dashboard')
+  const [showProductModal, setShowProductModal] = useState(false)
   
   const [estimates, setEstimates] = useState([
     { id: 'EST-001', date: '2026.01.28', customer: '갈더마코리아', manager: '기영길', amount: 63800000, status: '완료' },
@@ -76,7 +77,7 @@ function AdminPage() {
 
   const renderEstimates = () => (
     <div className="admin-section">
-      <h2>견적 관리</h2>
+      <h2>등록 자료 보기</h2>
       <div className="search-bar">
         <input type="text" placeholder="견적번호 또는 고객명 검색" />
         <button className="btn-cyan">검색</button>
@@ -84,26 +85,34 @@ function AdminPage() {
       <table className="data-table">
         <thead>
           <tr>
-            <th>견적번호</th>
             <th>날짜</th>
-            <th>고객명</th>
-            <th>담당자</th>
-            <th>금액</th>
-            <th>상태</th>
+            <th>이지텍 담당자</th>
+            <th>업체명</th>
+            <th>업체 담당자</th>
+            <th>연락처</th>
+            <th>메일주소</th>
+            <th>의뢰내역</th>
+            <th>합계 금액</th>
+            <th>내용보기</th>
+            <th>견적서 보기</th>
             <th>관리</th>
           </tr>
         </thead>
         <tbody>
           {estimates.map(est => (
             <tr key={est.id}>
-              <td>{est.id}</td>
               <td>{est.date}</td>
-              <td>{est.customer}</td>
               <td>{est.manager}</td>
+              <td>{est.customer}</td>
+              <td>{est.clientManager || '홍길동'}</td>
+              <td>{est.phone || '010-1234-5678'}</td>
+              <td>{est.email || 'test@example.com'}</td>
+              <td>{est.request || 'ETK-COB1.2 / 1.2Pixel / 7x5(35ea)'}</td>
               <td>₩ {est.amount.toLocaleString()}</td>
-              <td><span className={`status-badge ${est.status}`}>{est.status}</span></td>
+              <td><button className="btn-small" style={{background: '#FF8C00', color: 'white'}}>내용보기</button></td>
+              <td><button className="btn-small" style={{background: '#8cc63f', color: 'white'}}>견적서 보기</button></td>
               <td>
-                <button className="btn-small btn-cyan">상세</button>
+                <button className="btn-small btn-cyan">수정</button>
                 <button className="btn-small btn-danger">삭제</button>
               </td>
             </tr>
@@ -120,31 +129,37 @@ function AdminPage() {
       <div className="product-section">
         <div className="section-title-bar">
           <h3>LED 제품</h3>
-          <button className="btn-cyan">+ 제품 추가</button>
+          <button className="btn-cyan" onClick={() => setShowProductModal(true)}>제품 등록</button>
         </div>
         <table className="data-table">
           <thead>
             <tr>
-              <th>ID</th>
+              <th>순번</th>
               <th>제품명</th>
-              <th>사이즈</th>
+              <th>제품 사이즈</th>
               <th>픽셀</th>
               <th>밝기</th>
               <th>전력</th>
+              <th>해상도</th>
+              <th>수량</th>
               <th>단가</th>
+              <th>부가세</th>
               <th>관리</th>
             </tr>
           </thead>
           <tbody>
-            {products.map(prod => (
+            {products.map((prod, index) => (
               <tr key={prod.id}>
-                <td>{prod.id}</td>
+                <td>{index + 1}</td>
                 <td>{prod.name}</td>
                 <td>{prod.size}</td>
                 <td>{prod.pixel}</td>
                 <td>{prod.brightness}</td>
                 <td>{prod.power}</td>
+                <td>{prod.resolution || '480x270'}</td>
+                <td>{prod.quantity || 1}</td>
                 <td>₩ {prod.price.toLocaleString()}</td>
+                <td>₩ {Math.round(prod.price * 0.1).toLocaleString()}</td>
                 <td>
                   <button className="btn-small btn-cyan">수정</button>
                   <button className="btn-small btn-danger">삭제</button>
@@ -312,6 +327,56 @@ function AdminPage() {
 
   return (
     <div className="admin-page">
+      {showProductModal && (
+        <div className="modal-overlay" onClick={() => setShowProductModal(false)}>
+          <div className="product-modal" onClick={e => e.stopPropagation()}>
+            <h2>제품 등록</h2>
+            <form className="product-form">
+              <div className="form-group">
+                <label>제품명</label>
+                <input type="text" placeholder="예: ETK-COB1.2" />
+              </div>
+              <div className="form-group">
+                <label>제품 이미지</label>
+                <input type="file" accept="image/*" />
+              </div>
+              <div className="form-group">
+                <label>사이즈</label>
+                <input type="text" placeholder="예: 600x337.5" />
+              </div>
+              <div className="form-group">
+                <label>픽셀</label>
+                <input type="text" placeholder="예: 1.2" />
+              </div>
+              <div className="form-group">
+                <label>밝기</label>
+                <input type="text" placeholder="예: 800" />
+              </div>
+              <div className="form-group">
+                <label>전력</label>
+                <input type="text" placeholder="예: 75/25" />
+              </div>
+              <div className="form-group">
+                <label>해상도</label>
+                <input type="text" placeholder="예: 480x270" />
+              </div>
+              <div className="form-group">
+                <label>수량</label>
+                <input type="number" placeholder="예: 1" defaultValue="1" />
+              </div>
+              <div className="form-group">
+                <label>단가</label>
+                <input type="number" placeholder="예: 950000" />
+              </div>
+              <div className="modal-buttons">
+                <button type="button" className="btn-cancel" onClick={() => setShowProductModal(false)}>취소</button>
+                <button type="submit" className="btn-submit">등록</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+      
       <aside className="admin-sidebar">
         <div className="sidebar-header">
           <h2>LED 관리자</h2>
@@ -327,7 +392,7 @@ function AdminPage() {
             className={activeTab === 'estimates' ? 'active' : ''}
             onClick={() => setActiveTab('estimates')}
           >
-            견적 관리
+            등록 자료 보기
           </button>
           <button 
             className={activeTab === 'products' ? 'active' : ''}

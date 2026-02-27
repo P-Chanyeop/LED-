@@ -125,6 +125,7 @@
   background: white;
   border-radius: 8px;
   overflow: hidden;
+  table-layout: fixed;
 }
 
 .data-table thead {
@@ -135,7 +136,7 @@
 .data-table th,
 .data-table td {
   padding: 14px 16px;
-  text-align: left;
+  text-align: center;
   border-bottom: 1px solid #eee;
 }
 
@@ -143,6 +144,39 @@
   font-weight: 600;
   font-size: 14px;
 }
+
+.data-table th:nth-child(1),
+.data-table td:nth-child(1) { width: 60px; }
+
+.data-table th:nth-child(2),
+.data-table td:nth-child(2) { width: 120px; }
+
+.data-table th:nth-child(3),
+.data-table td:nth-child(3) { width: 110px; }
+
+.data-table th:nth-child(4),
+.data-table td:nth-child(4) { width: 70px; }
+
+.data-table th:nth-child(5),
+.data-table td:nth-child(5) { width: 70px; }
+
+.data-table th:nth-child(6),
+.data-table td:nth-child(6) { width: 80px; }
+
+.data-table th:nth-child(7),
+.data-table td:nth-child(7) { width: 100px; }
+
+.data-table th:nth-child(8),
+.data-table td:nth-child(8) { width: 70px; }
+
+.data-table th:nth-child(9),
+.data-table td:nth-child(9) { width: 110px; }
+
+.data-table th:nth-child(10),
+.data-table td:nth-child(10) { width: 100px; }
+
+.data-table th:nth-child(11),
+.data-table td:nth-child(11) { width: 150px; }
 
 .data-table tbody tr:hover {
   background-color: #f8f9fa;
@@ -385,4 +419,80 @@
     max-width: 100%;
     width: 100%;
   }
+}
+
+
+/* 제품 등록 모달 */
+.product-modal {
+  background: white;
+  border-radius: 8px;
+  padding: 30px;
+  width: 500px;
+  max-width: 90vw;
+}
+
+.product-modal h2 {
+  margin: 0 0 20px 0;
+  color: #333;
+  font-size: 20px;
+}
+
+.product-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #555;
+  font-size: 14px;
+}
+
+.form-group input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.btn-cancel {
+  padding: 10px 20px;
+  background: #999;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-cancel:hover {
+  background: #777;
+}
+
+.btn-submit {
+  padding: 10px 20px;
+  background: #3BC1CC;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-submit:hover {
+  background: #2aa0aa;
 }
