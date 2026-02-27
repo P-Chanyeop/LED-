@@ -482,7 +482,10 @@ function EstimateForm() {
         totalPower: 3.7,
         installPersonnel: 3,
         processorModel: 'VX600 Pro',
-        processorQuantity: 1
+        processorQuantity: 1,
+        installPlace: '부산/경남/대구/울산/경북',
+        travelCost: 300000,
+        materialCost: 100000
     })
 
     const productSpecs = {
@@ -919,13 +922,52 @@ function EstimateForm() {
                                     </div>
                                 </div>
                                 <div className="form-row">
-                                    <div className="form-label" style={labelCyan}>수량</div>
+                                    <div className="form-label" style={labelCyan}>프로세스 수량</div>
                                     <div className="form-input">
                                         <select value={formData.processorQuantity}
                                                 onChange={(e) => handleChange('processorQuantity', e.target.value)}>
                                             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => <option key={n}
                                                                                               value={n}>{n}</option>)}
                                         </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="form-row-group">
+                                <div className="form-row">
+                                    <div className="form-label" style={labelCyan}>납품 설치 장소</div>
+                                    <div className="form-input">
+                                        <select value={formData.installPlace || '부산'}
+                                                onChange={(e) => handleChange('installPlace', e.target.value)}>
+                                            <option>서울/경기/인천</option>
+                                            <option>부산/경남/대구/울산/경북</option>
+                                            <option>전북/세종/충남/충북/전남/강원/제주</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className="form-row">
+                                    <div className="form-label" style={labelCyan}>지방 출장비 외</div>
+                                    <div className="form-input">
+                                        <input type="text" value={'₩ ' + (formData.travelCost || 300000).toLocaleString()} 
+                                               onChange={(e) => handleChange('travelCost', parseInt(e.target.value.replace(/[^\d]/g, '')) || 0)}/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="form-row-group">
+                                <div className="form-row">
+                                    <div className="form-label" style={labelCyan}>설치인원</div>
+                                    <div className="form-input">
+                                        <select value={formData.installPersonnel}
+                                                onChange={(e) => handleChange('installPersonnel', e.target.value)}>
+                                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => <option key={n}
+                                                                                              value={n}>{n}명</option>)}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className="form-row">
+                                    <div className="form-label" style={labelCyan}>기타 재료비 외</div>
+                                    <div className="form-input">
+                                        <input type="text" value={'₩ ' + (formData.materialCost || 100000).toLocaleString()} 
+                                               onChange={(e) => handleChange('materialCost', parseInt(e.target.value.replace(/[^\d]/g, '')) || 0)}/>
                                     </div>
                                 </div>
                             </div>
