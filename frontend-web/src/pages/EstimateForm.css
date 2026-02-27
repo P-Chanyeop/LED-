@@ -444,10 +444,10 @@
   box-shadow: 0 8px 40px rgba(0,0,0,0.3);
   width: 620px;
   max-width: 98vw;
-  height: calc(100vh - 25px);
+  height: calc(100vh - 10px);
   display: flex;
   flex-direction: column;
-  padding: 25px;
+  padding: 15px;
 }
 
 /* 바깥 민트 테두리 박스 (인쇄버튼+로고+내용박스 전체 감쌈) */
@@ -717,7 +717,7 @@
   background: #8cc63f;
   color: white;
   border: none;
-  padding: 6px 20px;
+  padding: 4px 16px;
   border-radius: 5px;
   font-size: 11px;
   font-weight: 600;
@@ -729,9 +729,9 @@
   background: #3BC1CC;
   color: white;
   border: none;
-  padding: 8px 30px;
+  padding: 4px 20px;
   border-radius: 5px;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 600;
   cursor: pointer;
 }

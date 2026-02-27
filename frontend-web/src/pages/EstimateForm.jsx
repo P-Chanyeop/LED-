@@ -380,15 +380,37 @@ function ViewModal({formData, onClose, onQuote}) {
                                 <div className="modal-label">전체 전력</div>
                                 <div className="modal-value modal-value-cyan">{formData.totalPower * 1000} W</div>
                             </div>
-                            {/* 프로세스 사양 / 설치인원 */}
+                            {/* 프로세스 사양 / 프로세스 수량 */}
                             <div className="modal-row-group">
                                 <div className="modal-row">
                                     <div className="modal-label">프로세스 사양</div>
                                     <div className="modal-value modal-value-cyan">{formData.processorModel}</div>
                                 </div>
                                 <div className="modal-row">
+                                    <div className="modal-label">프로세스 수량</div>
+                                    <div className="modal-value modal-value-cyan">{formData.processorQuantity}</div>
+                                </div>
+                            </div>
+                            {/* 납품 설치 장소 / 지방 출장비 외 */}
+                            <div className="modal-row-group">
+                                <div className="modal-row">
+                                    <div className="modal-label">납품 설치 장소</div>
+                                    <div className="modal-value modal-value-cyan">{formData.installPlace}</div>
+                                </div>
+                                <div className="modal-row">
+                                    <div className="modal-label">지방 출장비 외</div>
+                                    <div className="modal-value modal-value-cyan">₩ {formData.travelCost?.toLocaleString()}</div>
+                                </div>
+                            </div>
+                            {/* 설치인원 / 기타 재료비 외 */}
+                            <div className="modal-row-group">
+                                <div className="modal-row">
                                     <div className="modal-label">설치인원</div>
                                     <div className="modal-value modal-value-cyan">{formData.installPersonnel}명</div>
+                                </div>
+                                <div className="modal-row">
+                                    <div className="modal-label">기타 재료비 외</div>
+                                    <div className="modal-value modal-value-cyan">₩ {formData.materialCost?.toLocaleString()}</div>
                                 </div>
                             </div>
 
