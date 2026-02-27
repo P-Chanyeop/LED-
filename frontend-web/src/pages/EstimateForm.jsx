@@ -88,7 +88,7 @@ function QuoteModal({formData, onClose}) {
                                 <td rowSpan={2} style={{height: '60px'}} className="qi-center">1</td>
                                 <td rowSpan={2} className="qi-product">
                                 </td>
-                                <td>{formData.productSize}</td>
+                                <td className="qi-center">{formData.productSize}</td>
                                 <td className="qi-center">{ledQty}</td>
                                 <td className="qi-right">₩      {fmt(unitPrice)}</td>
                                 <td className="qi-right" rowSpan={2}>₩      {fmt(ledTotal)}</td>
@@ -107,7 +107,7 @@ function QuoteModal({formData, onClose}) {
                                 <td className="qi-center">2</td>
                                 <td className="qi-product">
                                 </td>
-                                <td>—</td>
+                                <td className="qi-center">—</td>
                                 <td className="qi-center">{formData.processorQuantity}</td>
                                 <td className="qi-right">₩      {fmt(processorPrice)}</td>
                                 <td className="qi-right">₩      {fmt(sub2)}</td>
@@ -120,7 +120,7 @@ function QuoteModal({formData, onClose}) {
                             <tr className="qi-item-after-subtotal" style={{height: '60px'}}>
                                 <td className="qi-center">3</td>
                                 <td className="qi-product">시공 인건비</td>
-                                <td>인</td>
+                                <td className="qi-center">인</td>
                                 <td className="qi-center">{laborQty}</td>
                                 <td className="qi-right">₩      {fmt(laborPrice)}</td>
                                 <td className="qi-right">₩      {fmt(sub3)}</td>
@@ -133,7 +133,7 @@ function QuoteModal({formData, onClose}) {
                             <tr className="qi-item-after-subtotal" style={{height: '60px'}}>
                                 <td className="qi-center">4</td>
                                 <td className="qi-product">기타 비용</td>
-                                <td>—</td>
+                                <td className="qi-center">—</td>
                                 <td className="qi-center">2</td>
                                 <td className="qi-right">₩      {fmt(etcPrice)}</td>
                                 <td className="qi-right">₩      {fmt(sub4)}</td>
@@ -141,6 +141,19 @@ function QuoteModal({formData, onClose}) {
                             <tr className="qi-subtotal">
                                 <td colSpan={4} className="qi-center">소계</td>
                                 <td colSpan={2} className="qi-right">₩      {fmt(sub4)}</td>
+                            </tr>
+                            {/* 5. 지방 출장비 */}
+                            <tr className="qi-item-after-subtotal" style={{height: '60px'}}>
+                                <td className="qi-center">5</td>
+                                <td className="qi-product">지방 출장비 [{formData.installPlace}]<br/><span style={{fontSize: '10px', color: '#666'}}>(운송비,숙박,기타)</span></td>
+                                <td className="qi-center">지역</td>
+                                <td className="qi-center">1</td>
+                                <td className="qi-right">₩      {fmt(formData.travelCost || 0)}</td>
+                                <td className="qi-right">₩      {fmt(formData.travelCost || 0)}</td>
+                            </tr>
+                            <tr className="qi-subtotal">
+                                <td colSpan={4} className="qi-center">소계</td>
+                                <td colSpan={2} className="qi-right">₩      {fmt(formData.travelCost || 0)}</td>
                             </tr>
                             </tbody>
                         </table>
