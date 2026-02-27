@@ -107,7 +107,7 @@ function QuoteModal({formData, onClose}) {
                                 <td className="qi-center">2</td>
                                 <td className="qi-product">
                                 </td>
-                                <td className="qi-center">—</td>
+                                <td className="qi-center">EA</td>
                                 <td className="qi-center">{formData.processorQuantity}</td>
                                 <td className="qi-right">₩      {fmt(processorPrice)}</td>
                                 <td className="qi-right">₩      {fmt(sub2)}</td>
@@ -133,9 +133,9 @@ function QuoteModal({formData, onClose}) {
                             <tr className="qi-item-after-subtotal" style={{height: '60px'}}>
                                 <td className="qi-center">4</td>
                                 <td className="qi-product">기타 비용</td>
-                                <td className="qi-center">—</td>
-                                <td className="qi-center">2</td>
-                                <td className="qi-right">₩      {fmt(etcPrice)}</td>
+                                <td className="qi-center">EA</td>
+                                <td className="qi-center">1</td>
+                                <td className="qi-right">₩      {fmt(sub4)}</td>
                                 <td className="qi-right">₩      {fmt(sub4)}</td>
                             </tr>
                             <tr className="qi-subtotal">
@@ -518,7 +518,7 @@ function EstimateForm() {
         installPersonnel: 3,
         processorModel: 'VX600 Pro',
         processorQuantity: 1,
-        installPlace: '부산/경남/대구/울산/경북',
+        installPlace: '부산',
         travelCost: 300000,
         materialCost: 100000
     })
@@ -973,9 +973,21 @@ function EstimateForm() {
                                     <div className="form-input">
                                         <select value={formData.installPlace || '부산'}
                                                 onChange={(e) => handleChange('installPlace', e.target.value)}>
-                                            <option>서울/경기/인천</option>
-                                            <option>부산/경남/대구/울산/경북</option>
-                                            <option>전북/세종/충남/충북/전남/강원/제주</option>
+                                            <option>서울</option>
+                                            <option>경기</option>
+                                            <option>인천</option>
+                                            <option>부산</option>
+                                            <option>경남</option>
+                                            <option>대구</option>
+                                            <option>울산</option>
+                                            <option>경북</option>
+                                            <option>전북</option>
+                                            <option>세종</option>
+                                            <option>충남</option>
+                                            <option>충북</option>
+                                            <option>전남</option>
+                                            <option>강원</option>
+                                            <option>제주</option>
                                         </select>
                                     </div>
                                 </div>

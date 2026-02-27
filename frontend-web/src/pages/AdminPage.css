@@ -227,6 +227,38 @@
   background-color: #3DBDB4;
 }
 
+.btn-red {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-red:hover {
+  background-color: #c82333;
+}
+
+.btn-gray {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.btn-gray:hover {
+  background-color: #5a6268;
+}
+
 .btn-large {
   padding: 14px 32px;
   font-size: 15px;
@@ -422,75 +454,130 @@
 }
 
 
-/* 제품 등록 모달 */
-.product-modal {
+/* 제품 등록 모달 - 새 디자인 */
+.product-register-modal {
   background: white;
   border-radius: 8px;
   padding: 30px;
-  width: 500px;
-  max-width: 90vw;
+  width: 900px;
+  max-width: 95vw;
 }
 
-.product-modal h2 {
+.register-title {
   margin: 0 0 20px 0;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #4ECDC4;
   color: #333;
-  font-size: 20px;
-}
-
-.product-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.form-group label {
+  font-size: 22px;
   font-weight: 600;
-  color: #555;
-  font-size: 14px;
 }
 
-.form-group input {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-.modal-buttons {
+.register-form {
   display: flex;
-  gap: 10px;
-  justify-content: flex-end;
-  margin-top: 10px;
+  flex-direction: column;
+  gap: 0;
 }
 
-.btn-cancel {
-  padding: 10px 20px;
-  background: #999;
+.register-row {
+  display: grid;
+  grid-template-columns: 150px 1fr 150px 1fr;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+}
+
+.register-row-full {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+}
+
+.register-label {
+  background: #4ECDC4;
+  color: white;
+  padding: 15px 20px;
+  font-weight: 600;
+  font-size: 15px;
+  text-align: center;
+  border-right: 1px solid white;
+}
+
+.register-input {
+  padding: 15px 20px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  outline: none;
+}
+
+.register-input-full {
+  padding: 15px 20px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  outline: none;
+}
+
+.register-file-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.file-input-display {
+  flex: 1;
+  padding-right: 60px;
+}
+
+.file-btn-inside {
+  position: absolute;
+  right: 20px;
+  padding: 6px 12px;
+  background: #4ECDC4;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.file-btn-inside:hover {
+  background: #3ab8b8;
+}
+
+.register-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.register-btn-cancel {
+  padding: 12px 40px;
+  background: #4ECDC4;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: 600;
 }
 
-.btn-cancel:hover {
-  background: #777;
+.register-btn-cancel:hover {
+  background: #3ab8b8;
 }
 
-.btn-submit {
-  padding: 10px 20px;
-  background: #3BC1CC;
+.register-btn-submit {
+  padding: 12px 40px;
+  background: #8cc63f;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.register-btn-submit:hover {
+  background: #7ab52f;
 }
 
 .btn-submit:hover {
