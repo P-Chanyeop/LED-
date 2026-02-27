@@ -498,6 +498,7 @@ function AdminPage() {
   ])
   const [editingId, setEditingId] = useState(null)
   const [editForm, setEditForm] = useState({})
+  const [registerTab, setRegisterTab] = useState('led')
 
   // 기본 formData 구조
   const defaultFormData = {
@@ -666,17 +667,17 @@ function AdminPage() {
               <td><button className="btn-small" style={{background: '#FF8C00', color: 'white'}} onClick={() => {
                 setSelectedEstimate(est)
                 setShowViewModal(true)
-              }}>내용보기</button></td>
+              }}>내용<br/>보기</button></td>
               <td><button className="btn-small" style={{background: '#8cc63f', color: 'white'}} onClick={() => {
                 setSelectedEstimate(est)
                 setShowQuoteModal(true)
-              }}>견적서 보기</button></td>
+              }}>견적서<br/>보기</button></td>
               <td>
-                <button className="btn-small btn-cyan" onClick={() => {
+                <button style={{padding: '4px 8px', fontSize: '12px', marginRight: '8px', border: 'none', borderRadius: '4px', cursor: 'pointer', background: '#4ECDC4', color: 'white'}} onClick={() => {
                   setSelectedEstimate(est)
                   setShowEstimateEditModal(true)
                 }}>수정</button>
-                <button className="btn-small btn-danger" onClick={() => {
+                <button style={{padding: '4px 8px', fontSize: '12px', marginRight: '8px', border: 'none', borderRadius: '4px', cursor: 'pointer', background: '#dc3545', color: 'white'}} onClick={() => {
                   if (window.confirm('정말 삭제하시겠습니까?')) {
                     setEstimates(estimates.filter(e => e.id !== est.id))
                   }
@@ -905,6 +906,121 @@ function AdminPage() {
       <button className="btn-cyan btn-large">저장</button>
     </div>
   )
+
+  const renderProductRegister = () => {
+    return (
+      <div className="admin-section">
+        <h2>제품 등록</h2>
+        
+        <div style={{display: 'flex', gap: '10px', marginBottom: '30px', borderBottom: '2px solid #e0e0e0'}}>
+          <button 
+            onClick={() => setRegisterTab('led')}
+            style={{
+              padding: '12px 24px',
+              border: 'none',
+              background: registerTab === 'led' ? '#4ECDC4' : 'transparent',
+              color: registerTab === 'led' ? 'white' : '#666',
+              cursor: 'pointer',
+              fontWeight: '500',
+              borderRadius: '4px 4px 0 0',
+              transition: 'all 0.2s'
+            }}
+          >
+            LED 제품 등록
+          </button>
+          <button 
+            onClick={() => setRegisterTab('processor')}
+            style={{
+              padding: '12px 24px',
+              border: 'none',
+              background: registerTab === 'processor' ? '#4ECDC4' : 'transparent',
+              color: registerTab === 'processor' ? 'white' : '#666',
+              cursor: 'pointer',
+              fontWeight: '500',
+              borderRadius: '4px 4px 0 0',
+              transition: 'all 0.2s'
+            }}
+          >
+            프로세서 등록
+          </button>
+        </div>
+
+        {registerTab === 'led' && (
+          <div className="product-register-page">
+            <form className="register-form" onSubmit={(e) => e.preventDefault()}>
+              <div className="register-row">
+                <div className="register-label">제품명</div>
+                <input type="text" className="register-input" />
+                <div className="register-label">제품 이미지</div>
+                <div className="register-file-wrapper">
+                  <input type="text" className="register-input file-input-display" value={fileName} readOnly />
+                  <button type="button" className="file-btn-inside" onClick={() => document.getElementById('fileInput2').click()}>첨부</button>
+                  <input type="file" id="fileInput2" accept="image/*" style={{display: 'none'}} onChange={handleFileChange} />
+                </div>
+              </div>
+              <div className="register-row">
+                <div className="register-label">제품 사이즈</div>
+                <input type="text" className="register-input" />
+                <div className="register-label">픽셀</div>
+                <input type="text" className="register-input" />
+              </div>
+              <div className="register-row">
+                <div className="register-label">밝기</div>
+                <input type="text" className="register-input" />
+                <div className="register-label">전력</div>
+                <input type="text" className="register-input" />
+              </div>
+              <div className="register-row">
+                <div className="register-label">해상도</div>
+                <input type="text" className="register-input" />
+                <div className="register-label">수량</div>
+                <input type="text" className="register-input" />
+              </div>
+              <div className="register-row">
+                <div className="register-label">단가</div>
+                <input type="text" className="register-input" 
+                       value={productPrice ? productPrice.toLocaleString() : ''}
+                       onChange={(e) => handlePriceChange(e.target.value)} />
+                <div className="register-label">부가세</div>
+                <input type="text" className="register-input" 
+                       value={productTax ? productTax.toLocaleString() : ''} readOnly style={{background: '#f5f5f5'}} />
+              </div>
+              <div className="register-row-full">
+                <div className="register-label">합계</div>
+                <input type="text" className="register-input-full" 
+                       value={productTotal ? productTotal.toLocaleString() : ''} readOnly style={{background: '#f5f5f5'}} />
+              </div>
+              <div className="register-buttons">
+                <button type="button" className="btn-cyan btn-large">등록</button>
+              </div>
+            </form>
+          </div>
+        )}
+
+        {registerTab === 'processor' && (
+          <div className="product-register-page">
+            <form className="register-form" onSubmit={(e) => e.preventDefault()}>
+              <div className="register-row">
+                <div className="register-label">모델명</div>
+                <input type="text" className="register-input" />
+                <div className="register-label">지원해상도</div>
+                <input type="text" className="register-input" />
+              </div>
+              <div className="register-row">
+                <div className="register-label">랜포트</div>
+                <input type="text" className="register-input" />
+                <div className="register-label">단가</div>
+                <input type="text" className="register-input" />
+              </div>
+              <div className="register-buttons">
+                <button type="button" className="btn-cyan btn-large">등록</button>
+              </div>
+            </form>
+          </div>
+        )}
+      </div>
+    )
+  }
 
   const renderAccounts = () => {
     const handleEdit = (account) => {
@@ -1227,6 +1343,12 @@ function AdminPage() {
             제품 관리
           </button>
           <button 
+            className={activeTab === 'product-register' ? 'active' : ''}
+            onClick={() => setActiveTab('product-register')}
+          >
+            제품 등록
+          </button>
+          <button 
             className={activeTab === 'pricing' ? 'active' : ''}
             onClick={() => setActiveTab('pricing')}
           >
@@ -1252,6 +1374,7 @@ function AdminPage() {
           {activeTab === 'dashboard' && renderDashboard()}
           {activeTab === 'estimates' && renderEstimates()}
           {activeTab === 'products' && renderProducts()}
+          {activeTab === 'product-register' && renderProductRegister()}
           {activeTab === 'pricing' && renderPricing()}
           {activeTab === 'settings' && renderSettings()}
           {activeTab === 'accounts' && renderAccounts()}
