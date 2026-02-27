@@ -89,15 +89,17 @@
 /* Form Row */
 .form-row {
   display: flex;
-  min-height: 28px;
-  height: 28px;
-  gap: 6px;
+  min-height: 32px;
+  height: 32px;
+  gap: 8px;
+  margin-bottom: 6px;
 }
 
 .form-row-group {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 4px;
+  gap: 8px;
+  margin-bottom: 6px;
 }
 
 /* Form Label - fixed width, rounded */
@@ -242,8 +244,9 @@
 .split-input {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
-  padding: 0 10px;
+  padding: 0;
   flex: 1;
   border-bottom: 1px solid #eee;
   height: 34px;
@@ -262,22 +265,21 @@
 
 /* Preview Section */
 .preview-body {
-  padding: 10px;
+  padding: 3px;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 180px;
   background: white;
 }
 
 .led-preview-border {
-  padding: 5px;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  min-height: 150px;
   border: none !important;
+  background: white;
 }
 
 .led-preview-layout {
@@ -350,8 +352,8 @@
   gap: 8px; 
   border: none !important; 
 }
-.led-grid { display: grid; gap: 1px; background: #333; padding: 2px; border: none !important; }
-.led-panel { width: 55px !important; height: 30px !important; background: #1a1a2e; }
+.led-grid { display: grid; gap: 1px; background: #333; padding: 2px; border: none !important; width: 100%; height: 100%; }
+.led-panel { width: 100% !important; height: 100% !important; background: #1a1a2e; }
 
 .led-dimension-h {
   width: 100%;

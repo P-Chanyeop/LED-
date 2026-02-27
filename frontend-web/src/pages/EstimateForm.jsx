@@ -948,8 +948,10 @@ function EstimateForm() {
                                         </div>
                                         <div>
                                             <div className="led-grid" style={{
-                                                gridTemplateColumns: `repeat(${formData.width}, 55px)`,
-                                                gridTemplateRows: `repeat(${formData.height}, 30px)`
+                                                gridTemplateColumns: `repeat(${formData.width}, 1fr)`,
+                                                gridTemplateRows: `repeat(${formData.height}, 1fr)`,
+                                                width: '600px',
+                                                height: '400px'
                                             }}>
                                                 {Array.from({length: formData.totalPanels}).map((_, i) => (
                                                     <div key={i} className="led-panel"></div>
