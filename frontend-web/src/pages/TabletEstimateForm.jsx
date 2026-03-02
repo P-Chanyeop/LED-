@@ -16,9 +16,9 @@ function TabletEstimateForm() {
         installDate: '', installPeriod: '2일', installLocation: '', installDetail: '', installNote: '',
         productName: 'ETK-COB1.2', productSize: '600x337.5', pixel: '1.2 Pixel',
         brightness: '800 Nit', power: '75/25 W', resolution: '480x270 Dpi',
-        ledWidth: 7, ledHeight: 6, ledSizeW: 4200, ledSizeH: 2025,
-        ledResolutionW: 3360, ledResolutionH: 1620, totalPower: '427 W',
-        processorModel: 'VX600 Pro', processorQuantity: 1, totalPanels: 42,
+        ledWidth: 7, ledHeight: 7, ledSizeW: 4200, ledSizeH: 2363,
+        ledResolutionW: 3360, ledResolutionH: 1890, totalPower: '3.7 Kw',
+        processorModel: 'VX600 Pro', processorQuantity: 1, totalPanels: 49,
         installWorkers: 3,
         deliveryLocation: '서울',
         regionalTravelCost: 0,
@@ -28,17 +28,12 @@ function TabletEstimateForm() {
     const h = (field, value) => setFormData(prev => ({ ...prev, [field]: value }))
     const nextStep = () => { if (step < 3) setStep(step + 1) }
     const prevStep = () => { if (step > 1) setStep(step - 1) }
-
     const handleRegionChange = (region) => {
         h('deliveryLocation', region)
         if (FREE_REGIONS.includes(region)) h('regionalTravelCost', 0)
     }
 
-    // 견적 계산
-    const panelPrice = 950000
-    const sqmPrice = 4691358
-    const processorPrice = 3000000
-    const workerPrice = 300000
+    const panelPrice = 950000, sqmPrice = 4691358, processorPrice = 3000000, workerPrice = 300000
     const ledTotal = panelPrice * formData.totalPanels
     const processorTotal = processorPrice * formData.processorQuantity
     const laborTotal = workerPrice * formData.installWorkers
@@ -47,17 +42,14 @@ function TabletEstimateForm() {
     const salesTotal = ledTotal + processorTotal
     const addTotal = laborTotal + materialTotal + travelTotal
     const grandTotal = salesTotal + addTotal
-
     const fmt = (n) => n.toLocaleString()
 
     return (
         <div className="tb-container">
-            {/* Step 1 */}
             {step === 1 && (
                 <div className="tb-step">
                     <div className="tb-header"><img src={modalLogoImg} alt="logo" /></div>
 
-                    {/* 담당자 등록 */}
                     <div className="tb-section">
                         <div className="tb-sh">
                             <span>담당자 등록</span>
@@ -66,7 +58,8 @@ function TabletEstimateForm() {
                         <div className="tb-sb">
                             <div className="tb-row">
                                 <div className="tb-lbl">날짜</div>
-                                <div className="tb-inp"><input type="date" value={formData.date} onChange={e=>h('date',e.target.value)} /></div>
+                                <div className="tb-inp" style={{flex:'none',width:'30vw'}}><input type="date" value={formData.date} onChange={e=>h('date',e.target.value)} /></div>
+                                <div style={{flex:1}}></div>
                             </div>
                             <div className="tb-row">
                                 <div className="tb-lbl">담당자</div>
@@ -96,7 +89,6 @@ function TabletEstimateForm() {
                         </div>
                     </div>
 
-                    {/* 업체 담당자 등록 */}
                     <div className="tb-section tb-section--green">
                         <div className="tb-sh tb-sh--green"><span>업체 담당자 등록</span></div>
                         <div className="tb-sb">
@@ -128,7 +120,6 @@ function TabletEstimateForm() {
                         </div>
                     </div>
 
-                    {/* 설치 정보 등록 */}
                     <div className="tb-section tb-section--blue">
                         <div className="tb-sh tb-sh--blue"><span>설치 정보 등록</span></div>
                         <div className="tb-sb">
@@ -157,18 +148,17 @@ function TabletEstimateForm() {
                 </div>
             )}
 
-            {/* Step 2 */}
             {step === 2 && (
                 <div className="tb-step">
                     <div className="tb-header"><img src={modalLogoImg} alt="logo" /></div>
 
-                    {/* LED Display 제품 정보 */}
                     <div className="tb-section">
                         <div className="tb-sh"><span>LED Display 제품 정보</span></div>
                         <div className="tb-sb">
                             <div className="tb-row">
                                 <div className="tb-lbl">제품명</div>
-                                <div className="tb-inp"><select value={formData.productName} onChange={e=>h('productName',e.target.value)}><option>ETK-COB1.2</option><option>ETK-COB1.5</option></select></div>
+                                <div className="tb-inp" style={{flex:1}}><select value={formData.productName} onChange={e=>h('productName',e.target.value)}><option>ETK-COB1.2</option><option>ETK-COB1.5</option></select></div>
+                                <div style={{flex:1}}></div>
                             </div>
                             <div className="tb-row">
                                 <div className="tb-lbl">제품 사이즈</div>
@@ -184,42 +174,50 @@ function TabletEstimateForm() {
                             </div>
                             <div className="tb-row">
                                 <div className="tb-lbl">해상도</div>
-                                <div className="tb-inp" style={{flex:3}}><input type="text" value={formData.resolution} readOnly /></div>
+                                <div className="tb-inp" style={{flex:1}}><input type="text" value={formData.resolution} readOnly /></div>
+                                <div style={{flex:1}}></div>
                             </div>
                         </div>
                     </div>
 
-                    {/* LED Display 구매 수량 */}
                     <div className="tb-section">
                         <div className="tb-sh"><span>LED Display 구매 수량</span></div>
                         <div className="tb-sb">
                             <div className="tb-row">
                                 <div className="tb-lbl">수량</div>
-                                <div className="tb-inp" style={{gap:'8px',paddingLeft:'12px',fontSize:'26px'}}>
-                                    W: <input type="number" min="1" max="15" value={formData.ledWidth} style={{width:'100px'}} onChange={e=>h('ledWidth',Number(e.target.value))} />
-                                    <span style={{fontSize:'18px',color:'#888'}}>1~15</span>
-                                </div>
-                                <div className="tb-inp" style={{gap:'8px',paddingLeft:'12px',fontSize:'26px'}}>
-                                    H: <input type="number" min="1" max="15" value={formData.ledHeight} style={{width:'100px'}} onChange={e=>h('ledHeight',Number(e.target.value))} />
-                                    <span style={{fontSize:'18px',color:'#888'}}>1~15</span>
-                                </div>
-                                <div className="tb-inp" style={{fontSize:'26px',paddingLeft:'12px'}}>
-                                    = {formData.totalPanels} <span style={{fontSize:'32px',fontWeight:700}}>EA</span>
+                                <div className="tb-inp" style={{flex:'none',display:'flex',alignItems:'center',gap:'0.3vw',fontSize:'2.8vw',fontWeight:700}}>
+                                    <span>W:</span>
+                                    <select value={formData.ledWidth} onChange={e=>h('ledWidth',Number(e.target.value))} style={{width:'5vw',height:'100%',fontSize:'2.38vw'}}>
+                                        {Array.from({length:15},(_,i)=>i+1).map(n=><option key={n} value={n}>{n}</option>)}
+                                    </select>
+                                    <span style={{fontSize:'1.6vw',color:'#888'}}>1~15</span>
+                                    <span style={{margin:'0 0.3vw'}}>X</span>
+                                    <span>H:</span>
+                                    <select value={formData.ledHeight} onChange={e=>h('ledHeight',Number(e.target.value))} style={{width:'5vw',height:'100%',fontSize:'2.38vw'}}>
+                                        {Array.from({length:15},(_,i)=>i+1).map(n=><option key={n} value={n}>{n}</option>)}
+                                    </select>
+                                    <span style={{fontSize:'1.6vw',color:'#888'}}>1~15</span>
+                                    <span style={{margin:'0 0.3vw'}}>=</span>
+                                    <input type="text" value={formData.totalPanels} readOnly style={{width:'6vw',textAlign:'center',fontSize:'2.38vw'}} />
+                                    <span style={{fontWeight:700,fontSize:'3vw'}}>EA</span>
                                 </div>
                             </div>
                             <div className="tb-row">
                                 <div className="tb-lbl">LED 사이즈</div>
                                 <div className="tb-inp"><input type="text" value={formData.ledSizeW} readOnly /></div>
-                                <div className="tb-inp" style={{fontSize:'26px',paddingLeft:'12px'}}>X <input type="text" value={formData.ledSizeH} readOnly /></div>
+                                <span style={{display:'flex',alignItems:'center',fontWeight:700,fontSize:'2.8vw',padding:'0 0.3vw'}}>X</span>
+                                <div className="tb-inp"><input type="text" value={formData.ledSizeH} readOnly /></div>
                             </div>
                             <div className="tb-row">
                                 <div className="tb-lbl">LED 해상도</div>
                                 <div className="tb-inp"><input type="text" value={formData.ledResolutionW} readOnly /></div>
-                                <div className="tb-inp" style={{fontSize:'26px',paddingLeft:'12px'}}>X <input type="text" value={formData.ledResolutionH} readOnly /></div>
+                                <span style={{display:'flex',alignItems:'center',fontWeight:700,fontSize:'2.8vw',padding:'0 0.3vw'}}>X</span>
+                                <div className="tb-inp"><input type="text" value={formData.ledResolutionH} readOnly /></div>
                             </div>
                             <div className="tb-row">
                                 <div className="tb-lbl">전체 전력</div>
                                 <div className="tb-inp"><input type="text" value={formData.totalPower} readOnly /></div>
+                                <div style={{flex:1}}></div>
                             </div>
                             <div className="tb-row">
                                 <div className="tb-lbl">프로세스 사양</div>
@@ -235,28 +233,25 @@ function TabletEstimateForm() {
                                     </select>
                                 </div>
                                 <div className="tb-lbl">지방 출장비 외</div>
-                                <div className="tb-inp" style={{gap:'8px'}}>
-                                    <input type="number" value={formData.regionalTravelCost} onChange={e=>h('regionalTravelCost',Number(e.target.value))} />
-                                    <span style={{fontSize:'18px',color:'#888',whiteSpace:'nowrap'}}>직접입력</span>
+                                <div className="tb-inp" style={{gap:'4px'}}>
+                                    <span style={{fontSize:'2.4vw',fontWeight:700,whiteSpace:'nowrap'}}>₩</span>
+                                    <input type="number" value={formData.regionalTravelCost} onChange={e=>h('regionalTravelCost',Number(e.target.value))} style={{flex:1}} />
+                                    <span style={{fontSize:'1.88vw',color:'#888',whiteSpace:'nowrap'}}>직접입력</span>
                                 </div>
-                            </div>
-                            <div className="tb-hint">
-                                {REGIONS.join(' / ')}
-                                <span style={{marginLeft:'20px',color:'#666'}}>서울,경기,인천 지방출장비 0원</span>
                             </div>
                             <div className="tb-row">
                                 <div className="tb-lbl">설치인원</div>
                                 <div className="tb-inp"><select value={formData.installWorkers} onChange={e=>h('installWorkers',Number(e.target.value))}><option value={3}>3명</option><option value={4}>4명</option><option value={5}>5명</option></select></div>
                                 <div className="tb-lbl">기타 재료비 외</div>
-                                <div className="tb-inp" style={{gap:'8px'}}>
-                                    <input type="number" value={formData.materialCost} onChange={e=>h('materialCost',Number(e.target.value))} />
-                                    <span style={{fontSize:'18px',color:'#888',whiteSpace:'nowrap'}}>직접입력</span>
+                                <div className="tb-inp" style={{gap:'4px'}}>
+                                    <span style={{fontSize:'2.4vw',fontWeight:700,whiteSpace:'nowrap'}}>₩</span>
+                                    <input type="number" value={formData.materialCost} onChange={e=>h('materialCost',Number(e.target.value))} style={{flex:1}} />
+                                    <span style={{fontSize:'1.88vw',color:'#888',whiteSpace:'nowrap'}}>직접입력</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    {/* LED Display 예상도 */}
                     <div className="tb-section">
                         <div className="tb-sh"><span>LED Display 예상도</span></div>
                         <div className="tb-sb">
@@ -279,20 +274,17 @@ function TabletEstimateForm() {
                     </div>
 
                     <div className="tb-footer">
-                        <button className="tb-btn-prev" onClick={prevStep}>이전</button>
-                        <button className="tb-btn-next" onClick={nextStep}>전체 내용 보기</button>
+                        <button className="tb-btn-next" onClick={nextStep}>전채 내용 보기</button>
                     </div>
                 </div>
             )}
 
-            {/* Step 3 */}
             {step === 3 && (
                 <div className="tb-step">
                     <div className="tb-header"><img src={modalLogoImg} alt="logo" /></div>
 
-                    {/* 전체 내용 보기 */}
                     <div className="tb-section">
-                        <div className="tb-sh"><span>LED Display 전체 내용 보기</span></div>
+                        <div className="tb-sh" style={{justifyContent:'center'}}><span>LED Display 전체 내용 보기</span></div>
                         <div className="tb-sb">
                             <div className="tb-row"><div className="tb-lbl">날짜</div><div className="tb-val">{formData.date}</div></div>
                             <div className="tb-row">
@@ -335,9 +327,9 @@ function TabletEstimateForm() {
                             <div className="tb-divider"></div>
 
                             <div className="tb-row"><div className="tb-lbl">수량</div><div className="tb-val" style={{flex:3}}>W : {formData.ledWidth}   X   H : {formData.ledHeight}   =   {formData.totalPanels}EA</div></div>
-                            <div className="tb-row"><div className="tb-lbl">LED 사이즈</div><div className="tb-val" style={{flex:3}}>{formData.ledSizeW}   {formData.ledSizeH}</div></div>
-                            <div className="tb-row"><div className="tb-lbl">LED 해상도</div><div className="tb-val" style={{flex:3}}>{formData.ledResolutionW}   {formData.ledResolutionH}</div></div>
-                            <div className="tb-row"><div className="tb-lbl">전체 전력</div><div className="tb-val">{formData.totalPower}</div></div>
+                            <div className="tb-row"><div className="tb-lbl">LED 사이즈</div><div className="tb-val" style={{flex:3}}>{formData.ledSizeW} x {formData.ledSizeH}</div></div>
+                            <div className="tb-row"><div className="tb-lbl">LED 해상도</div><div className="tb-val" style={{flex:3}}>{formData.ledResolutionW} x {formData.ledResolutionH}</div></div>
+                            <div className="tb-row"><div className="tb-lbl">전체 전력</div><div className="tb-val">{formData.totalPower}</div><div style={{flex:1}}></div></div>
                             <div className="tb-row">
                                 <div className="tb-lbl">프로세스 사양</div><div className="tb-val">{formData.processorModel}</div>
                                 <div className="tb-lbl">프로세스 수량</div><div className="tb-val">{formData.processorQuantity}EA</div>
@@ -355,7 +347,6 @@ function TabletEstimateForm() {
 
                     {/* LED Display 예상도 */}
                     <div className="tb-section">
-                        <div className="tb-sh"><span>LED Display 예상도</span></div>
                         <div className="tb-sb">
                             <div className="tb-preview-border">
                                 <div className="tb-preview-layout">
@@ -375,9 +366,9 @@ function TabletEstimateForm() {
                         </div>
                     </div>
 
-                    <div className="tb-footer" style={{marginBottom:'40px'}}>
-                        <button className="tb-btn-prev" onClick={prevStep}>수정하기</button>
-                        <button className="tb-btn-next">견적서 보기</button>
+                    <div className="tb-footer">
+                        <button className="tb-btn-next" onClick={prevStep}>수정하기</button>
+                        <button className="tb-btn-next" style={{background:'#8BC53E'}}>견적서 보기</button>
                     </div>
 
                     {/* 견적서 */}
@@ -415,14 +406,9 @@ function TabletEstimateForm() {
                             <table className="tb-it"><thead><tr>
                                 <th>순번</th><th>품명</th><th>규격(인,장소)</th><th>수량</th><th>단가</th><th>가격</th>
                             </tr></thead><tbody>
-                                {/* 1. LED */}
                                 <tr>
                                     <td rowSpan={2} className="tb-it-center">1</td>
-                                    <td rowSpan={2} className="tb-it-product">
-                                        <div style={{display:'flex',alignItems:'center',gap:'6px',padding:'4px'}}>
-                                            <div style={{fontSize:'10px',fontWeight:'bold'}}>{formData.productName}</div>
-                                        </div>
-                                    </td>
+                                    <td rowSpan={2} className="tb-it-product"><div style={{fontSize:'10px',fontWeight:'bold'}}>{formData.productName}</div></td>
                                     <td>{formData.productSize}</td>
                                     <td className="tb-it-center">{formData.totalPanels}</td>
                                     <td className="tb-it-right">₩ {fmt(panelPrice)}</td>
@@ -437,14 +423,9 @@ function TabletEstimateForm() {
                                     <td colSpan={4} className="tb-it-center">소계</td>
                                     <td colSpan={2} className="tb-it-right">₩ {fmt(ledTotal)}</td>
                                 </tr>
-                                {/* 2. 프로세서 */}
                                 <tr className="tb-it-after-sub">
                                     <td className="tb-it-center">2</td>
-                                    <td className="tb-it-product">
-                                        <div style={{display:'flex',alignItems:'center',gap:'6px',padding:'4px'}}>
-                                            <div style={{fontSize:'10px',fontWeight:'bold'}}>{formData.processorModel}</div>
-                                        </div>
-                                    </td>
+                                    <td className="tb-it-product"><div style={{fontSize:'10px',fontWeight:'bold'}}>{formData.processorModel}</div></td>
                                     <td className="tb-it-center">-</td>
                                     <td className="tb-it-center">{formData.processorQuantity}</td>
                                     <td className="tb-it-right">₩ {fmt(processorPrice)}</td>
@@ -454,7 +435,6 @@ function TabletEstimateForm() {
                                     <td colSpan={4} className="tb-it-center">소계</td>
                                     <td colSpan={2} className="tb-it-right">₩ {fmt(processorTotal)}</td>
                                 </tr>
-                                {/* 3. 시공 인건비 */}
                                 <tr className="tb-it-after-sub">
                                     <td className="tb-it-center">3</td>
                                     <td className="tb-it-product">시공 인건비</td>
@@ -467,7 +447,6 @@ function TabletEstimateForm() {
                                     <td colSpan={4} className="tb-it-center">소계</td>
                                     <td colSpan={2} className="tb-it-right">₩ {fmt(laborTotal)}</td>
                                 </tr>
-                                {/* 4. 기타 재료 비용 외 */}
                                 <tr className="tb-it-after-sub">
                                     <td className="tb-it-center">4</td>
                                     <td className="tb-it-product">기타 재료 비용 외</td>
@@ -480,7 +459,6 @@ function TabletEstimateForm() {
                                     <td colSpan={4} className="tb-it-center">소계</td>
                                     <td colSpan={2} className="tb-it-right">₩ {fmt(materialTotal)}</td>
                                 </tr>
-                                {/* 5. 지방 출장비 */}
                                 <tr className="tb-it-after-sub">
                                     <td className="tb-it-center">5</td>
                                     <td className="tb-it-product">지방 출장비 [{formData.deliveryLocation}]<br/>(운송비,숙박,기타)</td>
@@ -534,12 +512,8 @@ function TabletEstimateForm() {
                     </div>
 
                     <div className="tb-footer">
-                        <button className="tb-btn-action tb-btn-action--green" onClick={() => setStep(1)}>처음으로</button>
-                        <button className="tb-btn-action">메일 보내기</button>
-                    </div>
-                    <div style={{display:'flex',justifyContent:'center',gap:'40px',padding:'10px 0',fontSize:'14px',color:'#666'}}>
-                        <span>1페이지 화면으로</span>
-                        <span>LED Display 전체 내용 보기 / 판매견적서 두개 같이 첨부 발송</span>
+                        <button className="tb-btn-next" onClick={() => setStep(1)}>처음으로</button>
+                        <button className="tb-btn-next">메일 보내기</button>
                     </div>
                 </div>
             )}
