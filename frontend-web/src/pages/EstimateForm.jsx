@@ -88,6 +88,7 @@ function QuoteModal({formData, onClose}) {
                                 <td rowSpan={2} style={{height: '60px'}} className="qi-center">1</td>
                                 <td rowSpan={2} className="qi-product">
                                 </td>
+                                    {/* TODO: DB 연동 시 이미지 추가 - <img src={productImage} alt={formData.productName} style={{maxWidth:'100%',maxHeight:'50px'}} /> */}
                                 <td className="qi-center">{formData.productSize}</td>
                                 <td className="qi-center">{ledQty}</td>
                                 <td className="qi-right">₩      {fmt(unitPrice)}</td>
@@ -107,6 +108,7 @@ function QuoteModal({formData, onClose}) {
                                 <td className="qi-center">2</td>
                                 <td className="qi-product">
                                 </td>
+                                    {/* TODO: DB 연동 시 이미지 추가 - <img src={processorImage} alt={formData.processorModel} style={{maxWidth:'100%',maxHeight:'50px'}} /> */}
                                 <td className="qi-center">EA</td>
                                 <td className="qi-center">{formData.processorQuantity}</td>
                                 <td className="qi-right">₩      {fmt(processorPrice)}</td>

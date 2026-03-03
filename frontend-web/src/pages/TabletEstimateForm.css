@@ -203,26 +203,32 @@
 .tb-quote-section { border-radius: 1.3vw; border: 0.14vw solid #41C1CC; margin-bottom: 0.7vw; }
 .tb-quote-section-title {
   background: #41C1CC; color: white; text-align: center;
-  font-size: 3.1vw; font-weight: 700; padding: 1.4vw 0; border-radius: 1.3vw 1.3vw 0 0;
+  font-size: 2.8vw; font-weight: 700; padding: 0.9vw 0; border-radius: 1.3vw 1.3vw 0 0;
 }
 
-.tb-ct { width: 100%; border-collapse: separate; border-spacing: 0.1vw; font-size: 2.6vw; }
-.tb-ct td { border: 0.1vw solid #8BC53E; padding: 1.1vw 1.6vw; height: 5.5vw; }
+.tb-ct { width: 100%; border-collapse: separate; border-spacing: 0.7vw; font-size: 2.6vw; }
+.tb-ct td { border: 0.2vw solid #8BC53E; padding: 1.1vw 1.6vw; height: 5.5vw; border-radius: 0.5vw; }
 .tb-ct-label { background: #8BC53E; color: white; font-weight: 600; width: 15vw; text-align: center; white-space: nowrap; }
 .tb-ct-value { background: white; color: #333; }
 
 .tb-quote-divider { border: none; border-top: 0.14vw dashed #41C1CC; margin: 0.7vw 0; }
 
-.tb-it { width: 100%; border-collapse: collapse; font-size: 2.6vw; }
+.tb-it { width: 100%; border-collapse: collapse; font-size: 2.6vw; table-layout: fixed; }
 .tb-it th {
   background: #41C1CC; color: white; padding: 1.1vw 0.9vw; text-align: center;
   border-bottom: 0.06vw solid #0A8186; border-right: 0.06vw solid #0A8186; font-weight: 600;
 }
+.tb-it th:nth-child(1), .tb-it td:nth-child(1) { width: 8%; }
+.tb-it th:nth-child(2), .tb-it td:nth-child(2) { width: 22%; }
+.tb-it th:nth-child(3), .tb-it td:nth-child(3) { width: 18%; }
+.tb-it th:nth-child(4), .tb-it td:nth-child(4) { width: 12%; }
+.tb-it th:nth-child(5), .tb-it td:nth-child(5) { width: 20%; }
+.tb-it th:nth-child(6), .tb-it td:nth-child(6) { width: 20%; }
 .tb-it th:last-child { border-right: none; }
-.tb-it td { border: 0.1vw solid #41C1CC; padding: 1.1vw 0.9vw; color: #333; vertical-align: middle; }
+.tb-it td { border: 0.1vw solid #41C1CC; padding: 1.1vw 0.9vw; color: #333; vertical-align: middle; font-size: 2.4vw; }
 .tb-it-center { text-align: center; }
 .tb-it-right { text-align: right; }
-.tb-it-product { text-align: center; vertical-align: middle; font-size: 2.4vw; }
+.tb-it-product { text-align: center; vertical-align: middle; font-size: 2.4vw; height: 12vw; }
 .tb-it-subtotal td {
   background: white; font-weight: 700; color: #333; text-align: center;
   border-top: none !important; height: 4.5vw; padding: 0.6vw 1.1vw;
@@ -234,19 +240,23 @@
 }
 .tb-it-after-sub td { border-top: none !important; }
 
-.tb-quote-note { font-size: 2vw; color: red; text-align: center; padding: 1.4vw; }
+.tb-quote-note { font-size: 1.6vw; color: #C1272C; text-align: right; padding: 1.4vw; }
 
-.tb-tt { width: 100%; border-collapse: separate; border-spacing: 0 0.18vw; font-size: 2.6vw; margin-bottom: 0.7vw; }
-.tb-tt td { padding: 1.1vw 1.6vw; height: 5.5vw; border: none; }
-.tb-tt-label { color: white; font-weight: 700; text-align: center; width: 9vw; }
-.tb-tt-desc { color: #333; text-align: center; }
-.tb-tt-amount { font-weight: 600; color: #333; width: 30vw; }
+.tb-tt { width: 100%; border-collapse: separate; border-spacing: 0 0.7vw; font-size: 2.6vw; margin-bottom: 0.7vw; }
+.tb-tt td { padding: 1vw 1.8vw; height: 5vw; border: none; }
+.tb-tt-label { color: #333; font-weight: 700; text-align: center; width: 11vw; font-size: 2.8vw; }
+.tb-tt-desc { color: #333; text-align: center; font-weight: 600; font-size: 2.4vw; }
+.tb-tt-amount { font-weight: 700; color: white; width: 32vw; text-align: right; font-size: 3vw; padding-right: 2.5vw; }
 
-.tb-tt-mint td { background: #E1FEFF; border: 0.1vw solid #41C1CC; }
+.tb-tt-mint td { background: #E1FEFF; border: 0.15vw solid #0A8186; }
+.tb-tt-mint td.tb-tt-label { background: #E1FEFF; }
 .tb-tt-mint td.tb-tt-amount { background: #41C1CC !important; color: white !important; }
-.tb-tt-green td { background: #EAFFCA; border: 0.1vw solid #8BC53E; }
-.tb-tt-green td.tb-tt-amount { background: #8BC53E !important; color: white !important; }
-.tb-tt-grand td { background: #FFEDE1; font-weight: 700; border: 0.1vw solid #F47921; }
+.tb-tt-green td { background: #EAFFCA; border: 0.15vw solid #006837; }
+.tb-tt-green td.tb-tt-label { background: #EAFFCA;  }
+.tb-tt-green td.tb-tt-amount { background: #8CC63F !important; color: white !important; }
+.tb-tt-grand { border-top: 2.5vw solid transparent; }
+.tb-tt-grand td { background: #FFEDE1; font-weight: 700;  border: 4.5px solid #9F4100; }
+.tb-tt-grand td.tb-tt-label { background: #FFEDE1; font-size: 3vw; letter-spacing: 0.3vw; }
 .tb-tt-grand td.tb-tt-amount { background: #F47921 !important; color: white !important; }
 
 .tb-terms { display: flex; gap: 1.6vw; margin-top: 2.8vw; padding: 2.2vw; align-items: flex-start; }

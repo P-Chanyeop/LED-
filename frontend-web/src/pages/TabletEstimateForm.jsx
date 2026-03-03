@@ -7,6 +7,7 @@ const FREE_REGIONS = ['서울','경기','인천']
 
 function TabletEstimateForm() {
     const [step, setStep] = useState(1)
+    const [showQuote, setShowQuote] = useState(false)
     const [formData, setFormData] = useState({
         date: new Date().toISOString().split('T')[0],
         managerName: '', department: '', managerPhone: '', managerMobile: '',
@@ -279,7 +280,7 @@ function TabletEstimateForm() {
                 </div>
             )}
 
-            {step === 3 && (
+            {step === 3 && !showQuote && (
                 <div className="tb-step">
                     <div className="tb-header"><img src={modalLogoImg} alt="logo" /></div>
 
@@ -368,10 +369,13 @@ function TabletEstimateForm() {
 
                     <div className="tb-footer">
                         <button className="tb-btn-next" onClick={prevStep}>수정하기</button>
-                        <button className="tb-btn-next" style={{background:'#8BC53E'}}>견적서 보기</button>
+                        <button className="tb-btn-next" style={{background:'#8BC53E'}} onClick={() => setShowQuote(true)}>견적서 보기</button>
                     </div>
+                </div>
+            )}
 
-                    {/* 견적서 */}
+            {step === 3 && showQuote && (
+                <div className="tb-step">
                     <div className="tb-quote">
                         <div className="tb-quote-header">
                             <div></div>
@@ -408,7 +412,10 @@ function TabletEstimateForm() {
                             </tr></thead><tbody>
                                 <tr>
                                     <td rowSpan={2} className="tb-it-center">1</td>
-                                    <td rowSpan={2} className="tb-it-product"><div style={{fontSize:'10px',fontWeight:'bold'}}>{formData.productName}</div></td>
+                                    <td rowSpan={2} className="tb-it-product">
+                                        {/* TODO: DB 연동 시 이미지 추가 - <img src={productImage} alt={formData.productName} style={{maxWidth:'100%',maxHeight:'8vw'}} /> */}
+                                        {formData.productName}
+                                    </td>
                                     <td>{formData.productSize}</td>
                                     <td className="tb-it-center">{formData.totalPanels}</td>
                                     <td className="tb-it-right">₩ {fmt(panelPrice)}</td>
@@ -425,7 +432,10 @@ function TabletEstimateForm() {
                                 </tr>
                                 <tr className="tb-it-after-sub">
                                     <td className="tb-it-center">2</td>
-                                    <td className="tb-it-product"><div style={{fontSize:'10px',fontWeight:'bold'}}>{formData.processorModel}</div></td>
+                                    <td className="tb-it-product">
+                                        {/* TODO: DB 연동 시 이미지 추가 - <img src={processorImage} alt={formData.processorModel} style={{maxWidth:'100%',maxHeight:'8vw'}} /> */}
+                                        {formData.processorModel}
+                                    </td>
                                     <td className="tb-it-center">-</td>
                                     <td className="tb-it-center">{formData.processorQuantity}</td>
                                     <td className="tb-it-right">₩ {fmt(processorPrice)}</td>
@@ -437,7 +447,7 @@ function TabletEstimateForm() {
                                 </tr>
                                 <tr className="tb-it-after-sub">
                                     <td className="tb-it-center">3</td>
-                                    <td className="tb-it-product">시공 인건비</td>
+                                    <td className="tb-it-product"><span style={{fontSize:'2vw'}}>시공 인건비</span></td>
                                     <td className="tb-it-center">인</td>
                                     <td className="tb-it-center">{formData.installWorkers}</td>
                                     <td className="tb-it-right">₩ {fmt(workerPrice)}</td>
@@ -449,9 +459,9 @@ function TabletEstimateForm() {
                                 </tr>
                                 <tr className="tb-it-after-sub">
                                     <td className="tb-it-center">4</td>
-                                    <td className="tb-it-product">기타 재료 비용 외</td>
-                                    <td className="tb-it-center">EA<br/>기본</td>
-                                    <td className="tb-it-center">1<br/>기본</td>
+                                    <td className="tb-it-product"><span style={{fontSize:'2vw'}}>기타 재료 비용 외</span></td>
+                                    <td className="tb-it-center">EA</td>
+                                    <td className="tb-it-center">1</td>
                                     <td className="tb-it-right">₩ {fmt(materialTotal)}</td>
                                     <td className="tb-it-right">₩ {fmt(materialTotal)}</td>
                                 </tr>
@@ -461,9 +471,9 @@ function TabletEstimateForm() {
                                 </tr>
                                 <tr className="tb-it-after-sub">
                                     <td className="tb-it-center">5</td>
-                                    <td className="tb-it-product">지방 출장비 [{formData.deliveryLocation}]<br/>(운송비,숙박,기타)</td>
-                                    <td className="tb-it-center">지역<br/>기본</td>
-                                    <td className="tb-it-center">1<br/>기본</td>
+                                    <td className="tb-it-product"><span style={{fontSize:'2vw'}}>지방 출장비 [{formData.deliveryLocation}]<br/><span style={{color:'#0066CC'}}>(운송비,숙박,기타)</span></span></td>
+                                    <td className="tb-it-center">지역</td>
+                                    <td className="tb-it-center">1</td>
                                     <td className="tb-it-right">₩ {fmt(travelTotal)}</td>
                                     <td className="tb-it-right">₩ {fmt(travelTotal)}</td>
                                 </tr>
@@ -487,8 +497,7 @@ function TabletEstimateForm() {
                                     <td className="tb-tt-amount">₩ {fmt(addTotal)}</td>
                                 </tr>
                                 <tr className="tb-tt-grand">
-                                    <td className="tb-tt-label">합 계</td>
-                                    <td className="tb-tt-desc"></td>
+                                    <td colSpan={2} className="tb-tt-label">합 계</td>
                                     <td className="tb-tt-amount">₩ {fmt(grandTotal)}</td>
                                 </tr>
                             </tbody></table>
@@ -512,7 +521,7 @@ function TabletEstimateForm() {
                     </div>
 
                     <div className="tb-footer">
-                        <button className="tb-btn-next" onClick={() => setStep(1)}>처음으로</button>
+                        <button className="tb-btn-next" onClick={() => { setStep(1); setShowQuote(false); }}>처음으로</button>
                         <button className="tb-btn-next">메일 보내기</button>
                     </div>
                 </div>
