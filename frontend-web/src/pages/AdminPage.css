@@ -503,17 +503,43 @@
 }
 
 .register-input {
-  padding: 15px 20px;
+  padding: 8px 12px;
   border: 1px solid #ddd;
+  border-radius: 4px;
   font-size: 14px;
   outline: none;
+  margin: 8px 12px;
+}
+
+.register-input-split {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  gap: 6px;
+}
+
+.register-input-split input {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  outline: none;
+  min-width: 0;
+}
+
+.register-input-split span {
+  font-weight: bold;
+  color: #333;
 }
 
 .register-input-full {
-  padding: 15px 20px;
+  padding: 8px 12px;
   border: 1px solid #ddd;
+  border-radius: 4px;
   font-size: 14px;
   outline: none;
+  margin: 8px 12px;
 }
 
 .register-file-wrapper {

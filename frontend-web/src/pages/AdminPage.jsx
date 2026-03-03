@@ -502,6 +502,8 @@ function AdminPage() {
   const [editingId, setEditingId] = useState(null)
   const [editForm, setEditForm] = useState({})
   const [registerTab, setRegisterTab] = useState('led')
+  const [productForm, setProductForm] = useState({ name: '', sizeW: '', sizeH: '', pixel: '', brightness: '', powerMax: '', powerAvg: '', resW: '', resH: '', price: 0 })
+  const [vxForm, setVxForm] = useState({ model: '', resolution: '', ports: '', price: 0 })
 
   // 기본 formData 구조
   const defaultFormData = {
@@ -646,6 +648,96 @@ function AdminPage() {
       await fetch(`${API_BASE}/products/led/${id}`, { method: 'DELETE' })
       fetchProducts()
     } catch (e) { console.error('Failed to delete product:', e) }
+  }
+
+  const createProduct = async (productData) => {
+    if (!productData.name?.trim()) return alert('제품명을 입력하세요')
+    if (!productData.sizeW || !productData.sizeH) return alert('제품 사이즈를 입력하세요')
+    if (!productData.pixel?.trim()) return alert('픽셀을 입력하세요')
+    if (!productData.price || productData.price <= 0) return alert('단가를 입력하세요')
+    try {
+      await fetch(`${API_BASE}/products/led`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: productData.name,
+          size: `${productData.sizeW}x${productData.sizeH}`,
+          pixel: productData.pixel,
+          brightness: productData.brightness,
+          power: `${productData.powerMax}/${productData.powerAvg}`,
+          resolution: `${productData.resW}x${productData.resH}`,
+          unitPrice: productData.price
+        })
+      })
+      fetchProducts()
+      return true
+    } catch (e) { console.error('Failed to create product:', e) }
+  }
+
+  const updateProduct = async (id, productData) => {
+    if (!productData.name?.trim()) return alert('제품명을 입력하세요')
+    if (!productData.sizeW || !productData.sizeH) return alert('제품 사이즈를 입력하세요')
+    if (!productData.pixel?.trim()) return alert('픽셀을 입력하세요')
+    if (!productData.price || productData.price <= 0) return alert('단가를 입력하세요')
+    try {
+      await fetch(`${API_BASE}/products/led/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: productData.name,
+          size: `${productData.sizeW}x${productData.sizeH}`,
+          pixel: productData.pixel,
+          brightness: productData.brightness,
+          power: `${productData.powerMax}/${productData.powerAvg}`,
+          resolution: `${productData.resW}x${productData.resH}`,
+          unitPrice: productData.price
+        })
+      })
+      fetchProducts()
+      return true
+    } catch (e) { console.error('Failed to update product:', e) }
+  }
+
+  const createVxProduct = async (vxData) => {
+    if (!vxData.model?.trim()) return alert('모델명을 입력하세요')
+    if (!vxData.resolution?.trim()) return alert('지원해상도를 입력하세요')
+    if (!vxData.ports || vxData.ports <= 0) return alert('랜포트를 입력하세요')
+    if (!vxData.price || vxData.price <= 0) return alert('단가를 입력하세요')
+    try {
+      await fetch(`${API_BASE}/products/vx`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          modelName: vxData.model,
+          supportResolution: vxData.resolution,
+          lanPortCount: vxData.ports,
+          unitPrice: vxData.price
+        })
+      })
+      fetchVxProducts()
+      return true
+    } catch (e) { console.error('Failed to create vx product:', e) }
+  }
+
+  const updateVxProduct = async (id, vxData) => {
+    if (!vxData.model?.trim()) return alert('모델명을 입력하세요')
+    if (!vxData.resolution?.trim()) return alert('지원해상도를 입력하세요')
+    if (!vxData.ports || vxData.ports <= 0) return alert('랜포트를 입력하세요')
+    if (!vxData.price || vxData.price <= 0) return alert('단가를 입력하세요')
+    try {
+      await fetch(`${API_BASE}/products/vx/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          modelName: vxData.model,
+          supportResolution: vxData.resolution,
+          lanPortCount: vxData.ports,
+          unitPrice: vxData.price
+        })
+      })
+      fetchVxProducts()
+      return true
+    } catch (e) { console.error('Failed to update vx product:', e) }
   }
 
   const deleteVxProduct = async (id) => {
@@ -814,6 +906,10 @@ function AdminPage() {
                 <td>
                   <button className="btn-small btn-cyan" onClick={() => {
                     setSelectedProduct(prod)
+                    const [sizeW, sizeH] = (prod.size || '').split('x')
+                    const [powerMax, powerAvg] = (prod.power || '').split('/')
+                    const [resW, resH] = (prod.resolution || '').split('x')
+                    setProductForm({ name: prod.name, sizeW: sizeW || '', sizeH: sizeH || '', pixel: prod.pixel, brightness: prod.brightness, powerMax: powerMax || '', powerAvg: powerAvg || '', resW: resW || '', resH: resH || '', price: prod.price })
                     setShowProductEditModal(true)
                   }}>수정</button>
                   <button className="btn-small btn-danger" onClick={() => deleteProduct(prod.id)}>삭제</button>
@@ -851,6 +947,7 @@ function AdminPage() {
                 <td>
                   <button className="btn-small btn-cyan" onClick={() => {
                     setSelectedProcessor(vx)
+                    setVxForm({ model: vx.model, resolution: vx.resolution, ports: vx.ports, price: vx.price })
                     setShowProcessorEditModal(true)
                   }}>수정</button>
                   <button className="btn-small btn-danger" onClick={() => deleteVxProduct(vx.id)}>삭제</button>
@@ -1178,52 +1275,55 @@ function AdminPage() {
         <div className="modal-overlay" onClick={() => setShowProductModal(false)}>
           <div className="product-register-modal" onClick={e => e.stopPropagation()}>
             <h2 className="register-title">제품 등록 하기</h2>
-            <form className="register-form" onSubmit={(e) => { e.preventDefault(); setShowProductModal(false); }}>
-              <div className="register-row">
+            <form className="register-form" onSubmit={async (e) => { 
+              e.preventDefault()
+              const result = await createProduct(productForm)
+              if (result) {
+                setProductForm({ name: '', sizeW: '', sizeH: '', pixel: '', brightness: '', powerMax: '', powerAvg: '', resW: '', resH: '', price: 0 })
+                setShowProductModal(false)
+              }
+            }}>
+              <div className="register-row-full">
                 <div className="register-label">제품명</div>
-                <input type="text" className="register-input" />
-                <div className="register-label">제품 이미지</div>
-                <div className="register-file-wrapper">
-                  <input type="text" className="register-input file-input-display" value={fileName} readOnly />
-                  <button type="button" className="file-btn-inside" onClick={() => document.getElementById('fileInput').click()}>첨부</button>
-                  <input type="file" id="fileInput" accept="image/*" style={{display: 'none'}} onChange={handleFileChange} />
-                </div>
+                <input type="text" className="register-input-full" value={productForm.name} onChange={e => setProductForm({...productForm, name: e.target.value})} />
               </div>
               <div className="register-row">
-                <div className="register-label">제품 사이즈</div>
-                <input type="text" className="register-input" />
                 <div className="register-label">픽셀</div>
-                <input type="text" className="register-input" />
-              </div>
-              <div className="register-row">
+                <input type="text" className="register-input" value={productForm.pixel} onChange={e => setProductForm({...productForm, pixel: e.target.value})} />
                 <div className="register-label">밝기</div>
-                <input type="text" className="register-input" />
-                <div className="register-label">전력</div>
-                <input type="text" className="register-input" />
-              </div>
-              <div className="register-row">
-                <div className="register-label">해상도</div>
-                <input type="text" className="register-input" />
-                <div className="register-label">수량</div>
-                <input type="text" className="register-input" />
-              </div>
-              <div className="register-row">
-                <div className="register-label">단가</div>
-                <input type="text" className="register-input" 
-                       value={productPrice ? productPrice.toLocaleString() : ''}
-                       onChange={(e) => handlePriceChange(e.target.value)} />
-                <div className="register-label">부가세</div>
-                <input type="text" className="register-input" 
-                       value={productTax ? productTax.toLocaleString() : ''} readOnly style={{background: '#f5f5f5'}} />
+                <input type="text" className="register-input" value={productForm.brightness} onChange={e => setProductForm({...productForm, brightness: e.target.value})} />
               </div>
               <div className="register-row-full">
-                <div className="register-label">합계</div>
-                <input type="text" className="register-input-full" 
-                       value={productTotal ? productTotal.toLocaleString() : ''} readOnly style={{background: '#f5f5f5'}} />
+                <div className="register-label">제품 사이즈</div>
+                <div className="register-input-split">
+                  <input type="number" value={productForm.sizeW} onChange={e => setProductForm({...productForm, sizeW: e.target.value})} placeholder="W" />
+                  <span>x</span>
+                  <input type="number" value={productForm.sizeH} onChange={e => setProductForm({...productForm, sizeH: e.target.value})} placeholder="H" />
+                </div>
+              </div>
+              <div className="register-row-full">
+                <div className="register-label">전력</div>
+                <div className="register-input-split">
+                  <input type="number" value={productForm.powerMax} onChange={e => setProductForm({...productForm, powerMax: e.target.value})} placeholder="최대" />
+                  <span>/</span>
+                  <input type="number" value={productForm.powerAvg} onChange={e => setProductForm({...productForm, powerAvg: e.target.value})} placeholder="평균" />
+                </div>
+              </div>
+              <div className="register-row-full">
+                <div className="register-label">해상도</div>
+                <div className="register-input-split">
+                  <input type="number" value={productForm.resW} onChange={e => setProductForm({...productForm, resW: e.target.value})} placeholder="W" />
+                  <span>x</span>
+                  <input type="number" value={productForm.resH} onChange={e => setProductForm({...productForm, resH: e.target.value})} placeholder="H" />
+                </div>
+              </div>
+              <div className="register-row-full">
+                <div className="register-label">단가</div>
+                <input type="number" className="register-input-full" value={productForm.price} onChange={e => setProductForm({...productForm, price: parseInt(e.target.value) || 0})} />
               </div>
               <div className="register-buttons">
-                <button type="button" className="register-btn-cancel" onClick={() => setShowProductModal(false)}>등록</button>
-                <button type="submit" className="register-btn-submit">수정완료</button>
+                <button type="button" className="register-btn-cancel" onClick={() => setShowProductModal(false)}>취소</button>
+                <button type="submit" className="register-btn-submit">등록</button>
               </div>
             </form>
           </div>
@@ -1234,44 +1334,48 @@ function AdminPage() {
         <div className="modal-overlay" onClick={() => setShowProductEditModal(false)}>
           <div className="product-register-modal" onClick={e => e.stopPropagation()}>
             <h2 className="register-title">제품 수정 하기</h2>
-            <form className="register-form" onSubmit={(e) => { e.preventDefault(); setShowProductEditModal(false); }}>
-              <div className="register-row">
+            <form className="register-form" onSubmit={async (e) => { 
+              e.preventDefault()
+              const result = await updateProduct(selectedProduct.id, productForm)
+              if (result) setShowProductEditModal(false)
+            }}>
+              <div className="register-row-full">
                 <div className="register-label">제품명</div>
-                <input type="text" className="register-input" defaultValue={selectedProduct.name} />
-                <div className="register-label">제품 이미지</div>
-                <div className="register-file-wrapper">
-                  <input type="text" className="register-input file-input-display" value={fileName} readOnly />
-                  <button type="button" className="file-btn-inside" onClick={() => document.getElementById('fileInputEdit').click()}>첨부</button>
-                  <input type="file" id="fileInputEdit" accept="image/*" style={{display: 'none'}} onChange={handleFileChange} />
-                </div>
+                <input type="text" className="register-input-full" value={productForm.name} onChange={e => setProductForm({...productForm, name: e.target.value})} />
               </div>
               <div className="register-row">
-                <div className="register-label">제품 사이즈</div>
-                <input type="text" className="register-input" defaultValue={selectedProduct.size} />
                 <div className="register-label">픽셀</div>
-                <input type="text" className="register-input" defaultValue={selectedProduct.pixel} />
-              </div>
-              <div className="register-row">
+                <input type="text" className="register-input" value={productForm.pixel} onChange={e => setProductForm({...productForm, pixel: e.target.value})} />
                 <div className="register-label">밝기</div>
-                <input type="text" className="register-input" defaultValue={selectedProduct.brightness} />
-                <div className="register-label">전력</div>
-                <input type="text" className="register-input" defaultValue={selectedProduct.power} />
-              </div>
-              <div className="register-row">
-                <div className="register-label">해상도</div>
-                <input type="text" className="register-input" defaultValue={selectedProduct.resolution} />
-                <div className="register-label">수량</div>
-                <input type="text" className="register-input" defaultValue={selectedProduct.quantity} />
-              </div>
-              <div className="register-row">
-                <div className="register-label">단가</div>
-                <input type="text" className="register-input" defaultValue={selectedProduct.price.toLocaleString()} />
-                <div className="register-label">부가세</div>
-                <input type="text" className="register-input" defaultValue={Math.round(selectedProduct.price * 0.1).toLocaleString()} readOnly style={{background: '#f5f5f5'}} />
+                <input type="text" className="register-input" value={productForm.brightness} onChange={e => setProductForm({...productForm, brightness: e.target.value})} />
               </div>
               <div className="register-row-full">
-                <div className="register-label">합계</div>
-                <input type="text" className="register-input-full" defaultValue={(selectedProduct.price + Math.round(selectedProduct.price * 0.1)).toLocaleString()} readOnly style={{background: '#f5f5f5'}} />
+                <div className="register-label">제품 사이즈</div>
+                <div className="register-input-split">
+                  <input type="number" value={productForm.sizeW} onChange={e => setProductForm({...productForm, sizeW: e.target.value})} placeholder="W" />
+                  <span>x</span>
+                  <input type="number" value={productForm.sizeH} onChange={e => setProductForm({...productForm, sizeH: e.target.value})} placeholder="H" />
+                </div>
+              </div>
+              <div className="register-row-full">
+                <div className="register-label">전력</div>
+                <div className="register-input-split">
+                  <input type="number" value={productForm.powerMax} onChange={e => setProductForm({...productForm, powerMax: e.target.value})} placeholder="최대" />
+                  <span>/</span>
+                  <input type="number" value={productForm.powerAvg} onChange={e => setProductForm({...productForm, powerAvg: e.target.value})} placeholder="평균" />
+                </div>
+              </div>
+              <div className="register-row-full">
+                <div className="register-label">해상도</div>
+                <div className="register-input-split">
+                  <input type="number" value={productForm.resW} onChange={e => setProductForm({...productForm, resW: e.target.value})} placeholder="W" />
+                  <span>x</span>
+                  <input type="number" value={productForm.resH} onChange={e => setProductForm({...productForm, resH: e.target.value})} placeholder="H" />
+                </div>
+              </div>
+              <div className="register-row-full">
+                <div className="register-label">단가</div>
+                <input type="number" className="register-input-full" value={productForm.price} onChange={e => setProductForm({...productForm, price: parseInt(e.target.value) || 0})} />
               </div>
               <div className="register-buttons">
                 <button type="button" className="register-btn-cancel" onClick={() => setShowProductEditModal(false)}>취소</button>
@@ -1286,22 +1390,29 @@ function AdminPage() {
         <div className="modal-overlay" onClick={() => setShowProcessorModal(false)}>
           <div className="product-register-modal" onClick={e => e.stopPropagation()}>
             <h2 className="register-title">프로세서 등록 하기</h2>
-            <form className="register-form" onSubmit={(e) => { e.preventDefault(); setShowProcessorModal(false); }}>
+            <form className="register-form" onSubmit={async (e) => { 
+              e.preventDefault()
+              const result = await createVxProduct(vxForm)
+              if (result) {
+                setVxForm({ model: '', resolution: '', ports: '', price: 0 })
+                setShowProcessorModal(false)
+              }
+            }}>
               <div className="register-row">
                 <div className="register-label">모델명</div>
-                <input type="text" className="register-input" />
+                <input type="text" className="register-input" value={vxForm.model} onChange={e => setVxForm({...vxForm, model: e.target.value})} />
                 <div className="register-label">지원해상도</div>
-                <input type="text" className="register-input" />
+                <input type="text" className="register-input" value={vxForm.resolution} onChange={e => setVxForm({...vxForm, resolution: e.target.value})} />
               </div>
               <div className="register-row">
                 <div className="register-label">랜포트</div>
-                <input type="text" className="register-input" />
+                <input type="number" className="register-input" value={vxForm.ports} onChange={e => setVxForm({...vxForm, ports: parseInt(e.target.value) || 0})} />
                 <div className="register-label">단가</div>
-                <input type="text" className="register-input" />
+                <input type="number" className="register-input" value={vxForm.price} onChange={e => setVxForm({...vxForm, price: parseInt(e.target.value) || 0})} />
               </div>
               <div className="register-buttons">
-                <button type="button" className="register-btn-cancel" onClick={() => setShowProcessorModal(false)}>등록</button>
-                <button type="submit" className="register-btn-submit">수정완료</button>
+                <button type="button" className="register-btn-cancel" onClick={() => setShowProcessorModal(false)}>취소</button>
+                <button type="submit" className="register-btn-submit">등록</button>
               </div>
             </form>
           </div>
@@ -1312,22 +1423,22 @@ function AdminPage() {
         <div className="modal-overlay" onClick={() => setShowProcessorEditModal(false)}>
           <div className="product-register-modal" onClick={e => e.stopPropagation()}>
             <h2 className="register-title">프로세서 수정 하기</h2>
-            <form className="register-form" onSubmit={(e) => { e.preventDefault(); setShowProcessorEditModal(false); }}>
+            <form className="register-form" onSubmit={async (e) => { 
+              e.preventDefault()
+              const result = await updateVxProduct(selectedProcessor.id, vxForm)
+              if (result) setShowProcessorEditModal(false)
+            }}>
               <div className="register-row">
-                <div className="register-label">ID</div>
-                <input type="text" className="register-input" defaultValue={selectedProcessor.id || ''} readOnly style={{background: '#f5f5f5'}} />
                 <div className="register-label">모델명</div>
-                <input type="text" className="register-input" defaultValue={selectedProcessor.model || ''} />
+                <input type="text" className="register-input" value={vxForm.model} onChange={e => setVxForm({...vxForm, model: e.target.value})} />
+                <div className="register-label">지원해상도</div>
+                <input type="text" className="register-input" value={vxForm.resolution} onChange={e => setVxForm({...vxForm, resolution: e.target.value})} />
               </div>
               <div className="register-row">
-                <div className="register-label">지원해상도</div>
-                <input type="text" className="register-input" defaultValue={selectedProcessor.resolution || ''} />
                 <div className="register-label">랜포트</div>
-                <input type="text" className="register-input" defaultValue={selectedProcessor.ports || ''} />
-              </div>
-              <div className="register-row-full">
+                <input type="number" className="register-input" value={vxForm.ports} onChange={e => setVxForm({...vxForm, ports: parseInt(e.target.value) || 0})} />
                 <div className="register-label">단가</div>
-                <input type="text" className="register-input-full" defaultValue={selectedProcessor.price ? selectedProcessor.price.toLocaleString() : ''} />
+                <input type="number" className="register-input" value={vxForm.price} onChange={e => setVxForm({...vxForm, price: parseInt(e.target.value) || 0})} />
               </div>
               <div className="register-buttons">
                 <button type="button" className="register-btn-cancel" onClick={() => setShowProcessorEditModal(false)}>취소</button>
