@@ -14,17 +14,17 @@
 
 .tb-step {
   width: 96%;
-  margin: 1.2vw auto;
+  margin: 0.8vw auto;
   background: white;
-  border: 0.22vw solid #41C1CC;
-  border-radius: 2.4vw;
+  border: 0.35vw solid #41C1CC;
+  border-radius: 1.8vw;
   padding: 0 0 1vw 0;
   overflow: hidden;
 }
 
 /* 로고 */
 .tb-header {
-  padding: 6vw 0 4.5vw 0;
+  padding: 3.5vw 0 2.5vw 0;
   text-align: center;
 }
 .tb-header img {
@@ -34,9 +34,9 @@
 
 /* 섹션 */
 .tb-section {
-  margin: 0 3.2vw 5.5vw;
-  border: 0.22vw solid #41C1CC;
-  border-radius: 1.5vw;
+  margin: 0 3.2vw 3.3vw;
+  border: 0.3vw solid #41C1CC;
+  border-radius: 1.2vw;
   overflow: hidden;
 }
 .tb-section:last-of-type { margin-bottom: 0; }
@@ -46,23 +46,23 @@
 /* 섹션 헤더 */
 .tb-sh {
   padding: 0 2.5vw;
-  color: white; font-weight: 800;
-  font-size: 4.5vw;
+  color: white; font-weight: 900;
+  font-size: 3.5vw;
   display: flex; justify-content: space-between; align-items: center;
   background: #41C1CC;
-  height: 8vw;
+  height: 5.5vw;
 }
 .tb-sh--green { background: #8BC53E; }
 .tb-sh--blue { background: #0070BB; }
 
 /* 섹션 바디 */
-.tb-sb { padding: 3vw 0 2.5vw; }
+.tb-sb { padding: 2vw 0 1.7vw; }
 
 /* 행 */
 .tb-row {
   display: flex;
-  height: 7vw;
-  margin: 0 2vw 1.8vw;
+  height: 4.8vw;
+  margin: 0 2vw 1.2vw;
   gap: 1vw;
   align-items: stretch;
 }
@@ -72,9 +72,9 @@
   width: 20vw; min-width: 20vw; flex-shrink: 0;
   background: #41C1CC; color: white;
   display: flex; align-items: center; justify-content: center;
-  font-size: 3.3vw;
-  font-weight: 700; white-space: nowrap;
-  border-radius: 0.9vw;
+  font-size: 2.9vw;
+  font-weight: 800; white-space: nowrap;
+  border-radius: 0.6vw;
   padding: 0 0.5vw;
 }
 .tb-lbl--green { background: #8BC53E; }
@@ -89,10 +89,10 @@
   font-size: 3.1vw;
   padding: 0 1.8vw;
   height: 100%;
-  border: 0.16vw solid #a0c4c8;
+  border: 0.25vw solid #a0c4c8;
   background: #CCDFE0;
   outline: none; color: #333;
-  border-radius: 0.9vw;
+  border-radius: 0.6vw;
   box-sizing: border-box;
 }
 .tb-inp input[readonly] { background: #CCDFE0; }
@@ -109,8 +109,8 @@
 /* 값 표시 (Step3) */
 .tb-val {
   flex: 1; padding: 0 1.8vw;
-  background: #CCDFE0; border: 0.16vw solid #a0c4c8;
-  border-radius: 0.9vw; font-size: 3.1vw;
+  background: #CCDFE0; border: 0.25vw solid #a0c4c8;
+  border-radius: 0.6vw; font-size: 3.1vw;
   height: 100%; display: flex; align-items: center;
   box-sizing: border-box;
 }
@@ -123,8 +123,8 @@
 
 /* Reset 버튼 */
 .tb-btn-reset {
-  background: rgba(255,255,255,0.3); border: 0.14vw solid white; color: white;
-  padding: 0 2.2vw; border-radius: 0.7vw; cursor: pointer;
+  background: rgba(255,255,255,0.3); border: 0.2vw solid white; color: white;
+  padding: 0 2.2vw; border-radius: 0.5vw; cursor: pointer;
   font-size: 3vw;
   height: 60%; display: flex; align-items: center;
 }
@@ -132,9 +132,9 @@
 /* 첨부하기/사진찍기 버튼 */
 .tb-btn-action {
   width: 15vw; flex-shrink: 0;
-  border: 0.22vw solid #8BC53E; border-radius: 0.9vw;
+  border: 0.35vw solid #8BC53E; border-radius: 0.6vw;
   color: #8BC53E; background: white;
-  font-size: 3.3vw; font-weight: 700; cursor: pointer;
+  font-size: 3.3vw; font-weight: 800; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   white-space: nowrap;
 }
@@ -144,11 +144,11 @@
 /* 다음/이전 버튼 */
 .tb-btn-next {
   padding: 0 7vw;
-  border: none; border-radius: 1.3vw; color: white;
+  border: none; border-radius: 0.8vw; color: white;
   font-size: 3.5vw;
-  font-weight: 700; cursor: pointer;
+  font-weight: 800; cursor: pointer;
   background: #41C0CA;
-  height: 6.5vw;
+  height: 4.5vw;
   display: flex; align-items: center; justify-content: center;
 }
 .tb-btn-next:hover { opacity: 0.9; }
@@ -158,7 +158,7 @@
   border: 0.16vw solid #666; border-radius: 1.3vw;
   background: white; color: #666;
   font-size: 3.5vw; font-weight: 700; cursor: pointer;
-  height: 6.5vw;
+  height: 4.5vw;
   display: flex; align-items: center; justify-content: center;
 }
 .tb-btn-prev:hover { background: #f5f5f5; }
@@ -166,7 +166,7 @@
 /* 푸터 */
 .tb-footer {
   display: flex; justify-content: center; gap: 2.2vw;
-  padding: 5.5vw 0 6.5vw;
+  padding: 3.2vw 0 3.8vw;
 }
 
 /* 구분선 */
