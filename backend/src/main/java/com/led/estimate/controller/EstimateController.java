@@ -12,7 +12,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/estimates")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class EstimateController {
     
     private final EstimateService estimateService;
@@ -33,7 +32,7 @@ public class EstimateController {
     }
     
     @GetMapping("/{id}")
-    public ApiResponse<Estimate> getEstimate(@PathVariable String id) {
+    public ApiResponse<Estimate> getEstimate(@PathVariable Long id) {
         Estimate estimate = estimateService.getEstimate(id);
         if (estimate == null) {
             return ApiResponse.error("Estimate not found");
@@ -42,7 +41,7 @@ public class EstimateController {
     }
     
     @DeleteMapping("/{id}")
-    public ApiResponse<Void> deleteEstimate(@PathVariable String id) {
+    public ApiResponse<Void> deleteEstimate(@PathVariable Long id) {
         estimateService.deleteEstimate(id);
         return ApiResponse.success(null);
     }

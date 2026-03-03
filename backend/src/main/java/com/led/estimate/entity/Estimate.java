@@ -1,11 +1,17 @@
 package com.led.estimate.entity;
 
+import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "estimates")
 @Data
 public class Estimate {
-    private String id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
     private LocalDate date;
     private String managerName;
     private String department;
@@ -27,22 +33,24 @@ public class Estimate {
     private String installPeriod;
     private String installLocation;
     private String installDetailLocation;
+    
+    @Column(length = 2000)
     private String etcContent;
     
     private String productName;
-    private int width;
-    private int height;
-    private int quantity;
+    private Integer width;
+    private Integer height;
+    private Integer quantity;
     private String ledSize;
     private String ledResolution;
-    private double totalPower;
-    private int installPersonnel;
+    private Double totalPower;
+    private Integer installPersonnel;
     private String processorModel;
-    private int processorQuantity;
+    private Integer processorQuantity;
     
-    private long ledPrice;
-    private long processorPrice;
-    private long installPrice;
-    private long etcPrice;
-    private long totalPrice;
+    private Long ledPrice;
+    private Long processorPrice;
+    private Long installPrice;
+    private Long etcPrice;
+    private Long totalPrice;
 }

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/calculate")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class CalculationController {
     
     private final CalculationService calculationService;

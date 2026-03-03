@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import './AdminPage.css'
 import './EstimateForm.css'
@@ -6,6 +6,9 @@ import modalLogoImg from '../assets/modal-logo2.png'
 import modalLogoImg1 from '../assets/modal-logo.png'
 import printIconImg from '../assets/print-icon.png'
 import stampImg from '../assets/stamp.png'
+
+const API_BASE = 'http://localhost:8080/api'
+
 function QuoteModal({formData, onClose}) {
     const unitPrice = 950000
     const sqmPrice = 4691358
@@ -560,43 +563,126 @@ function AdminPage() {
     setProductTotal(total)
   }
   
-  const [estimates, setEstimates] = useState([
-    { id: 'EST-001', date: '2026.01.28', customer: '갈더마코리아', manager: '기영길', amount: 63800000, status: '완료' },
-    { id: 'EST-002', date: '2026.01.27', customer: '삼성전자', manager: '김철수', amount: 125000000, status: '진행중' },
-    { id: 'EST-003', date: '2026.01.26', customer: 'LG전자', manager: '박영희', amount: 87000000, status: '대기' },
-  ])
+  const [estimates, setEstimates] = useState([])
 
-  const [products, setProducts] = useState([
-    { id: '1', name: 'ETK-COB1.2', size: '600x337.5', pixel: '1.2', brightness: '800', power: '75/25', price: 950000 },
-    { id: '2', name: 'ETK-COB1.5', size: '600x337.5', pixel: '1.5', brightness: '800', power: '70/25', price: 850000 },
-  ])
+  const [products, setProducts] = useState([])
 
-  const [vxProducts, setVxProducts] = useState([
-    { id: '1', model: 'VX400', resolution: '260만 화소', ports: 4, price: 2000000 },
-    { id: '2', model: 'VX600', resolution: '390만 화소', ports: 6, price: 3000000 },
-    { id: '3', model: 'VX1000', resolution: '650만 화소', ports: 10, price: 5000000 },
-    { id: '4', model: 'VX2000', resolution: '1300만 화소', ports: 20, price: 8000000 },
-  ])
+  const [vxProducts, setVxProducts] = useState([])
 
-  const renderDashboard = () => (
+  // DB에서 데이터 로드
+  useEffect(() => {
+    fetchProducts()
+    fetchVxProducts()
+    fetchEstimates()
+  }, [])
+
+  const fetchProducts = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/products/led`)
+      const data = await res.json()
+      if (data.success) {
+        setProducts(data.data.map(p => ({
+          id: p.id,
+          name: p.name,
+          size: p.size,
+          pixel: p.pixel,
+          brightness: p.brightness,
+          power: p.power,
+          resolution: p.resolution,
+          price: p.unitPrice
+        })))
+      }
+    } catch (e) { console.error('Failed to fetch products:', e) }
+  }
+
+  const fetchVxProducts = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/products/vx`)
+      const data = await res.json()
+      if (data.success) {
+        setVxProducts(data.data.map(v => ({
+          id: v.id,
+          model: v.modelName,
+          resolution: v.supportResolution,
+          ports: v.lanPortCount,
+          price: v.unitPrice
+        })))
+      }
+    } catch (e) { console.error('Failed to fetch vx products:', e) }
+  }
+
+  const fetchEstimates = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/estimates`)
+      const data = await res.json()
+      if (data.success) {
+        setEstimates(data.data.map(e => ({
+          id: e.id,
+          date: e.date,
+          customer: e.clientCompanyName,
+          manager: e.managerName,
+          clientManager: e.clientManager,
+          phone: e.clientMobile,
+          email: e.clientEmail,
+          request: `${e.productName} / ${e.width}x${e.height}(${e.quantity}ea)`,
+          amount: e.totalPrice || 0,
+          status: '완료'
+        })))
+      }
+    } catch (e) { console.error('Failed to fetch estimates:', e) }
+  }
+
+  const deleteEstimate = async (id) => {
+    if (!window.confirm('정말 삭제하시겠습니까?')) return
+    try {
+      await fetch(`${API_BASE}/estimates/${id}`, { method: 'DELETE' })
+      fetchEstimates()
+    } catch (e) { console.error('Failed to delete estimate:', e) }
+  }
+
+  const deleteProduct = async (id) => {
+    if (!window.confirm('정말 삭제하시겠습니까?')) return
+    try {
+      await fetch(`${API_BASE}/products/led/${id}`, { method: 'DELETE' })
+      fetchProducts()
+    } catch (e) { console.error('Failed to delete product:', e) }
+  }
+
+  const deleteVxProduct = async (id) => {
+    if (!window.confirm('정말 삭제하시겠습니까?')) return
+    try {
+      await fetch(`${API_BASE}/products/vx/${id}`, { method: 'DELETE' })
+      fetchVxProducts()
+    } catch (e) { console.error('Failed to delete vx product:', e) }
+  }
+
+  const renderDashboard = () => {
+    const totalAmount = estimates.reduce((sum, e) => sum + (e.amount || 0), 0)
+    const formatAmount = (n) => {
+      if (n >= 100000000) return `₩ ${(n / 100000000).toFixed(1)}억`
+      if (n >= 10000) return `₩ ${(n / 10000).toLocaleString()}만`
+      return `₩ ${n.toLocaleString()}`
+    }
+    
+    return (
     <div className="admin-section">
       <h2>대시보드</h2>
       <div className="stats-grid">
         <div className="stat-card">
           <h3>전체 견적</h3>
-          <p className="stat-value">128</p>
+          <p className="stat-value">{estimates.length}</p>
         </div>
         <div className="stat-card">
-          <h3>이번 달 견적</h3>
-          <p className="stat-value">24</p>
+          <h3>등록 제품</h3>
+          <p className="stat-value">{products.length}</p>
         </div>
         <div className="stat-card">
-          <h3>이번 달 매출</h3>
-          <p className="stat-value">₩ 1.2억</p>
+          <h3>총 매출</h3>
+          <p className="stat-value">{formatAmount(totalAmount)}</p>
         </div>
         <div className="stat-card">
-          <h3>진행중</h3>
-          <p className="stat-value">8</p>
+          <h3>프로세서</h3>
+          <p className="stat-value">{vxProducts.length}</p>
         </div>
       </div>
       
@@ -620,7 +706,7 @@ function AdminPage() {
                 <td>{est.date}</td>
                 <td>{est.customer}</td>
                 <td>{est.manager}</td>
-                <td>₩ {est.amount.toLocaleString()}</td>
+                <td>₩ {(est.amount || 0).toLocaleString()}</td>
                 <td><span className={`status-badge ${est.status}`}>{est.status}</span></td>
               </tr>
             ))}
@@ -628,7 +714,8 @@ function AdminPage() {
         </table>
       </div>
     </div>
-  )
+    )
+  }
 
   const renderEstimates = () => (
     <div className="admin-section">
@@ -677,11 +764,7 @@ function AdminPage() {
                   setSelectedEstimate(est)
                   setShowEstimateEditModal(true)
                 }}>수정</button>
-                <button style={{padding: '4px 8px', fontSize: '12px', marginRight: '8px', border: 'none', borderRadius: '4px', cursor: 'pointer', background: '#dc3545', color: 'white'}} onClick={() => {
-                  if (window.confirm('정말 삭제하시겠습니까?')) {
-                    setEstimates(estimates.filter(e => e.id !== est.id))
-                  }
-                }}>삭제</button>
+                <button style={{padding: '4px 8px', fontSize: '12px', marginRight: '8px', border: 'none', borderRadius: '4px', cursor: 'pointer', background: '#dc3545', color: 'white'}} onClick={() => deleteEstimate(est.id)}>삭제</button>
               </td>
             </tr>
           ))}
@@ -733,11 +816,7 @@ function AdminPage() {
                     setSelectedProduct(prod)
                     setShowProductEditModal(true)
                   }}>수정</button>
-                  <button className="btn-small btn-danger" onClick={() => {
-                    if (window.confirm('정말 삭제하시겠습니까?')) {
-                      setProducts(products.filter(p => p.id !== prod.id))
-                    }
-                  }}>삭제</button>
+                  <button className="btn-small btn-danger" onClick={() => deleteProduct(prod.id)}>삭제</button>
                 </td>
               </tr>
             ))}
@@ -774,11 +853,7 @@ function AdminPage() {
                     setSelectedProcessor(vx)
                     setShowProcessorEditModal(true)
                   }}>수정</button>
-                  <button className="btn-small btn-danger" onClick={() => {
-                    if (window.confirm('정말 삭제하시겠습니까?')) {
-                      setVxProducts(vxProducts.filter(v => v.id !== vx.id))
-                    }
-                  }}>삭제</button>
+                  <button className="btn-small btn-danger" onClick={() => deleteVxProduct(vx.id)}>삭제</button>
                 </td>
               </tr>
             ))}

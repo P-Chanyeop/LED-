@@ -2,20 +2,20 @@ package com.led.estimate.service;
 
 import com.led.estimate.dto.EstimateRequestDto;
 import com.led.estimate.entity.Estimate;
+import com.led.estimate.repository.EstimateRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class EstimateService {
     
-    private Map<String, Estimate> estimates = new HashMap<>();
+    private final EstimateRepository estimateRepository;
     
     public Estimate createEstimate(EstimateRequestDto request) {
         Estimate estimate = new Estimate();
-        String id = UUID.randomUUID().toString();
-        
-        estimate.setId(id);
         estimate.setDate(request.getDate());
         estimate.setManagerName(request.getManagerName());
         estimate.setDepartment(request.getDepartment());
@@ -49,19 +49,18 @@ public class EstimateService {
         estimate.setLedResolution(String.format("%d x %d", request.getWidth() * 480, request.getHeight() * 270));
         estimate.setTotalPower((totalPanels * 75.0) / 1000.0);
         
-        estimates.put(id, estimate);
-        return estimate;
+        return estimateRepository.save(estimate);
     }
     
-    public Estimate getEstimate(String id) {
-        return estimates.get(id);
+    public Estimate getEstimate(Long id) {
+        return estimateRepository.findById(id).orElse(null);
     }
     
     public List<Estimate> getAllEstimates() {
-        return new ArrayList<>(estimates.values());
+        return estimateRepository.findAll();
     }
     
-    public void deleteEstimate(String id) {
-        estimates.remove(id);
+    public void deleteEstimate(Long id) {
+        estimateRepository.deleteById(id);
     }
 }

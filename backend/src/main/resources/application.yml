@@ -4,11 +4,23 @@ server:
 spring:
   application:
     name: led-estimate-backend
+  datasource:
+    url: jdbc:h2:file:./data/leddb;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
 
-# Frontend Auto-Start 설정
 frontend:
-  auto-start: true  # main() 실행 시 자동으로 npm run dev 실행
-  project-root: ".."  # backend 기준 상위 디렉토리
+  auto-start: true
+  project-root: ".."
 
 google:
   sheets:

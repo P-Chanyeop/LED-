@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="77bf4c7b-3278-47d7-8a34-e5d0f39ce70e" name="변경" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/aws.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/aws.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/copilot.data.migration.agent.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/led-estimate-system.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/All_Services.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/runConfigurations/All_Services.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/Backend.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/Frontend_Web.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/LedEstimateApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/LedEstimateApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/config/FrontendAutoRunner.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/config/FrontendAutoRunner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/config/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/config/WebConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/controller/CalculationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/controller/CalculationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/controller/EstimateController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/controller/EstimateController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/controller/ProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/controller/ProductController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/dto/ApiResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/dto/ApiResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/dto/CalculateRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/dto/CalculateRequestDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/dto/CalculateResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/dto/CalculateResponseDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/dto/EstimateRequestDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/dto/EstimateRequestDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/entity/Estimate.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/entity/Estimate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/entity/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/entity/Product.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/entity/VxProduct.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/entity/VxProduct.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/service/CalculationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/service/CalculationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/service/EstimateService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/service/EstimateService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/service/GoogleSheetsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/service/GoogleSheetsService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/led/estimate/config/FrontendAutoRunner.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/led/estimate/config/FrontendAutoRunner.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/led/estimate/controller/CalculationController.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/led/estimate/controller/CalculationController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/led/estimate/controller/EstimateController.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/led/estimate/controller/EstimateController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/led/estimate/controller/ProductController.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/led/estimate/controller/ProductController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/led/estimate/dto/ApiResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/led/estimate/dto/ApiResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/led/estimate/dto/CalculateRequestDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/led/estimate/dto/CalculateRequestDto.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/led/estimate/dto/CalculateResponseDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/led/estimate/dto/CalculateResponseDto.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/led/estimate/dto/EstimateRequestDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/led/estimate/dto/EstimateRequestDto.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/led/estimate/entity/Estimate.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/led/estimate/entity/Estimate.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/led/estimate/entity/Product.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/led/estimate/entity/Product.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/led/estimate/entity/VxProduct.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/led/estimate/entity/VxProduct.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/led/estimate/service/EstimateService.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/led/estimate/service/EstimateService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-web/src/pages/AdminPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-web/src/pages/AdminPage.jsx" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;P-Chanyeop&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/P-Chanyeop/LED-.git&quot;,
+    &quot;accountId&quot;: &quot;ca309e6e-abd7-4ef3-bbcb-f6b50d72fd83&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
+  <component name="ProjectId" id="3AQRRGleuw3LUBliSp1CLxO7FRs" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "Spring Boot.Backend (Spring Boot).executor": "Debug",
+    "git-widget-placeholder": "master",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "npm.Frontend (npm dev).executor": "Debug",
+    "project.structure.last.edited": "프로젝트",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager" selected="Spring Boot.Backend (Spring Boot)">
+    <list>
+      <item itemvalue="npm.Frontend (npm dev)" />
+      <item itemvalue="Spring Boot.Backend (Spring Boot)" />
+      <item itemvalue="복합.▶️ All Services" />
+    </list>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.27812.49" />
+        <option value="bundled-js-predefined-d6986cc7102b-09060db00ec0-JavaScript-IU-251.27812.49" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="디폴트 작업">
+      <changelist id="77bf4c7b-3278-47d7-8a34-e5d0f39ce70e" name="변경" comment="" />
+      <created>1772522797279</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1772522797279</updated>
+      <workItem from="1772522798450" duration="254000" />
+      <workItem from="1772524062031" duration="3392000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

@@ -1,16 +1,22 @@
 package com.led.estimate.entity;
 
+import jakarta.persistence.*;
 import lombok.Data;
 
+@Entity
+@Table(name = "products")
 @Data
 public class Product {
-    private String id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
     private String name;
     private String size;
     private String pixel;
     private String brightness;
     private String power;
     private String resolution;
-    private long unitPrice;
+    private Long unitPrice;
     private String imageUrl;
 }
