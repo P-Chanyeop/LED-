@@ -63,7 +63,7 @@
 }
 
 .section-header.cyan { background-color: #3BC1CC; }
-.section-header.green { background-color: #3BC1CC; }
+.section-header.green { background-color: #8cc63f; }
 .section-header.blue { background-color: #0071BC; }
 
 .reset-btn {
@@ -213,7 +213,7 @@
   padding: 0 10px;
 }
 
-.dim-label { color: #333; font-weight: 700; font-size: 15px; }
+.dim-label { color: #333; font-weight: 700; font-size: 13px; }
 
 .quantity-select-wrap select {
   width: 55px;
@@ -1198,4 +1198,121 @@ div.section {
 .qi-subtotal td:first-child {
   background: white;
   color: #333;
+}
+
+/* PC LED Preview Styles */
+.led-preview-line-v-top,
+.led-preview-line-v-bottom {
+  width: 2px;
+  height: 160px;
+  background: #41C1CC;
+  position: relative;
+}
+
+.led-preview-line-v-top::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 2px;
+  background: #41C1CC;
+  top: 0;
+}
+
+.led-preview-line-v-bottom::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 2px;
+  background: #41C1CC;
+  bottom: 0;
+}
+
+.led-preview-label-v {
+  color: white;
+  background: #41C1CC;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 6px 10px;
+  border-radius: 5px;
+  white-space: nowrap;
+}
+
+.led-preview-line-h-left,
+.led-preview-line-h-right {
+  flex: 1;
+  height: 2px;
+  background: #41C1CC;
+  position: relative;
+}
+
+.led-preview-line-h-left::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 10px;
+  background: #41C1CC;
+  left: 0;
+}
+
+.led-preview-line-h-right::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 10px;
+  background: #41C1CC;
+  right: 0;
+}
+
+.led-preview-label-h {
+  color: white;
+  background: #41C1CC;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 6px 10px;
+  border-radius: 5px;
+  white-space: nowrap;
+}
+
+/* PC Quantity Row Sizing */
+.quantity-row .form-input select {
+  width: 60px;
+  height: 32px;
+  font-size: 13px;
+  padding: 4px 8px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%2341C1CC' d='M12 16L4 8h16z'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 4px center !important;
+  background-size: 12px !important;
+  padding-right: 20px;
+}
+
+.quantity-row .form-input .result-field {
+  width: 60px;
+  height: 32px;
+  font-size: 13px;
+  text-align: center;
+  padding: 4px;
+}
+
+.quantity-row .form-input .unit {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.quantity-row .form-input .equals {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.quantity-row .form-input .quantity-range {
+  font-size: 11px;
+  color: #999;
 }

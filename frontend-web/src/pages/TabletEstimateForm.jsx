@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './TabletEstimateForm.css'
 import modalLogoImg from '../assets/modal-logo2.png'
+import stampImg from '../assets/stamp.png'
 
 const REGIONS = ['서울','경기','인천','부산','경남','대구','울산','경북','대전','세종','충남','충북','전북','광주','전남','강원','제주']
 const FREE_REGIONS = ['서울','경기','인천']
@@ -26,7 +27,22 @@ function TabletEstimateForm() {
         materialCost: 100000,
     })
 
-    const h = (field, value) => setFormData(prev => ({ ...prev, [field]: value }))
+    const h = (field, value) => {
+        setFormData(prev => {
+            const updated = { ...prev, [field]: value }
+            if (field === 'ledWidth' || field === 'ledHeight') {
+                const w = field === 'ledWidth' ? value : prev.ledWidth
+                const h = field === 'ledHeight' ? value : prev.ledHeight
+                updated.totalPanels = w * h
+                updated.ledSizeW = w * 600
+                updated.ledSizeH = Math.round(h * 337.5)
+                updated.ledResolutionW = w * 480
+                updated.ledResolutionH = h * 270
+                console.log('Updated:', { w, h, ledSizeW: updated.ledSizeW, ledSizeH: updated.ledSizeH })
+            }
+            return updated
+        })
+    }
     const nextStep = () => { if (step < 3) setStep(step + 1) }
     const prevStep = () => { if (step > 1) setStep(step - 1) }
     const handleRegionChange = (region) => {
@@ -186,19 +202,19 @@ function TabletEstimateForm() {
                         <div className="tb-sb">
                             <div className="tb-row">
                                 <div className="tb-lbl">수량</div>
-                                <div className="tb-inp" style={{flex:'none',display:'flex',alignItems:'center',gap:'0.5vw',fontSize:'2.8vw',fontWeight:700,height:'7vw'}}>
+                                <div className="tb-inp quantity-row">
                                     <span>W:</span>
-                                    <select value={formData.ledWidth} onChange={e=>h('ledWidth',Number(e.target.value))} style={{width:'10vw',height:'5.5vw',fontSize:'2.8vw',background:'white',padding:'0.5vw 1vw',appearance:'auto'}}>
+                                    <select value={formData.ledWidth} onChange={e=>h('ledWidth',Number(e.target.value))}>
                                         {Array.from({length:15},(_,i)=>i+1).map(n=><option key={n} value={n}>{n}</option>)}
                                     </select>
-                                    <span style={{margin:'0 0.5vw'}}>X</span>
+                                    <span>X</span>
                                     <span>H:</span>
-                                    <select value={formData.ledHeight} onChange={e=>h('ledHeight',Number(e.target.value))} style={{width:'10vw',height:'5.5vw',fontSize:'2.8vw',background:'white',padding:'0.5vw 1vw',appearance:'auto'}}>
+                                    <select value={formData.ledHeight} onChange={e=>h('ledHeight',Number(e.target.value))}>
                                         {Array.from({length:15},(_,i)=>i+1).map(n=><option key={n} value={n}>{n}</option>)}
                                     </select>
-                                    <span style={{margin:'0 0.5vw'}}>=</span>
-                                    <input type="text" value={formData.totalPanels} readOnly style={{width:'8vw',height:'5.5vw',textAlign:'center',fontSize:'2.8vw',background:'white'}} />
-                                    <span style={{fontWeight:700,fontSize:'3vw'}}>EA</span>
+                                    <span>=</span>
+                                    <input type="text" value={formData.totalPanels} readOnly />
+                                    <span className="unit">EA</span>
                                 </div>
                             </div>
                             <div className="tb-row">
@@ -235,7 +251,6 @@ function TabletEstimateForm() {
                                 <div className="tb-inp" style={{gap:'4px'}}>
                                     <span style={{fontSize:'2.4vw',fontWeight:700,whiteSpace:'nowrap'}}>₩</span>
                                     <input type="number" value={formData.regionalTravelCost} onChange={e=>h('regionalTravelCost',Number(e.target.value))} style={{flex:1}} />
-                                    <span style={{fontSize:'1.88vw',color:'#888',whiteSpace:'nowrap'}}>직접입력</span>
                                 </div>
                             </div>
                             <div className="tb-row">
@@ -245,7 +260,6 @@ function TabletEstimateForm() {
                                 <div className="tb-inp" style={{gap:'4px'}}>
                                     <span style={{fontSize:'2.4vw',fontWeight:700,whiteSpace:'nowrap'}}>₩</span>
                                     <input type="number" value={formData.materialCost} onChange={e=>h('materialCost',Number(e.target.value))} style={{flex:1}} />
-                                    <span style={{fontSize:'1.88vw',color:'#888',whiteSpace:'nowrap'}}>직접입력</span>
                                 </div>
                             </div>
                         </div>
@@ -256,13 +270,23 @@ function TabletEstimateForm() {
                         <div className="tb-sb">
                             <div className="tb-preview-border">
                                 <div className="tb-preview-layout">
-                                    <div className="tb-preview-v"><span>{formData.ledSizeH}mm</span></div>
-                                    <div className="tb-grid-container" style={{gridTemplateColumns: `repeat(${formData.ledWidth}, 1fr)`, gridTemplateRows: `repeat(${formData.ledHeight}, 1fr)`}}>
-                                        {Array.from({length: formData.ledHeight * formData.ledWidth}).map((_, i) => (
-                                            <div key={i} className="tb-panel"></div>
-                                        ))}
+                                    <div style={{display: 'flex', gap: '1vw', alignItems: 'center', width: '100%', position: 'relative'}}>
+                                        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0', position: 'absolute', left: '0.5vw'}}>
+                                            <div className="tb-preview-line-v-top"></div>
+                                            <div className="tb-preview-label-v">{formData.ledSizeH}mm</div>
+                                            <div className="tb-preview-line-v-bottom"></div>
+                                        </div>
+                                        <div className="tb-grid-container" style={{gridTemplateColumns: `repeat(${formData.ledWidth}, 1fr)`, gridTemplateRows: `repeat(${formData.ledHeight}, 1fr)`, margin: '0 auto'}}>
+                                            {Array.from({length: formData.ledHeight * formData.ledWidth}).map((_, i) => (
+                                                <div key={i} className="tb-panel"></div>
+                                            ))}
+                                        </div>
                                     </div>
-                                    <div className="tb-preview-h"><span>{formData.ledSizeW}mm</span></div>
+                                    <div style={{display: 'flex', alignItems: 'center', gap: '0', width: '60vw', marginLeft: 'auto', marginRight: 'auto'}}>
+                                        <div className="tb-preview-line-h-left"></div>
+                                        <div className="tb-preview-label-h">{formData.ledSizeW}mm</div>
+                                        <div className="tb-preview-line-h-right"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -345,13 +369,23 @@ function TabletEstimateForm() {
                         <div className="tb-sb">
                             <div className="tb-preview-border">
                                 <div className="tb-preview-layout">
-                                    <div className="tb-preview-v"><span>{formData.ledSizeH}mm</span></div>
-                                    <div className="tb-grid-container" style={{gridTemplateColumns: `repeat(${formData.ledWidth}, 1fr)`, gridTemplateRows: `repeat(${formData.ledHeight}, 1fr)`}}>
-                                        {Array.from({length: formData.ledHeight * formData.ledWidth}).map((_, i) => (
-                                            <div key={i} className="tb-panel"></div>
-                                        ))}
+                                    <div style={{display: 'flex', gap: '1vw', alignItems: 'center', width: '100%', position: 'relative'}}>
+                                        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0', position: 'absolute', left: '0.5vw'}}>
+                                            <div className="tb-preview-line-v-top"></div>
+                                            <div className="tb-preview-label-v">{formData.ledSizeH}mm</div>
+                                            <div className="tb-preview-line-v-bottom"></div>
+                                        </div>
+                                        <div className="tb-grid-container" style={{gridTemplateColumns: `repeat(${formData.ledWidth}, 1fr)`, gridTemplateRows: `repeat(${formData.ledHeight}, 1fr)`, margin: '0 auto'}}>
+                                            {Array.from({length: formData.ledHeight * formData.ledWidth}).map((_, i) => (
+                                                <div key={i} className="tb-panel"></div>
+                                            ))}
+                                        </div>
                                     </div>
-                                    <div className="tb-preview-h"><span>{formData.ledSizeW}mm</span></div>
+                                    <div style={{display: 'flex', alignItems: 'center', gap: '0', width: '60vw', marginLeft: 'auto', marginRight: 'auto'}}>
+                                        <div className="tb-preview-line-h-left"></div>
+                                        <div className="tb-preview-label-h">{formData.ledSizeW}mm</div>
+                                        <div className="tb-preview-line-h-right"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -506,7 +540,9 @@ function TabletEstimateForm() {
                                 <p className="tb-terms-icon">제품의 성능 향상을 위해 제품 스펙은 일부 변경 될 수 있습니다.</p>
                                 <p className="tb-terms-icon">입금계좌 : 하나은행 471-910014-06704 예금주 : ㈜이지텍인터내셔널</p>
                             </div>
-                            <div className="tb-stamp"><div className="tb-stamp-text">(주)이지텍<br/>인터내셔널</div></div>
+                            <div className="tb-stamp">
+                                <img src={stampImg} alt="stamp" className="tb-stamp-img" />
+                            </div>
                         </div>
                     </div>
 

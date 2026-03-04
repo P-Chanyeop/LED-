@@ -1051,29 +1051,31 @@ function EstimateForm() {
                             <span>LED Display 예상도</span>
                         </div>
                         <div className="section-body preview-body">
-                            <div className="led-preview-border">
+                            <div className="led-preview-border" style={{padding: '40px 20px'}}>
                                 <div className="led-preview-layout">
-                                    <div className="led-grid-wrapper">
-                                        <div className="led-dimension-v">
-                                            <div className="led-dimension-v-line">
-                                                <span className="led-dimension-v-text">{formData.ledSizeH}mm</span>
-                                            </div>
+                                    <div style={{display: 'flex', gap: '30px', alignItems: 'flex-start', justifyContent: 'center', width: '100%', paddingTop: '10px'}}>
+                                        <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0'}}>
+                                            <div className="led-preview-line-v-top"></div>
+                                            <div className="led-preview-label-v">{formData.ledSizeH}mm</div>
+                                            <div className="led-preview-line-v-bottom"></div>
                                         </div>
-                                        <div>
+                                        <div style={{display: 'flex', flexDirection: 'column', gap: '15px', alignItems: 'center'}}>
                                             <div className="led-grid" style={{
                                                 gridTemplateColumns: `repeat(${formData.width}, 1fr)`,
                                                 gridTemplateRows: `repeat(${formData.height}, 1fr)`,
                                                 width: '600px',
-                                                height: '400px'
+                                                height: '350px',
+                                                display: 'grid',
+                                                gap: '2px'
                                             }}>
                                                 {Array.from({length: formData.totalPanels}).map((_, i) => (
                                                     <div key={i} className="led-panel"></div>
                                                 ))}
                                             </div>
-                                            <div className="led-dimension-h">
-                                                <div className="led-dimension-h-line">
-                                                    <span className="led-dimension-h-text">{formData.ledSizeW}mm</span>
-                                                </div>
+                                            <div style={{display: 'flex', alignItems: 'center', gap: '0', width: '600px'}}>
+                                                <div className="led-preview-line-h-left"></div>
+                                                <div className="led-preview-label-h">{formData.ledSizeW}mm</div>
+                                                <div className="led-preview-line-h-right"></div>
                                             </div>
                                         </div>
                                     </div>
