@@ -226,12 +226,14 @@ function QuoteModal({formData, onClose}) {
 
 
 function ViewModal({formData, onClose, onQuote}) {
-    const panelW = 40
-    const panelH = 24
+    const maxGridW = 600
+    const maxGridH = 360
     const gap = 2
     const padding = 2
-    const gridW = formData.width * panelW + (formData.width - 1) * gap + padding * 2
-    const gridH = formData.height * panelH + (formData.height - 1) * gap + padding * 2
+    const panelW = (maxGridW - (formData.width - 1) * gap - padding * 2) / formData.width
+    const panelH = (maxGridH - (formData.height - 1) * gap - padding * 2) / formData.height
+    const gridW = maxGridW
+    const gridH = maxGridH
 
     return createPortal(
         <div className="modal-overlay" onClick={onClose}>

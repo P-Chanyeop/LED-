@@ -5,11 +5,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="77bf4c7b-3278-47d7-8a34-e5d0f39ce70e" name="변경" comment="">
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/files/스크린샷 2026-03-04 111637.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/files/스크린샷 2026-03-04 112021.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/files/스크린샷 2026-03-04 112206.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/files/스크린샷 2026-03-04 112337.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/files/스크린샷 2026-03-04 112523.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/files/스크린샷 2026-03-04 125906.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/files/스크린샷 2026-03-04 130753.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/main/resources/files/스크린샷 2026-03-04 131359.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/controller/ProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/main/java/com/led/estimate/controller/ProductController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/target/classes/com/led/estimate/controller/ProductController.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/target/classes/com/led/estimate/controller/ProductController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-web/src/pages/AdminPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-web/src/pages/AdminPage.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend-web/src/pages/AdminPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-web/src/pages/AdminPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/files/스크린샷 2026-03-03 160713.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/files/스크린샷 2026-03-03 162713.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/files/스크린샷 2026-03-03 163130.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/files/스크린샷 2026-03-03 172927.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/files/스크린샷 2026-03-03 173446.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/files/스크린샷 2026-03-03 174638.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/files/스크린샷 2026-03-03 174745.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/files/스크린샷 2026-03-03 174839.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/files/스크린샷 2026-03-03 175115.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/files/스크린샷 2026-03-03 180459.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/files/스크린샷 2026-03-03 180544.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/main/resources/files/스크린샷 2026-03-03 181701.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-web/src/pages/EstimateForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-web/src/pages/EstimateForm.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-web/src/pages/TabletEstimateForm.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-web/src/pages/TabletEstimateForm.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend-web/src/pages/TabletEstimateForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend-web/src/pages/TabletEstimateForm.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,31 +58,47 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "Spring Boot.Backend (Spring Boot).executor": "Debug",
-    "git-widget-placeholder": "master",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "npm.Frontend (npm dev).executor": "Debug",
-    "project.structure.last.edited": "프로젝트",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Spring Boot.Backend (Spring Boot).executor&quot;: &quot;Debug&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;npm.Frontend (npm dev).executor&quot;: &quot;Debug&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;프로젝트&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\GITHUB\LED\LED-\backend\src\main\resources\files" />
+    </key>
+  </component>
   <component name="RunManager" selected="Spring Boot.Backend (Spring Boot)">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="led-estimate-backend" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="led-estimate-backend" />
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="npm.Frontend (npm dev)" />
       <item itemvalue="Spring Boot.Backend (Spring Boot)" />

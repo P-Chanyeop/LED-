@@ -87,10 +87,11 @@
 .tb-inp input, .tb-inp select, .tb-inp textarea {
   width: 100%; flex: 1;
   font-size: 3.1vw;
+  font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
   padding: 0 1.8vw;
   height: 100%;
   border: 0.25vw solid #a0c4c8;
-  background: #CCDFE0;
+  background: white;
   outline: none; color: #333;
   border-radius: 0.6vw;
   box-sizing: border-box;
@@ -123,23 +124,24 @@
 
 /* Reset 버튼 */
 .tb-btn-reset {
-  background: rgba(255,255,255,0.3); border: 0.2vw solid white; color: white;
+  background: white; border: 0.2vw solid #41C1CC; color: #41C1CC;
   padding: 0 2.2vw; border-radius: 0.5vw; cursor: pointer;
-  font-size: 3vw;
+  font-size: 3vw; font-weight: 400;
+  font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
   height: 60%; display: flex; align-items: center;
 }
 
 /* 첨부하기/사진찍기 버튼 */
 .tb-btn-action {
   width: 15vw; flex-shrink: 0;
-  border: 0.35vw solid #8BC53E; border-radius: 0.6vw;
-  color: #8BC53E; background: white;
+  border: none; border-radius: 1vw;
+  color: white; background: #41C1CC;
   font-size: 3.3vw; font-weight: 800; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   white-space: nowrap;
 }
-.tb-btn-action--green { border-color: #8BC53E; color: #8BC53E; }
-.tb-btn-action:hover { background: #f8fff0; }
+.tb-btn-action--green { background: #8BC53E; }
+.tb-btn-action:hover { opacity: 0.9; }
 
 /* 다음/이전 버튼 */
 .tb-btn-next {
@@ -183,11 +185,17 @@
 .tb-preview-layout { display: flex; flex-direction: column; align-items: center; gap: 0.7vw; }
 .tb-preview-v { writing-mode: vertical-rl; color: #41C0CA; font-weight: 700; font-size: 2vw; }
 .tb-preview-h { color: #41C0CA; font-weight: 700; font-size: 2vw; }
-.tb-grid-container { display: flex; flex-direction: column; gap: 0.35vw; }
-.tb-grid-row { display: flex; gap: 0.35vw; }
+.tb-grid-container { 
+  display: grid; 
+  gap: 0.35vw; 
+  width: 70vw; 
+  height: 40vw;
+}
 .tb-panel {
-  width: 9vw; height: 5vw;
-  background: #333333; border: 0.08vw solid #444;
+  background: #333333; 
+  border: 0.08vw solid #444;
+  width: 100%;
+  height: 100%;
 }
 
 /* ============================================
@@ -259,9 +267,9 @@
 .tb-tt-grand td.tb-tt-label { background: #FFEDE1; font-size: 3vw; letter-spacing: 0.3vw; }
 .tb-tt-grand td.tb-tt-amount { background: #F47921 !important; color: white !important; }
 
-.tb-terms { display: flex; gap: 1.6vw; margin-top: 2.8vw; padding: 2.2vw; align-items: flex-start; }
+.tb-terms { display: flex; gap: 1.6vw; margin-top: 2.8vw; padding: 2.2vw; align-items: flex-start; position: relative; }
 .tb-terms-text { flex: 1; }
-.tb-terms-text p { font-size: 2vw; margin: 0.55vw 0; line-height: 1.4; font-weight: 700; }
+.tb-terms-text p { font-size: 1.6vw; margin: 0.55vw 0; line-height: 1.4; font-weight: 700; }
 .tb-terms-indent { padding-left: 2.8vw; }
 .tb-terms-icon::before {
   content: ''; display: inline-block; width: 2vw; height: 2vw; margin-right: 0.55vw;
@@ -269,7 +277,20 @@
   background-size: contain; background-repeat: no-repeat; vertical-align: text-top; position: relative; top: 0.12vw;
 }
 .tb-stamp {
-  width: 12vw; height: 12vw; border: 0.22vw solid #E91E63; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  width: 26vw;
+  height: 16vw;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  position: absolute;
+  right: -1vw;
+  top: 0.5vw;
+  z-index: 10;
+  overflow: visible;
 }
-.tb-stamp-text { font-size: 2vw; color: #E91E63; font-weight: 700; text-align: center; }
+.tb-stamp-img {
+  width: 26vw;
+  height: auto;
+  object-fit: contain;
+}
