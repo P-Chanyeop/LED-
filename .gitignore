@@ -1,2 +1,5 @@
 *.pdf
 backend/data/
+.idea/workspace.xml
+backend/src/main/resources/application.yml
+backend/target/
