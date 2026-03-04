@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import {createPortal} from 'react-dom'
 import './EstimateForm.css'
 import modalLogoImg from '../assets/modal-logo2.png'
@@ -527,6 +527,26 @@ function EstimateForm() {
         materialCost: 100000
     })
 
+    const [managers, setManagers] = useState([])
+
+    useEffect(() => {
+        fetch('http://localhost:8080/api/managers')
+            .then(r => r.json())
+            .then(data => {
+                if (data.success && data.data.length > 0) {
+                    setManagers(data.data)
+                    const m = data.data[0]
+                    setFormData(prev => ({...prev, manager: m.name, department: m.department, companyPhone: m.phone, mobilePhone: m.mobile, email: m.email, companyAddress: m.address}))
+                }
+            })
+            .catch(e => console.error('Failed to fetch managers:', e))
+    }, [])
+
+    const handleManagerSelect = (name) => {
+        const m = managers.find(mg => mg.name === name)
+        if (m) setFormData(prev => ({...prev, manager: m.name, department: m.department, companyPhone: m.phone, mobilePhone: m.mobile, email: m.email, companyAddress: m.address}))
+    }
+
     const productSpecs = {
         'ETK-COB1.2': {
             size: '600x337.5',
@@ -638,10 +658,10 @@ function EstimateForm() {
                                     <div className="form-label" style={labelCyan}>담당자</div>
                                     <div className="form-input">
                                         <select value={formData.manager}
-                                                onChange={(e) => handleChange('manager', e.target.value)}>
-                                            <option>기영길</option>
-                                            <option>김철수</option>
-                                            <option>박영희</option>
+                                                onChange={(e) => handleManagerSelect(e.target.value)}>
+                                            {managers.map(m => (
+                                                <option key={m.id} value={m.name}>{m.name}</option>
+                                            ))}
                                         </select>
                                     </div>
                                 </div>

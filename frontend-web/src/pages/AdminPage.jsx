@@ -565,6 +565,11 @@ function AdminPage() {
 
   const [laborCost, setLaborCost] = useState(300000)
 
+  const [managers, setManagers] = useState([])
+  const [managerForm, setManagerForm] = useState({ name: '', department: '', phone: '', mobile: '', email: '', address: '' })
+  const [showManagerModal, setShowManagerModal] = useState(false)
+  const [editingManagerId, setEditingManagerId] = useState(null)
+
   const [settingsForm, setSettingsForm] = useState({
     companyName: '', companyAddress: '', companyPhone: '', companyEmail: '',
     quoteValidity: '', paymentTerms: '', warrantyPeriod: '',
@@ -604,12 +609,21 @@ function AdminPage() {
     } catch (e) { console.error('Failed to fetch accounts:', e) }
   }
 
+  const fetchManagers = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/managers`)
+      const data = await res.json()
+      if (data.success) setManagers(data.data)
+    } catch (e) { console.error('Failed to fetch managers:', e) }
+  }
+
   useEffect(() => {
     fetchProducts()
     fetchVxProducts()
     fetchEstimates()
     fetchSettings()
     fetchAccounts()
+    fetchManagers()
   }, [])
 
   const fetchProducts = async () => {
@@ -1336,6 +1350,125 @@ function AdminPage() {
     )
   }
 
+  const renderManagers = () => {
+    const handleSaveManager = async () => {
+      const phoneRegex = /^[\d]{2,4}-[\d]{3,4}-[\d]{4}$/
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      if (!managerForm.name?.trim()) return alert('이름을 입력하세요')
+      if (!managerForm.mobile?.trim()) return alert('핸드폰 번호를 입력하세요')
+      if (!phoneRegex.test(managerForm.mobile)) return alert('핸드폰 번호 형식이 올바르지 않습니다. (예: 010-1234-5678)')
+      if (managerForm.phone?.trim() && !phoneRegex.test(managerForm.phone)) return alert('회사 연락처 형식이 올바르지 않습니다. (예: 02-6258-1600)')
+      if (!managerForm.email?.trim()) return alert('이메일을 입력하세요')
+      if (!emailRegex.test(managerForm.email)) return alert('이메일 형식이 올바르지 않습니다.')
+      try {
+        if (editingManagerId) {
+          await fetch(`${API_BASE}/managers/${editingManagerId}`, {
+            method: 'PUT', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(managerForm)
+          })
+        } else {
+          await fetch(`${API_BASE}/managers`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(managerForm)
+          })
+        }
+        fetchManagers()
+        setManagerForm({ name: '', department: '', phone: '', mobile: '', email: '', address: '' })
+        setEditingManagerId(null)
+        setShowManagerModal(false)
+      } catch (e) { console.error('Failed to save manager:', e) }
+    }
+
+    const handleDeleteManager = async (id) => {
+      if (!confirm('정말 삭제하시겠습니까?')) return
+      try {
+        await fetch(`${API_BASE}/managers/${id}`, { method: 'DELETE' })
+        fetchManagers()
+      } catch (e) { console.error('Failed to delete manager:', e) }
+    }
+
+    return (
+      <div className="admin-section">
+        <h2>담당자 관리</h2>
+        <div className="section-title-bar">
+          <h3>이지텍 담당자 목록</h3>
+          <button className="btn-cyan" onClick={() => {
+            setManagerForm({ name: '', department: '', phone: '', mobile: '', email: '', address: '' })
+            setEditingManagerId(null)
+            setShowManagerModal(true)
+          }}>담당자 추가</button>
+        </div>
+        <table className="data-table">
+          <thead>
+            <tr>
+              <th>순번</th>
+              <th>이름</th>
+              <th>부서</th>
+              <th>회사 연락처</th>
+              <th>핸드폰</th>
+              <th>이메일</th>
+              <th>관리</th>
+            </tr>
+          </thead>
+          <tbody>
+            {managers.map((m, i) => (
+              <tr key={m.id}>
+                <td>{i + 1}</td>
+                <td>{m.name}</td>
+                <td>{m.department}</td>
+                <td>{m.phone}</td>
+                <td>{m.mobile}</td>
+                <td>{m.email}</td>
+                <td>
+                  <button className="btn-small btn-cyan" onClick={() => {
+                    setManagerForm({ name: m.name, department: m.department, phone: m.phone, mobile: m.mobile, email: m.email, address: m.address })
+                    setEditingManagerId(m.id)
+                    setShowManagerModal(true)
+                  }}>수정</button>
+                  <button className="btn-small btn-danger" onClick={() => handleDeleteManager(m.id)}>삭제</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {showManagerModal && (
+          <div className="modal-overlay" onClick={() => setShowManagerModal(false)}>
+            <div className="product-register-modal" onClick={e => e.stopPropagation()}>
+              <h2 className="register-title">{editingManagerId ? '담당자 수정' : '담당자 추가'}</h2>
+              <form className="register-form" onSubmit={e => { e.preventDefault(); handleSaveManager() }}>
+                <div className="register-row">
+                  <div className="register-label">이름</div>
+                  <input type="text" className="register-input" placeholder="홍길동" value={managerForm.name} onChange={e => setManagerForm({...managerForm, name: e.target.value})} />
+                  <div className="register-label">부서</div>
+                  <input type="text" className="register-input" placeholder="기획팀" value={managerForm.department} onChange={e => setManagerForm({...managerForm, department: e.target.value})} />
+                </div>
+                <div className="register-row">
+                  <div className="register-label">회사 연락처</div>
+                  <input type="text" className="register-input" placeholder="02-6258-1600" value={managerForm.phone} onChange={e => setManagerForm({...managerForm, phone: e.target.value})} />
+                  <div className="register-label">핸드폰</div>
+                  <input type="text" className="register-input" placeholder="010-1234-5678" value={managerForm.mobile} onChange={e => setManagerForm({...managerForm, mobile: e.target.value})} />
+                </div>
+                <div className="register-row-full">
+                  <div className="register-label">이메일</div>
+                  <input type="text" className="register-input-full" placeholder="example@iztec.co.kr" value={managerForm.email} onChange={e => setManagerForm({...managerForm, email: e.target.value})} />
+                </div>
+                <div className="register-row-full">
+                  <div className="register-label">회사 주소</div>
+                  <input type="text" className="register-input-full" placeholder="경기도 남양주시 화도읍 재재기로 190번길 32" value={managerForm.address} onChange={e => setManagerForm({...managerForm, address: e.target.value})} />
+                </div>
+                <div className="register-buttons">
+                  <button type="button" className="register-btn-cancel" onClick={() => setShowManagerModal(false)}>취소</button>
+                  <button type="submit" className="register-btn-submit">{editingManagerId ? '수정완료' : '등록'}</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+      </div>
+    )
+  }
+
   const renderAccounts = () => {
     const currentUser = JSON.parse(localStorage.getItem('user') || '{}')
     const isAdmin = currentUser.role === '마스터'
@@ -1732,6 +1865,12 @@ function AdminPage() {
             단가 관리
           </button>
           <button 
+            className={activeTab === 'managers' ? 'active' : ''}
+            onClick={() => setActiveTab('managers')}
+          >
+            담당자 관리
+          </button>
+          <button 
             className={activeTab === 'settings' ? 'active' : ''}
             onClick={() => setActiveTab('settings')}
           >
@@ -1753,6 +1892,7 @@ function AdminPage() {
           {activeTab === 'products' && renderProducts()}
           {activeTab === 'product-register' && renderProductRegister()}
           {activeTab === 'pricing' && renderPricing()}
+          {activeTab === 'managers' && renderManagers()}
           {activeTab === 'settings' && renderSettings()}
           {activeTab === 'accounts' && renderAccounts()}
         </div>

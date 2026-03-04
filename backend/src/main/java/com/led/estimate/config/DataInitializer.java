@@ -1,9 +1,11 @@
 package com.led.estimate.config;
 
 import com.led.estimate.entity.Account;
+import com.led.estimate.entity.Manager;
 import com.led.estimate.entity.Product;
 import com.led.estimate.entity.VxProduct;
 import com.led.estimate.repository.AccountRepository;
+import com.led.estimate.repository.ManagerRepository;
 import com.led.estimate.repository.ProductRepository;
 import com.led.estimate.repository.VxProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ public class DataInitializer implements CommandLineRunner {
     private final ProductRepository productRepository;
     private final VxProductRepository vxProductRepository;
     private final AccountRepository accountRepository;
+    private final ManagerRepository managerRepository;
     
     @Override
     public void run(String... args) {
@@ -62,6 +65,17 @@ public class DataInitializer implements CommandLineRunner {
             admin.setRole("마스터");
             admin.setCreatedAt(LocalDate.now().toString());
             accountRepository.save(admin);
+        }
+
+        if (managerRepository.count() == 0) {
+            Manager m = new Manager();
+            m.setName("기영길");
+            m.setDepartment("기획팀");
+            m.setPhone("02-6258-1600");
+            m.setMobile("010-1234-5678");
+            m.setEmail("ky@iztec.co.kr");
+            m.setAddress("경기도 남양주시 화도읍 재재기로 190번길 32");
+            managerRepository.save(m);
         }
     }
     
