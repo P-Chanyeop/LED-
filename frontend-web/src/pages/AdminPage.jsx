@@ -496,9 +496,7 @@ function AdminPage() {
   const [selectedProcessor, setSelectedProcessor] = useState(null)
   const [selectedProduct, setSelectedProduct] = useState(null)
   const [productPrice, setProductPrice] = useState(0)
-  const [accounts, setAccounts] = useState([
-    { id: 1, username: 'master', email: 'master@iztec.co.kr', role: '마스터', createdAt: '2026-01-01' }
-  ])
+  const [accounts, setAccounts] = useState([])
   const [editingId, setEditingId] = useState(null)
   const [editForm, setEditForm] = useState({})
   const [registerTab, setRegisterTab] = useState('led')
@@ -598,11 +596,20 @@ function AdminPage() {
     } catch (e) { console.error('Failed to fetch settings:', e) }
   }
 
+  const fetchAccounts = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/accounts`)
+      const data = await res.json()
+      if (data.success) setAccounts(data.data)
+    } catch (e) { console.error('Failed to fetch accounts:', e) }
+  }
+
   useEffect(() => {
     fetchProducts()
     fetchVxProducts()
     fetchEstimates()
     fetchSettings()
+    fetchAccounts()
   }, [])
 
   const fetchProducts = async () => {
@@ -1330,20 +1337,31 @@ function AdminPage() {
   }
 
   const renderAccounts = () => {
+    const currentUser = JSON.parse(localStorage.getItem('user') || '{}')
+    const isAdmin = currentUser.role === '마스터'
+
     const handleEdit = (account) => {
       setEditingId(account.id)
-      setEditForm(account)
+      setEditForm({...account})
     }
 
-    const handleSave = () => {
-      setAccounts(accounts.map(a => a.id === editingId ? editForm : a))
-      setEditingId(null)
+    const handleSave = async () => {
+      try {
+        await fetch(`${API_BASE}/accounts/${editingId}`, {
+          method: 'PUT', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(editForm)
+        })
+        fetchAccounts()
+        setEditingId(null)
+      } catch (e) { console.error('Failed to update account:', e) }
     }
 
-    const handleDelete = (id) => {
-      if (confirm('정말 삭제하시겠습니까?')) {
-        setAccounts(accounts.filter(a => a.id !== id))
-      }
+    const handleDelete = async (id) => {
+      if (!confirm('정말 삭제하시겠습니까?')) return
+      try {
+        await fetch(`${API_BASE}/accounts/${id}`, { method: 'DELETE' })
+        fetchAccounts()
+      } catch (e) { console.error('Failed to delete account:', e) }
     }
 
     return (
@@ -1375,7 +1393,7 @@ function AdminPage() {
                   ) : account.email}
                 </td>
                 <td>
-                  {editingId === account.id ? (
+                  {editingId === account.id && isAdmin && account.role !== '마스터' ? (
                     <select value={editForm.role} onChange={e => setEditForm({...editForm, role: e.target.value})}>
                       <option>관리자</option>
                       <option>일반</option>
@@ -1391,8 +1409,14 @@ function AdminPage() {
                     </>
                   ) : (
                     <>
-                      <button className="btn-cyan" style={{padding: '4px 12px', fontSize: '13px', marginRight: '4px'}} onClick={() => handleEdit(account)}>수정</button>
-                      <button className="btn-red" style={{padding: '4px 12px', fontSize: '13px'}} onClick={() => handleDelete(account.id)}>삭제</button>
+                      {isAdmin && (
+                        <>
+                          <button className="btn-cyan" style={{padding: '4px 12px', fontSize: '13px', marginRight: '4px'}} onClick={() => handleEdit(account)}>수정</button>
+                          {account.role !== '마스터' && (
+                            <button className="btn-red" style={{padding: '4px 12px', fontSize: '13px'}} onClick={() => handleDelete(account.id)}>삭제</button>
+                          )}
+                        </>
+                      )}
                     </>
                   )}
                 </td>

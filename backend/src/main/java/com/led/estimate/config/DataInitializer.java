@@ -1,12 +1,19 @@
 package com.led.estimate.config;
 
+import com.led.estimate.entity.Account;
 import com.led.estimate.entity.Product;
 import com.led.estimate.entity.VxProduct;
+import com.led.estimate.repository.AccountRepository;
 import com.led.estimate.repository.ProductRepository;
 import com.led.estimate.repository.VxProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import java.time.LocalDate;
+import java.util.Base64;
 
 @Component
 @RequiredArgsConstructor
@@ -14,6 +21,7 @@ public class DataInitializer implements CommandLineRunner {
     
     private final ProductRepository productRepository;
     private final VxProductRepository vxProductRepository;
+    private final AccountRepository accountRepository;
     
     @Override
     public void run(String... args) {
@@ -45,6 +53,16 @@ public class DataInitializer implements CommandLineRunner {
             saveVx("VX1000", "650만 화소", 10, 5000000L);
             saveVx("VX2000", "1300만 화소", 20, 8000000L);
         }
+
+        if (accountRepository.count() == 0) {
+            Account admin = new Account();
+            admin.setUsername("admin");
+            admin.setPassword(encrypt("admin123"));
+            admin.setEmail("admin@iztec.co.kr");
+            admin.setRole("마스터");
+            admin.setCreatedAt(LocalDate.now().toString());
+            accountRepository.save(admin);
+        }
     }
     
     private void saveVx(String model, String resolution, int ports, long price) {
@@ -54,5 +72,13 @@ public class DataInitializer implements CommandLineRunner {
         vx.setLanPortCount(ports);
         vx.setUnitPrice(price);
         vxProductRepository.save(vx);
+    }
+
+    private String encrypt(String data) {
+        try {
+            Cipher c = Cipher.getInstance("AES");
+            c.init(Cipher.ENCRYPT_MODE, new SecretKeySpec("LedEstimate2026!".getBytes(), "AES"));
+            return Base64.getEncoder().encodeToString(c.doFinal(data.getBytes()));
+        } catch (Exception e) { return data; }
     }
 }

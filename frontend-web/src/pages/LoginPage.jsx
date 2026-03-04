@@ -7,15 +7,23 @@ function LoginPage() {
   const [password, setPassword] = useState('')
   const navigate = useNavigate()
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault()
-    
-    // 마스터 계정 확인
-    if (username === 'admin' && password === 'admin1234') {
-      localStorage.setItem('isLoggedIn', 'true')
-      navigate('/')
-    } else {
-      alert('아이디 또는 비밀번호가 올바르지 않습니다.')
+    try {
+      const res = await fetch('http://localhost:8080/api/auth/login', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      })
+      const data = await res.json()
+      if (data.success) {
+        localStorage.setItem('isLoggedIn', 'true')
+        localStorage.setItem('user', JSON.stringify(data.data))
+        navigate('/')
+      } else {
+        alert(data.message || '아이디 또는 비밀번호가 올바르지 않습니다.')
+      }
+    } catch (e) {
+      alert('서버에 연결할 수 없습니다.')
     }
   }
 
@@ -27,21 +35,11 @@ function LoginPage() {
         <form onSubmit={handleLogin} className="login-form">
           <div className="form-group">
             <label>아이디</label>
-            <input 
-              type="text" 
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
+            <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
           </div>
           <div className="form-group">
             <label>비밀번호</label>
-            <input 
-              type="password" 
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
           </div>
           <button type="submit" className="login-btn">로그인</button>
         </form>
