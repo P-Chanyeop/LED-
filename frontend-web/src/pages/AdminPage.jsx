@@ -567,13 +567,33 @@ function AdminPage() {
 
   const [laborCost, setLaborCost] = useState(300000)
 
+  const [settingsForm, setSettingsForm] = useState({
+    companyName: '', companyAddress: '', companyPhone: '', companyEmail: '',
+    quoteValidity: '', paymentTerms: '', warrantyPeriod: '',
+    smtpServer: '', smtpPort: '', emailAccount: '', emailPassword: ''
+  })
+
   // DB에서 데이터 로드
   const fetchSettings = async () => {
     try {
       const res = await fetch(`${API_BASE}/settings`)
       const data = await res.json()
-      if (data.success && data.data.laborCostPerDay) {
-        setLaborCost(parseInt(data.data.laborCostPerDay) || 300000)
+      if (data.success) {
+        const d = data.data
+        if (d.laborCostPerDay) setLaborCost(parseInt(d.laborCostPerDay) || 300000)
+        setSettingsForm(prev => ({
+          companyName: d.companyName || prev.companyName,
+          companyAddress: d.companyAddress || prev.companyAddress,
+          companyPhone: d.companyPhone || prev.companyPhone,
+          companyEmail: d.companyEmail || prev.companyEmail,
+          quoteValidity: d.quoteValidity || prev.quoteValidity,
+          paymentTerms: d.paymentTerms || prev.paymentTerms,
+          warrantyPeriod: d.warrantyPeriod || prev.warrantyPeriod,
+          smtpServer: d.smtpServer || prev.smtpServer,
+          smtpPort: d.smtpPort || prev.smtpPort,
+          emailAccount: d.emailAccount || prev.emailAccount,
+          emailPassword: d.emailPassword || ''
+        }))
       }
     } catch (e) { console.error('Failed to fetch settings:', e) }
   }
@@ -1078,7 +1098,23 @@ function AdminPage() {
     )
   }
 
-  const renderSettings = () => (
+  const renderSettings = () => {
+    const sf = settingsForm
+    const set = (key, val) => setSettingsForm({...sf, [key]: val})
+
+    const handleSaveSettings = async () => {
+      try {
+        const payload = {...sf}
+        if (!payload.emailPassword) delete payload.emailPassword
+        await fetch(`${API_BASE}/settings`, {
+          method: 'PUT', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+        alert('설정이 저장되었습니다.')
+      } catch (e) { console.error('Failed to save settings:', e) }
+    }
+
+    return (
     <div className="admin-section">
       <h2>설정</h2>
       
@@ -1086,19 +1122,19 @@ function AdminPage() {
         <h3>회사 정보</h3>
         <div className="setting-row">
           <label>회사명</label>
-          <input type="text" defaultValue="(주)이지텍인터내셔널" />
+          <input type="text" value={sf.companyName} onChange={e => set('companyName', e.target.value)} />
         </div>
         <div className="setting-row">
           <label>주소</label>
-          <input type="text" defaultValue="경기도 남양주시 화도읍 재재기로 190번길 32" />
+          <input type="text" value={sf.companyAddress} onChange={e => set('companyAddress', e.target.value)} />
         </div>
         <div className="setting-row">
           <label>전화</label>
-          <input type="text" defaultValue="02-6258-1600" />
+          <input type="text" value={sf.companyPhone} onChange={e => set('companyPhone', e.target.value)} />
         </div>
         <div className="setting-row">
           <label>이메일</label>
-          <input type="text" defaultValue="izt@iztec.co.kr" />
+          <input type="text" value={sf.companyEmail} onChange={e => set('companyEmail', e.target.value)} />
         </div>
       </div>
 
@@ -1106,15 +1142,15 @@ function AdminPage() {
         <h3>견적서 설정</h3>
         <div className="setting-row">
           <label>견적 유효기간</label>
-          <input type="text" defaultValue="15일" />
+          <input type="text" value={sf.quoteValidity} onChange={e => set('quoteValidity', e.target.value)} />
         </div>
         <div className="setting-row">
           <label>결제 조건</label>
-          <input type="text" defaultValue="발주시 계약금 60%, 잔금 40%" />
+          <input type="text" value={sf.paymentTerms} onChange={e => set('paymentTerms', e.target.value)} />
         </div>
         <div className="setting-row">
           <label>A/S 기간</label>
-          <input type="text" defaultValue="납기일로부터 2년 무상" />
+          <input type="text" value={sf.warrantyPeriod} onChange={e => set('warrantyPeriod', e.target.value)} />
         </div>
       </div>
 
@@ -1122,25 +1158,26 @@ function AdminPage() {
         <h3>이메일 설정</h3>
         <div className="setting-row">
           <label>SMTP 서버</label>
-          <input type="text" defaultValue="smtp.gmail.com" />
+          <input type="text" value={sf.smtpServer} onChange={e => set('smtpServer', e.target.value)} />
         </div>
         <div className="setting-row">
           <label>포트</label>
-          <input type="text" defaultValue="587" />
+          <input type="text" value={sf.smtpPort} onChange={e => set('smtpPort', e.target.value)} />
         </div>
         <div className="setting-row">
           <label>이메일</label>
-          <input type="text" defaultValue="izt@iztec.co.kr" />
+          <input type="text" value={sf.emailAccount} onChange={e => set('emailAccount', e.target.value)} />
         </div>
         <div className="setting-row">
-          <label>비밀번호</label>
-          <input type="password" placeholder="앱 비밀번호 입력" />
+          <label>앱 비밀번호</label>
+          <input type="password" value={sf.emailPassword} onChange={e => set('emailPassword', e.target.value)} placeholder="변경 시에만 입력" />
         </div>
       </div>
 
-      <button className="btn-cyan btn-large">저장</button>
+      <button className="btn-cyan btn-large" onClick={handleSaveSettings}>저장</button>
     </div>
-  )
+    )
+  }
 
   const renderProductRegister = () => {
     return (
