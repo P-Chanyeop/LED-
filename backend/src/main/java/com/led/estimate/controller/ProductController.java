@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -47,6 +48,15 @@ public class ProductController {
         productRepository.deleteById(id);
         return ApiResponse.success(null);
     }
+
+    @PutMapping("/led/prices")
+    public ApiResponse<Void> updateLedPrices(@RequestBody Map<Long, Long> prices) {
+        prices.forEach((id, price) -> productRepository.findById(id).ifPresent(p -> {
+            p.setUnitPrice(price);
+            productRepository.save(p);
+        }));
+        return ApiResponse.success(null);
+    }
     
     @PostMapping("/upload")
     public ApiResponse<String> uploadImage(@RequestParam("file") MultipartFile file) throws IOException {
@@ -77,6 +87,15 @@ public class ProductController {
     @DeleteMapping("/vx/{id}")
     public ApiResponse<Void> deleteVxProduct(@PathVariable Long id) {
         vxProductRepository.deleteById(id);
+        return ApiResponse.success(null);
+    }
+
+    @PutMapping("/vx/prices")
+    public ApiResponse<Void> updateVxPrices(@RequestBody Map<Long, Long> prices) {
+        prices.forEach((id, price) -> vxProductRepository.findById(id).ifPresent(v -> {
+            v.setUnitPrice(price);
+            vxProductRepository.save(v);
+        }));
         return ApiResponse.success(null);
     }
 }

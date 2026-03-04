@@ -565,11 +565,24 @@ function AdminPage() {
 
   const [vxProducts, setVxProducts] = useState([])
 
+  const [laborCost, setLaborCost] = useState(300000)
+
   // DB에서 데이터 로드
+  const fetchSettings = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/settings`)
+      const data = await res.json()
+      if (data.success && data.data.laborCostPerDay) {
+        setLaborCost(parseInt(data.data.laborCostPerDay) || 300000)
+      }
+    } catch (e) { console.error('Failed to fetch settings:', e) }
+  }
+
   useEffect(() => {
     fetchProducts()
     fetchVxProducts()
     fetchEstimates()
+    fetchSettings()
   }, [])
 
   const fetchProducts = async () => {
@@ -986,16 +999,41 @@ function AdminPage() {
   )
 
   const renderPricing = () => {
-    const handleLedPriceChange = (productName, newPrice) => {
+    const handleLedPriceChange = (productId, newPrice) => {
       setProducts(products.map(p => 
-        p.name === productName ? {...p, price: parseInt(newPrice) || 0} : p
+        p.id === productId ? {...p, price: parseInt(newPrice) || 0} : p
       ))
     }
 
-    const handleVxPriceChange = (model, newPrice) => {
+    const handleVxPriceChange = (vxId, newPrice) => {
       setVxProducts(vxProducts.map(v => 
-        v.model === model ? {...v, price: parseInt(newPrice) || 0} : v
+        v.id === vxId ? {...v, price: parseInt(newPrice) || 0} : v
       ))
+    }
+
+    const handleSavePricing = async () => {
+      try {
+        const ledPrices = {}
+        products.forEach(p => { ledPrices[p.id] = p.price })
+        const vxPrices = {}
+        vxProducts.forEach(v => { vxPrices[v.id] = v.price })
+
+        await Promise.all([
+          fetch(`${API_BASE}/products/led/prices`, {
+            method: 'PUT', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(ledPrices)
+          }),
+          fetch(`${API_BASE}/products/vx/prices`, {
+            method: 'PUT', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(vxPrices)
+          }),
+          fetch(`${API_BASE}/settings`, {
+            method: 'PUT', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ laborCostPerDay: String(laborCost) })
+          })
+        ])
+        alert('단가가 저장되었습니다.')
+      } catch (e) { console.error('Failed to save pricing:', e) }
     }
 
     return (
@@ -1008,7 +1046,7 @@ function AdminPage() {
             <div className="pricing-row" key={prod.id}>
               <label>{prod.name}</label>
               <input type="number" value={prod.price} 
-                     onChange={(e) => handleLedPriceChange(prod.name, e.target.value)} />
+                     onChange={(e) => handleLedPriceChange(prod.id, e.target.value)} />
               <span>원</span>
             </div>
           ))}
@@ -1020,7 +1058,7 @@ function AdminPage() {
             <div className="pricing-row" key={vx.id}>
               <label>{vx.model}</label>
               <input type="number" value={vx.price} 
-                     onChange={(e) => handleVxPriceChange(vx.model, e.target.value)} />
+                     onChange={(e) => handleVxPriceChange(vx.id, e.target.value)} />
               <span>원</span>
             </div>
           ))}
@@ -1030,12 +1068,12 @@ function AdminPage() {
         <h3>시공비 단가</h3>
         <div className="pricing-row">
           <label>인당/일</label>
-          <input type="number" defaultValue={300000} />
+          <input type="number" value={laborCost} onChange={e => setLaborCost(parseInt(e.target.value) || 0)} />
           <span>원</span>
         </div>
       </div>
 
-      <button className="btn-cyan btn-large">저장</button>
+      <button className="btn-cyan btn-large" onClick={handleSavePricing}>저장</button>
     </div>
     )
   }
