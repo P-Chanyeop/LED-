@@ -1,2 +1,4 @@
 *.pdf
 backend/data/
+.idea/
+backend/target/
