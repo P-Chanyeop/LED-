@@ -7,8 +7,14 @@ import com.led.estimate.repository.ProductRepository;
 import com.led.estimate.repository.VxProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/products")
@@ -17,6 +23,8 @@ public class ProductController {
     
     private final ProductRepository productRepository;
     private final VxProductRepository vxProductRepository;
+    
+    private static final String UPLOAD_DIR = "uploads/products/";
     
     @GetMapping("/led")
     public ApiResponse<List<Product>> getLedProducts() {
@@ -38,6 +46,16 @@ public class ProductController {
     public ApiResponse<Void> deleteProduct(@PathVariable Long id) {
         productRepository.deleteById(id);
         return ApiResponse.success(null);
+    }
+    
+    @PostMapping("/upload")
+    public ApiResponse<String> uploadImage(@RequestParam("file") MultipartFile file) throws IOException {
+        if (file.isEmpty()) return ApiResponse.error("파일이 없습니다");
+        Path uploadPath = Paths.get(UPLOAD_DIR);
+        if (!Files.exists(uploadPath)) Files.createDirectories(uploadPath);
+        String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+        Files.copy(file.getInputStream(), uploadPath.resolve(fileName));
+        return ApiResponse.success("/uploads/products/" + fileName);
     }
     
     @GetMapping("/vx")

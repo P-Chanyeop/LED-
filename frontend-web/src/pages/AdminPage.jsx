@@ -547,14 +547,8 @@ function AdminPage() {
 
   const [productTax, setProductTax] = useState(0)
   const [productTotal, setProductTotal] = useState(0)
-  const [fileName, setFileName] = useState('')
-
-  const handleFileChange = (e) => {
-    const file = e.target.files[0]
-    if (file) {
-      setFileName(file.name)
-    }
-  }
+  const [imageFile, setImageFile] = useState(null)
+  const [imageName, setImageName] = useState('')
 
   const handlePriceChange = (value) => {
     const price = parseInt(value.replace(/[^\d]/g, '')) || 0
@@ -591,7 +585,8 @@ function AdminPage() {
           brightness: p.brightness,
           power: p.power,
           resolution: p.resolution,
-          price: p.unitPrice
+          price: p.unitPrice,
+          imageUrl: p.imageUrl
         })))
       }
     } catch (e) { console.error('Failed to fetch products:', e) }
@@ -607,7 +602,8 @@ function AdminPage() {
           model: v.modelName,
           resolution: v.supportResolution,
           ports: v.lanPortCount,
-          price: v.unitPrice
+          price: v.unitPrice,
+          imageUrl: v.imageUrl
         })))
       }
     } catch (e) { console.error('Failed to fetch vx products:', e) }
@@ -650,12 +646,24 @@ function AdminPage() {
     } catch (e) { console.error('Failed to delete product:', e) }
   }
 
+  const uploadImage = async () => {
+    if (!imageFile) return null
+    const formData = new FormData()
+    formData.append('file', imageFile)
+    try {
+      const res = await fetch(`${API_BASE}/products/upload`, { method: 'POST', body: formData })
+      const json = await res.json()
+      return json.data
+    } catch (e) { console.error('Image upload failed:', e); return null }
+  }
+
   const createProduct = async (productData) => {
     if (!productData.name?.trim()) return alert('제품명을 입력하세요')
     if (!productData.sizeW || !productData.sizeH) return alert('제품 사이즈를 입력하세요')
     if (!productData.pixel?.trim()) return alert('픽셀을 입력하세요')
     if (!productData.price || productData.price <= 0) return alert('단가를 입력하세요')
     try {
+      const imageUrl = await uploadImage()
       await fetch(`${API_BASE}/products/led`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -666,10 +674,12 @@ function AdminPage() {
           brightness: productData.brightness,
           power: `${productData.powerMax}/${productData.powerAvg}`,
           resolution: `${productData.resW}x${productData.resH}`,
-          unitPrice: productData.price
+          unitPrice: productData.price,
+          imageUrl
         })
       })
       fetchProducts()
+      setImageFile(null); setImageName('')
       return true
     } catch (e) { console.error('Failed to create product:', e) }
   }
@@ -680,6 +690,7 @@ function AdminPage() {
     if (!productData.pixel?.trim()) return alert('픽셀을 입력하세요')
     if (!productData.price || productData.price <= 0) return alert('단가를 입력하세요')
     try {
+      const imageUrl = await uploadImage() || productData.imageUrl
       await fetch(`${API_BASE}/products/led/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -690,10 +701,12 @@ function AdminPage() {
           brightness: productData.brightness,
           power: `${productData.powerMax}/${productData.powerAvg}`,
           resolution: `${productData.resW}x${productData.resH}`,
-          unitPrice: productData.price
+          unitPrice: productData.price,
+          imageUrl
         })
       })
       fetchProducts()
+      setImageFile(null); setImageName('')
       return true
     } catch (e) { console.error('Failed to update product:', e) }
   }
@@ -704,6 +717,7 @@ function AdminPage() {
     if (!vxData.ports || vxData.ports <= 0) return alert('랜포트를 입력하세요')
     if (!vxData.price || vxData.price <= 0) return alert('단가를 입력하세요')
     try {
+      const imageUrl = await uploadImage()
       await fetch(`${API_BASE}/products/vx`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -711,10 +725,12 @@ function AdminPage() {
           modelName: vxData.model,
           supportResolution: vxData.resolution,
           lanPortCount: vxData.ports,
-          unitPrice: vxData.price
+          unitPrice: vxData.price,
+          imageUrl
         })
       })
       fetchVxProducts()
+      setImageFile(null); setImageName('')
       return true
     } catch (e) { console.error('Failed to create vx product:', e) }
   }
@@ -725,6 +741,7 @@ function AdminPage() {
     if (!vxData.ports || vxData.ports <= 0) return alert('랜포트를 입력하세요')
     if (!vxData.price || vxData.price <= 0) return alert('단가를 입력하세요')
     try {
+      const imageUrl = await uploadImage() || vxData.imageUrl
       await fetch(`${API_BASE}/products/vx/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -732,10 +749,12 @@ function AdminPage() {
           modelName: vxData.model,
           supportResolution: vxData.resolution,
           lanPortCount: vxData.ports,
-          unitPrice: vxData.price
+          unitPrice: vxData.price,
+          imageUrl
         })
       })
       fetchVxProducts()
+      setImageFile(null); setImageName('')
       return true
     } catch (e) { console.error('Failed to update vx product:', e) }
   }
@@ -878,15 +897,16 @@ function AdminPage() {
           <thead>
             <tr>
               <th>순번</th>
+              <th style={{minWidth: '140px'}}>이미지</th>
               <th>제품명</th>
               <th>제품 사이즈</th>
               <th>픽셀</th>
-              <th>밝기</th>
-              <th>전력</th>
-              <th>해상도</th>
+              <th style={{width: '50px', whiteSpace: 'nowrap'}}>밝기</th>
+              <th style={{width: '50px', whiteSpace: 'nowrap'}}>전력</th>
+              <th style={{width: '55px', whiteSpace: 'nowrap'}}>해상도</th>
               <th>수량</th>
-              <th>단가</th>
-              <th>부가세</th>
+              <th style={{minWidth: '120px', whiteSpace: 'nowrap'}}>단가</th>
+              <th style={{minWidth: '120px', whiteSpace: 'nowrap'}}>부가세</th>
               <th>관리</th>
             </tr>
           </thead>
@@ -894,6 +914,7 @@ function AdminPage() {
             {products.map((prod, index) => (
               <tr key={prod.id}>
                 <td>{index + 1}</td>
+                <td>{prod.imageUrl ? <img src={`http://localhost:8080${prod.imageUrl}`} alt={prod.name} style={{width: '130px', height: '130px', objectFit: 'contain', borderRadius: '4px'}} /> : '-'}</td>
                 <td>{prod.name}</td>
                 <td>{prod.size}</td>
                 <td>{prod.pixel}</td>
@@ -901,15 +922,16 @@ function AdminPage() {
                 <td>{prod.power}</td>
                 <td>{prod.resolution || '480x270'}</td>
                 <td>{prod.quantity || 1}</td>
-                <td>₩ {prod.price.toLocaleString()}</td>
-                <td>₩ {Math.round(prod.price * 0.1).toLocaleString()}</td>
+                <td style={{whiteSpace: 'nowrap'}}>₩ {prod.price.toLocaleString()}</td>
+                <td style={{whiteSpace: 'nowrap'}}>₩ {Math.round(prod.price * 0.1).toLocaleString()}</td>
                 <td>
                   <button className="btn-small btn-cyan" onClick={() => {
                     setSelectedProduct(prod)
                     const [sizeW, sizeH] = (prod.size || '').split('x')
                     const [powerMax, powerAvg] = (prod.power || '').split('/')
                     const [resW, resH] = (prod.resolution || '').split('x')
-                    setProductForm({ name: prod.name, sizeW: sizeW || '', sizeH: sizeH || '', pixel: prod.pixel, brightness: prod.brightness, powerMax: powerMax || '', powerAvg: powerAvg || '', resW: resW || '', resH: resH || '', price: prod.price })
+                    setProductForm({ name: prod.name, sizeW: sizeW || '', sizeH: sizeH || '', pixel: prod.pixel, brightness: prod.brightness, powerMax: powerMax || '', powerAvg: powerAvg || '', resW: resW || '', resH: resH || '', price: prod.price, imageUrl: prod.imageUrl || '' })
+                    setImageFile(null); setImageName('')
                     setShowProductEditModal(true)
                   }}>수정</button>
                   <button className="btn-small btn-danger" onClick={() => deleteProduct(prod.id)}>삭제</button>
@@ -929,6 +951,7 @@ function AdminPage() {
           <thead>
             <tr>
               <th>ID</th>
+              <th>이미지</th>
               <th>모델명</th>
               <th>지원해상도</th>
               <th>랜포트</th>
@@ -940,6 +963,7 @@ function AdminPage() {
             {vxProducts.map(vx => (
               <tr key={vx.id}>
                 <td>{vx.id}</td>
+                <td>{vx.imageUrl ? <img src={`http://localhost:8080${vx.imageUrl}`} alt={vx.model} style={{width: '130px', height: '130px', objectFit: 'contain', borderRadius: '4px'}} /> : '-'}</td>
                 <td>{vx.model}</td>
                 <td>{vx.resolution}</td>
                 <td>{vx.ports}개</td>
@@ -947,7 +971,8 @@ function AdminPage() {
                 <td>
                   <button className="btn-small btn-cyan" onClick={() => {
                     setSelectedProcessor(vx)
-                    setVxForm({ model: vx.model, resolution: vx.resolution, ports: vx.ports, price: vx.price })
+                    setVxForm({ model: vx.model, resolution: vx.resolution, ports: vx.ports, price: vx.price, imageUrl: vx.imageUrl || '' })
+                    setImageFile(null); setImageName('')
                     setShowProcessorEditModal(true)
                   }}>수정</button>
                   <button className="btn-small btn-danger" onClick={() => deleteVxProduct(vx.id)}>삭제</button>
@@ -1119,34 +1144,54 @@ function AdminPage() {
 
         {registerTab === 'led' && (
           <div className="product-register-page">
-            <form className="register-form" onSubmit={(e) => e.preventDefault()}>
+            <form className="register-form" onSubmit={async (e) => {
+              e.preventDefault()
+              const result = await createProduct({...productForm, price: productPrice})
+              if (result) {
+                setProductForm({ name: '', sizeW: '', sizeH: '', pixel: '', brightness: '', powerMax: '', powerAvg: '', resW: '', resH: '', price: 0 })
+                setProductPrice(0); setProductTax(0); setProductTotal(0)
+                alert('제품이 등록되었습니다.')
+              }
+            }}>
               <div className="register-row">
                 <div className="register-label">제품명</div>
-                <input type="text" className="register-input" />
+                <input type="text" className="register-input" value={productForm.name} onChange={e => setProductForm({...productForm, name: e.target.value})} />
                 <div className="register-label">제품 이미지</div>
                 <div className="register-file-wrapper">
-                  <input type="text" className="register-input file-input-display" value={fileName} readOnly />
-                  <button type="button" className="file-btn-inside" onClick={() => document.getElementById('fileInput2').click()}>첨부</button>
-                  <input type="file" id="fileInput2" accept="image/*" style={{display: 'none'}} onChange={handleFileChange} />
+                  <input type="text" className="register-input file-input-display" value={imageName} readOnly />
+                  <button type="button" className="file-btn-inside" onClick={() => document.getElementById('imageInput').click()}>첨부</button>
+                  <input type="file" id="imageInput" accept="image/*" style={{display: 'none'}} onChange={e => { const f = e.target.files[0]; if (f) { setImageFile(f); setImageName(f.name) }}} />
                 </div>
               </div>
               <div className="register-row">
                 <div className="register-label">제품 사이즈</div>
-                <input type="text" className="register-input" />
+                <div className="register-input-split">
+                  <input type="number" value={productForm.sizeW} onChange={e => setProductForm({...productForm, sizeW: e.target.value})} placeholder="W" />
+                  <span>x</span>
+                  <input type="number" value={productForm.sizeH} onChange={e => setProductForm({...productForm, sizeH: e.target.value})} placeholder="H" />
+                </div>
                 <div className="register-label">픽셀</div>
-                <input type="text" className="register-input" />
+                <input type="text" className="register-input" value={productForm.pixel} onChange={e => setProductForm({...productForm, pixel: e.target.value})} />
               </div>
               <div className="register-row">
                 <div className="register-label">밝기</div>
-                <input type="text" className="register-input" />
+                <input type="text" className="register-input" value={productForm.brightness} onChange={e => setProductForm({...productForm, brightness: e.target.value})} />
                 <div className="register-label">전력</div>
-                <input type="text" className="register-input" />
+                <div className="register-input-split">
+                  <input type="number" value={productForm.powerMax} onChange={e => setProductForm({...productForm, powerMax: e.target.value})} placeholder="최대" />
+                  <span>/</span>
+                  <input type="number" value={productForm.powerAvg} onChange={e => setProductForm({...productForm, powerAvg: e.target.value})} placeholder="평균" />
+                </div>
               </div>
               <div className="register-row">
                 <div className="register-label">해상도</div>
-                <input type="text" className="register-input" />
+                <div className="register-input-split">
+                  <input type="number" value={productForm.resW} onChange={e => setProductForm({...productForm, resW: e.target.value})} placeholder="W" />
+                  <span>x</span>
+                  <input type="number" value={productForm.resH} onChange={e => setProductForm({...productForm, resH: e.target.value})} placeholder="H" />
+                </div>
                 <div className="register-label">수량</div>
-                <input type="text" className="register-input" />
+                <input type="text" className="register-input" value={productForm.quantity || ''} onChange={e => setProductForm({...productForm, quantity: e.target.value})} />
               </div>
               <div className="register-row">
                 <div className="register-label">단가</div>
@@ -1163,7 +1208,7 @@ function AdminPage() {
                        value={productTotal ? productTotal.toLocaleString() : ''} readOnly style={{background: '#f5f5f5'}} />
               </div>
               <div className="register-buttons">
-                <button type="button" className="btn-cyan btn-large">등록</button>
+                <button type="submit" className="btn-cyan btn-large">등록</button>
               </div>
             </form>
           </div>
@@ -1171,21 +1216,36 @@ function AdminPage() {
 
         {registerTab === 'processor' && (
           <div className="product-register-page">
-            <form className="register-form" onSubmit={(e) => e.preventDefault()}>
+            <form className="register-form" onSubmit={async (e) => {
+              e.preventDefault()
+              const result = await createVxProduct(vxForm)
+              if (result) {
+                setVxForm({ model: '', resolution: '', ports: '', price: 0 })
+                alert('프로세서가 등록되었습니다.')
+              }
+            }}>
               <div className="register-row">
                 <div className="register-label">모델명</div>
-                <input type="text" className="register-input" />
-                <div className="register-label">지원해상도</div>
-                <input type="text" className="register-input" />
+                <input type="text" className="register-input" value={vxForm.model} onChange={e => setVxForm({...vxForm, model: e.target.value})} />
+                <div className="register-label">제품 이미지</div>
+                <div className="register-file-wrapper">
+                  <input type="text" className="register-input file-input-display" value={imageName} readOnly />
+                  <button type="button" className="file-btn-inside" onClick={() => document.getElementById('vxImageInput').click()}>첨부</button>
+                  <input type="file" id="vxImageInput" accept="image/*" style={{display: 'none'}} onChange={e => { const f = e.target.files[0]; if (f) { setImageFile(f); setImageName(f.name) }}} />
+                </div>
               </div>
               <div className="register-row">
+                <div className="register-label">지원해상도</div>
+                <input type="text" className="register-input" value={vxForm.resolution} onChange={e => setVxForm({...vxForm, resolution: e.target.value})} />
                 <div className="register-label">랜포트</div>
-                <input type="text" className="register-input" />
+                <input type="number" className="register-input" value={vxForm.ports} onChange={e => setVxForm({...vxForm, ports: parseInt(e.target.value) || 0})} />
+              </div>
+              <div className="register-row-full">
                 <div className="register-label">단가</div>
-                <input type="text" className="register-input" />
+                <input type="number" className="register-input-full" value={vxForm.price} onChange={e => setVxForm({...vxForm, price: parseInt(e.target.value) || 0})} />
               </div>
               <div className="register-buttons">
-                <button type="button" className="btn-cyan btn-large">등록</button>
+                <button type="submit" className="btn-cyan btn-large">등록</button>
               </div>
             </form>
           </div>
@@ -1287,6 +1347,14 @@ function AdminPage() {
                 <div className="register-label">제품명</div>
                 <input type="text" className="register-input-full" value={productForm.name} onChange={e => setProductForm({...productForm, name: e.target.value})} />
               </div>
+              <div className="register-row-full">
+                <div className="register-label">제품 이미지</div>
+                <div className="register-file-wrapper" style={{flex: 1}}>
+                  <input type="text" className="register-input file-input-display" value={imageName} readOnly />
+                  <button type="button" className="file-btn-inside" onClick={() => document.getElementById('modalImageInput').click()}>첨부</button>
+                  <input type="file" id="modalImageInput" accept="image/*" style={{display: 'none'}} onChange={e => { const f = e.target.files[0]; if (f) { setImageFile(f); setImageName(f.name) }}} />
+                </div>
+              </div>
               <div className="register-row">
                 <div className="register-label">픽셀</div>
                 <input type="text" className="register-input" value={productForm.pixel} onChange={e => setProductForm({...productForm, pixel: e.target.value})} />
@@ -1343,6 +1411,14 @@ function AdminPage() {
                 <div className="register-label">제품명</div>
                 <input type="text" className="register-input-full" value={productForm.name} onChange={e => setProductForm({...productForm, name: e.target.value})} />
               </div>
+              <div className="register-row-full">
+                <div className="register-label">제품 이미지</div>
+                <div className="register-file-wrapper" style={{flex: 1}}>
+                  <input type="text" className="register-input file-input-display" value={imageName || (selectedProduct.imageUrl ? '기존 이미지 있음' : '')} readOnly />
+                  <button type="button" className="file-btn-inside" onClick={() => document.getElementById('modalEditImageInput').click()}>첨부</button>
+                  <input type="file" id="modalEditImageInput" accept="image/*" style={{display: 'none'}} onChange={e => { const f = e.target.files[0]; if (f) { setImageFile(f); setImageName(f.name) }}} />
+                </div>
+              </div>
               <div className="register-row">
                 <div className="register-label">픽셀</div>
                 <input type="text" className="register-input" value={productForm.pixel} onChange={e => setProductForm({...productForm, pixel: e.target.value})} />
@@ -1398,6 +1474,14 @@ function AdminPage() {
                 setShowProcessorModal(false)
               }
             }}>
+              <div className="register-row-full">
+                <div className="register-label">제품 이미지</div>
+                <div className="register-file-wrapper" style={{flex: 1}}>
+                  <input type="text" className="register-input file-input-display" value={imageName} readOnly />
+                  <button type="button" className="file-btn-inside" onClick={() => document.getElementById('modalVxImageInput').click()}>첨부</button>
+                  <input type="file" id="modalVxImageInput" accept="image/*" style={{display: 'none'}} onChange={e => { const f = e.target.files[0]; if (f) { setImageFile(f); setImageName(f.name) }}} />
+                </div>
+              </div>
               <div className="register-row">
                 <div className="register-label">모델명</div>
                 <input type="text" className="register-input" value={vxForm.model} onChange={e => setVxForm({...vxForm, model: e.target.value})} />
@@ -1428,6 +1512,14 @@ function AdminPage() {
               const result = await updateVxProduct(selectedProcessor.id, vxForm)
               if (result) setShowProcessorEditModal(false)
             }}>
+              <div className="register-row-full">
+                <div className="register-label">제품 이미지</div>
+                <div className="register-file-wrapper" style={{flex: 1}}>
+                  <input type="text" className="register-input file-input-display" value={imageName || (selectedProcessor.imageUrl ? '기존 이미지 있음' : '')} readOnly />
+                  <button type="button" className="file-btn-inside" onClick={() => document.getElementById('modalVxEditImageInput').click()}>첨부</button>
+                  <input type="file" id="modalVxEditImageInput" accept="image/*" style={{display: 'none'}} onChange={e => { const f = e.target.files[0]; if (f) { setImageFile(f); setImageName(f.name) }}} />
+                </div>
+              </div>
               <div className="register-row">
                 <div className="register-label">모델명</div>
                 <input type="text" className="register-input" value={vxForm.model} onChange={e => setVxForm({...vxForm, model: e.target.value})} />
