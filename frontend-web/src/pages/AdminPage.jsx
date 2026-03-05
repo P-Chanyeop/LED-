@@ -544,6 +544,38 @@ function AdminPage() {
   }
 
   const [productTax, setProductTax] = useState(0)
+
+  const toFormData = (est) => {
+    if (!est?.raw) return defaultFormData
+    const e = est.raw
+    const p = products.find(pr => pr.name === e.productName)
+    const [sW, sH] = (e.ledSize || '0x0').split('x').map(Number)
+    const [rW, rH] = (e.ledResolution || '0x0').split('x').map(Number)
+    return {
+      date: e.date?.replace(/-/g, '.') || '',
+      manager: e.managerName || '', department: e.department || '',
+      companyPhone: e.companyPhone || '', mobilePhone: e.mobilePhone || '',
+      email: e.email || '', companyAddress: e.companyAddress || '',
+      attachment: e.attachmentFile || '',
+      clientCompany: e.clientCompanyName || '', clientDepartment: e.clientDepartment || '',
+      clientManager: e.clientManager || '', clientPhone: e.clientPhone || '',
+      clientMobile: e.clientMobile || '', clientEmail: e.clientEmail || '',
+      businessCard: e.businessCardImage || '',
+      installDate: e.installDate?.replace(/-/g, '.') || '',
+      installPeriod: e.installPeriod || '', installLocation: e.installLocation || '',
+      installDetailLocation: e.installDetailLocation || '', etcContent: e.etcContent || '',
+      productName: e.productName || '',
+      productSize: p?.size || '', pixel: (p?.pixel || '') + ' Pixel',
+      brightness: (p?.brightness || '') + ' Nit', power: (p?.power || '') + ' W',
+      resolution: (p?.resolution || '') + ' Dpi',
+      width: e.width || 0, height: e.height || 0, totalPanels: e.quantity || 0,
+      ledSizeW: sW, ledSizeH: sH, ledResW: rW, ledResH: rH,
+      totalPower: e.totalPower || 0, installPersonnel: e.installPersonnel || 0,
+      processorModel: e.processorModel || '', processorQuantity: e.processorQuantity || 0,
+      processorPrice: e.processorPrice || 0,
+      installPlace: e.installLocation || '', travelCost: 0, materialCost: 0
+    }
+  }
   const [productTotal, setProductTotal] = useState(0)
   const [imageFile, setImageFile] = useState(null)
   const [imageName, setImageName] = useState('')
@@ -573,7 +605,7 @@ function AdminPage() {
   const [settingsForm, setSettingsForm] = useState({
     companyName: '', companyAddress: '', companyPhone: '', companyEmail: '',
     quoteValidity: '', paymentTerms: '', warrantyPeriod: '',
-    smtpServer: '', smtpPort: '', emailAccount: '', emailPassword: ''
+    smtpServer: '', smtpPort: '', emailAccount: '', emailPassword: '', defaultAttachment: ''
   })
 
   // DB에서 데이터 로드
@@ -595,7 +627,8 @@ function AdminPage() {
           smtpServer: d.smtpServer || prev.smtpServer,
           smtpPort: d.smtpPort || prev.smtpPort,
           emailAccount: d.emailAccount || prev.emailAccount,
-          emailPassword: d.emailPassword || ''
+          emailPassword: d.emailPassword || '',
+          defaultAttachment: d.defaultAttachment || prev.defaultAttachment
         }))
       }
     } catch (e) { console.error('Failed to fetch settings:', e) }
@@ -676,9 +709,10 @@ function AdminPage() {
           clientManager: e.clientManager,
           phone: e.clientMobile,
           email: e.clientEmail,
-          request: `${e.productName} / ${e.width}x${e.height}(${e.quantity}ea)`,
+          request: e,
           amount: e.totalPrice || 0,
-          status: '완료'
+          status: '완료',
+          raw: e
         })))
       }
     } catch (e) { console.error('Failed to fetch estimates:', e) }
@@ -911,10 +945,10 @@ function AdminPage() {
               <td>{est.date}</td>
               <td>{est.manager}</td>
               <td>{est.customer}</td>
-              <td>{est.clientManager || '홍길동'}</td>
-              <td>{est.phone || '010-1234-5678'}</td>
-              <td>{est.email || 'test@example.com'}</td>
-              <td>{est.request || 'ETK-COB1.2 / 1.2Pixel / 7x5(35ea)'}</td>
+              <td>{est.clientManager}</td>
+              <td>{est.phone}</td>
+              <td>{est.email}</td>
+              <td>{(() => { const e = est.request; const p = products.find(pr => pr.name === e.productName); return `${e.productName} / ${p ? p.pixel + 'Pixel' : ''} / ${e.width}x${e.height}(${e.quantity}ea)`; })()}</td>
               <td style={{whiteSpace: 'nowrap'}}>₩ {est.amount.toLocaleString()}</td>
               <td><button className="btn-small" style={{background: '#FF8C00', color: 'white'}} onClick={() => {
                 setSelectedEstimate(est)
@@ -1192,6 +1226,28 @@ function AdminPage() {
         <div className="setting-row">
           <label>앱 비밀번호</label>
           <input type="password" value={sf.emailPassword} onChange={e => set('emailPassword', e.target.value)} placeholder="변경 시에만 입력" />
+        </div>
+      </div>
+
+      <div className="settings-card">
+        <h3>기본 첨부파일</h3>
+        <div className="setting-row">
+          <label>현재 파일</label>
+          <span>{sf.defaultAttachment ? sf.defaultAttachment.split('/').pop().replace(/^[^_]*_/, '') : '없음'}</span>
+        </div>
+        <div className="setting-row">
+          <label>파일 변경</label>
+          <input type="file" onChange={async (e) => {
+            const file = e.target.files[0]
+            if (!file) return
+            const fd = new FormData()
+            fd.append('file', file)
+            try {
+              const res = await fetch(`${API_BASE}/products/upload`, {method: 'POST', body: fd})
+              const data = await res.json()
+              if (data.success) set('defaultAttachment', data.data)
+            } catch (err) { console.error('Upload failed:', err) }
+          }} />
         </div>
       </div>
 
@@ -1813,7 +1869,7 @@ function AdminPage() {
 
       {showViewModal && selectedEstimate && (
         <ViewModal 
-          formData={defaultFormData} 
+          formData={toFormData(selectedEstimate)} 
           onClose={() => setShowViewModal(false)}
           onQuote={() => {
             setShowViewModal(false)
@@ -1824,7 +1880,7 @@ function AdminPage() {
 
       {showQuoteModal && selectedEstimate && (
         <QuoteModal 
-          formData={defaultFormData}
+          formData={toFormData(selectedEstimate)}
           onClose={() => setShowQuoteModal(false)}
         />
       )}

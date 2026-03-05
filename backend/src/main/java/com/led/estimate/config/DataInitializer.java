@@ -1,13 +1,7 @@
 package com.led.estimate.config;
 
-import com.led.estimate.entity.Account;
-import com.led.estimate.entity.Manager;
-import com.led.estimate.entity.Product;
-import com.led.estimate.entity.VxProduct;
-import com.led.estimate.repository.AccountRepository;
-import com.led.estimate.repository.ManagerRepository;
-import com.led.estimate.repository.ProductRepository;
-import com.led.estimate.repository.VxProductRepository;
+import com.led.estimate.entity.*;
+import com.led.estimate.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -25,6 +19,7 @@ public class DataInitializer implements CommandLineRunner {
     private final VxProductRepository vxProductRepository;
     private final AccountRepository accountRepository;
     private final ManagerRepository managerRepository;
+    private final EstimateRepository estimateRepository;
     
     @Override
     public void run(String... args) {
@@ -76,6 +71,45 @@ public class DataInitializer implements CommandLineRunner {
             m.setEmail("ky@iztec.co.kr");
             m.setAddress("경기도 남양주시 화도읍 재재기로 190번길 32");
             managerRepository.save(m);
+        }
+
+        if (estimateRepository.count() == 0) {
+            Estimate e = new Estimate();
+            e.setDate(LocalDate.now());
+            e.setManagerName("기영길");
+            e.setDepartment("기획팀");
+            e.setCompanyPhone("02-6258-1600");
+            e.setMobilePhone("010-1234-5678");
+            e.setEmail("ky@iztec.co.kr");
+            e.setCompanyAddress("경기도 남양주시 화도읍 재재기로 190번길 32");
+            e.setClientCompanyName("테스트회사");
+            e.setClientDepartment("개발팀");
+            e.setClientManager("홍길동");
+            e.setClientPhone("02-1111-3333");
+            e.setClientMobile("010-9999-8888");
+            e.setClientEmail("test@test.com");
+            e.setBusinessCardImage("/uploads/products/4e72fc59-5246-471e-aa52-6651d04b2e50_학원로그인페이지.png");
+            e.setInstallDate(LocalDate.of(2026, 4, 1));
+            e.setInstallPeriod("2일");
+            e.setInstallLocation("서울 강남구");
+            e.setInstallDetailLocation("실내 로비");
+            e.setEtcContent("테스트 견적서");
+            e.setProductName("테스트상품2");
+            e.setWidth(5);
+            e.setHeight(6);
+            e.setQuantity(30);
+            e.setLedSize("25x24");
+            e.setLedResolution("1x1");
+            e.setTotalPower(3.0);
+            e.setInstallPersonnel(3);
+            e.setProcessorModel("VX600");
+            e.setProcessorQuantity(1);
+            e.setLedPrice(1500000001L);
+            e.setProcessorPrice(3000000L);
+            e.setInstallPrice(900000L);
+            e.setEtcPrice(200000L);
+            e.setTotalPrice(1504100001L);
+            estimateRepository.save(e);
         }
     }
     

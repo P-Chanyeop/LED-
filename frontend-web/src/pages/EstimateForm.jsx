@@ -1,18 +1,17 @@
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useRef} from 'react'
 import {createPortal} from 'react-dom'
 import './EstimateForm.css'
 import modalLogoImg from '../assets/modal-logo2.png'
 import modalLogoImg1 from '../assets/modal-logo.png'
 import printIconImg from '../assets/print-icon.png'
 import stampImg from '../assets/stamp.png'
-
 function QuoteModal({formData, onClose}) {
     const unitPrice = 950000
     const sqmPrice = 4691358
     const ledQty = formData.totalPanels
     const ledSqm = Math.round((formData.ledSizeW * formData.ledSizeH) / 1000000 * 100) / 100
     const ledTotal = unitPrice * ledQty
-    const processorPrice = 3000000
+    const processorPrice = formData.processorPrice || 0
     const laborPrice = 300000
     const etcPrice = 100000
     const laborQty = formData.installPersonnel
@@ -22,9 +21,7 @@ function QuoteModal({formData, onClose}) {
     const sub4 = etcPrice * 2
     const grandTotal = sub1 + sub2 + sub3 + sub4
     const addCost = 2200000
-
     const fmt = (n) => n.toLocaleString()
-
     return createPortal(
         <div className="modal-overlay" onClick={onClose}>
             <div className="quote-wrapper" onClick={e => e.stopPropagation()}>
@@ -40,13 +37,10 @@ function QuoteModal({formData, onClose}) {
                                  style={{height: '75px', verticalAlign: 'bottom', imageRendering: 'crisp-edges'}}/>
                         </div>
                     </div>
-
                     <div className="quote-date">DATE : {formData.date}</div>
-
                     {/* 판매 견적서 타이틀바 */}
                     <div className="section">
                         <div className="quote-section-title">판매 견적서</div>
-
                         {/* 업체 정보 */}
                         <table className="quote-client-table">
                             <tbody>
@@ -68,7 +62,6 @@ function QuoteModal({formData, onClose}) {
                             </tr>
                             </tbody>
                         </table>
-
                         <div className="quote-divider"></div>
                         {/* 상품 테이블 */}
                         <table className="quote-items-table">
@@ -159,9 +152,7 @@ function QuoteModal({formData, onClose}) {
                             </tr>
                             </tbody>
                         </table>
-
                         <div className="quote-note">*설치 구조물 / UTP케이블 작업 / 전기 공사 비용은 현장실측 이후 측정 합니다.</div>
-
                         {/* 합계 */}
                         <table className="quote-total-table">
                             <tbody>
@@ -188,13 +179,11 @@ function QuoteModal({formData, onClose}) {
                             </tr>
                             </tbody>
                         </table>
-
                         {/* 약관 + 도장 */}
                         <div className="quote-terms-wrapper">
                         <div className="quote-stamp">
                             <img src={stampImg} alt="stamp" className="quote-stamp-img" />
                         </div>
-
                         <div className="quote-terms">
                             <div className="quote-terms-text">
                                 <p className="qt-bold qt-icon">견적조건</p>
@@ -219,12 +208,9 @@ function QuoteModal({formData, onClose}) {
                     </div>
             </div>
         </div>,
-
         document.body
     )
 }
-
-
 function ViewModal({formData, onClose, onQuote}) {
     const maxGridW = 600
     const maxGridH = 360
@@ -234,7 +220,6 @@ function ViewModal({formData, onClose, onQuote}) {
     const panelH = (maxGridH - (formData.height - 1) * gap - padding * 2) / formData.height
     const gridW = maxGridW
     const gridH = maxGridH
-
     return createPortal(
         <div className="modal-overlay" onClick={onClose}>
             {/* 바깥 흰 박스 */}
@@ -251,12 +236,10 @@ function ViewModal({formData, onClose, onQuote}) {
                             <img src={modalLogoImg} alt="logo" style={{height: '75px', imageRendering: 'crisp-edges'}}/>
                         </div>
                     </div>
-
                     {/* 작은 민트 테두리 - 타이틀 + 내용 감쌈 */}
                     <div className="modal-inner">
                         {/* 청록 타이틀바 */}
                         <div className="modal-title">LED Display 전체 내용 보기</div>
-
                         {/* 내용 */}
                         <div className="modal-content">
                             {/* 날짜 */}
@@ -304,9 +287,7 @@ function ViewModal({formData, onClose, onQuote}) {
                                        style={{color: '#25CAD2', textDecoration: 'underline'}}>{formData.attachment}</a>
                                 </div>
                             </div>
-
                             <div className="modal-divider"></div>
-
                             {/* 예상 설치날짜 / 설치기간 */}
                             <div className="modal-row-group">
                                 <div className="modal-row">
@@ -334,9 +315,7 @@ function ViewModal({formData, onClose, onQuote}) {
                                 <div className="modal-label modal-label-blue">기타 내용</div>
                                 <div className="modal-value modal-value-blue">{formData.etcContent}</div>
                             </div>
-
                             <div className="modal-divider"></div>
-
                             {/* 제품명 */}
                             <div className="modal-row full">
                                 <div className="modal-label">제품명</div>
@@ -370,9 +349,7 @@ function ViewModal({formData, onClose, onQuote}) {
                                 <div className="modal-value modal-value-cyan"
                                      style={{maxWidth: '37%'}}>{formData.resolution}</div>
                             </div>
-
                             <div className="modal-divider"></div>
-
                             {/* 수량 */}
                             <div className="modal-row full">
                                 <div className="modal-label">수량</div>
@@ -430,7 +407,6 @@ function ViewModal({formData, onClose, onQuote}) {
                                     <div className="modal-value modal-value-cyan">₩ {formData.materialCost?.toLocaleString()}</div>
                                 </div>
                             </div>
-
                             {/* LED 예상도 */}
                             <div className="modal-preview-wrap">
                                 <div className="modal-preview-inner">
@@ -463,13 +439,10 @@ function ViewModal({formData, onClose, onQuote}) {
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                         {/* modal-content 끝 */}
-
                     </div>
                     {/* modal-inner 끝 */}
-
                     {/* 하단 버튼 - modal-inner 밖, modal-border-outer 안 */}
                     <div className="modal-footer">
                         <button className="modal-btn-close" onClick={onClose}>닫기</button>
@@ -482,53 +455,53 @@ function ViewModal({formData, onClose, onQuote}) {
         document.body
     )
 }
-
 function EstimateForm() {
     const [formData, setFormData] = useState({
-        date: '2026.01.28',
-        manager: '기영길',
-        department: '기획팀',
-        companyPhone: '02-6258-1600',
-        mobilePhone: '010-1234-5678',
-        email: 'adcde@aaaa.co.kr',
-        companyAddress: '경기도 남양주시 화도읍 재재기로 190번길 32 이지빌리지타워',
-        attachment: '이지텍인터내셔널 e_브로슈어.pdf',
-        clientCompany: '갈더마코리아',
-        clientDepartment: '영업부',
-        clientManager: '홍길동',
-        clientPhone: '02-1111-3333',
-        clientMobile: '010-1234-5678',
-        clientEmail: 'adcde@aaaa.co.kr',
-        businessCard: 'asdasd.jpg',
-        installDate: '2026.01.28',
-        installPeriod: '2일',
-        installLocation: '안양 새마을금고',
-        installDetailLocation: '실내 로비',
-        etcContent: '———',
-        productName: 'ETK-COB1.2',
-        productSize: '600x337.5',
-        pixel: '1.2 Pixel',
-        brightness: '800 Nit',
-        power: '75/25 W',
-        resolution: '480x270 Dpi',
-        width: 7,
-        height: 7,
-        totalPanels: 49,
-        ledSizeW: '4200',
-        ledSizeH: '2363',
-        ledResW: '3360',
-        ledResH: '1890',
-        totalPower: 3.7,
-        installPersonnel: 3,
-        processorModel: 'VX600 Pro',
-        processorQuantity: 1,
-        installPlace: '부산',
-        travelCost: 300000,
-        materialCost: 100000
+        date: '',
+        manager: '',
+        department: '',
+        companyPhone: '',
+        mobilePhone: '',
+        email: '',
+        companyAddress: '',
+        attachment: '',
+        clientCompany: '',
+        clientDepartment: '',
+        clientManager: '',
+        clientPhone: '',
+        clientMobile: '',
+        clientEmail: '',
+        businessCard: '',
+        installDate: '',
+        installPeriod: '',
+        installLocation: '',
+        installDetailLocation: '',
+        etcContent: '',
+        productName: '',
+        productSize: '',
+        pixel: '',
+        brightness: '',
+        power: '',
+        resolution: '',
+        width: 0,
+        height: 0,
+        totalPanels: 0,
+        ledSizeW: '',
+        ledSizeH: '',
+        ledResW: '',
+        ledResH: '',
+        totalPower: 0,
+        installPersonnel: 0,
+        processorModel: '',
+        processorQuantity: 0,
+        processorPrice: 0,
+        installPlace: '',
+        travelCost: 0,
+        materialCost: 0
     })
-
     const [managers, setManagers] = useState([])
-
+    const [products, setProducts] = useState([])
+    const [vxProducts, setVxProducts] = useState([])
     useEffect(() => {
         fetch('http://localhost:8080/api/managers')
             .then(r => r.json())
@@ -540,69 +513,128 @@ function EstimateForm() {
                 }
             })
             .catch(e => console.error('Failed to fetch managers:', e))
+        fetch('http://localhost:8080/api/products/led')
+            .then(r => r.json())
+            .then(data => {
+                if (data.success && data.data.length > 0) {
+                    setProducts(data.data)
+                }
+            })
+            .catch(e => console.error('Failed to fetch products:', e))
+        fetch('http://localhost:8080/api/products/vx')
+            .then(r => r.json())
+            .then(data => {
+                if (data.success && data.data.length > 0) {
+                    setVxProducts(data.data)
+                    const v = data.data[0]
+                    setFormData(prev => ({...prev, processorModel: v.modelName, processorPrice: v.unitPrice}))
+                }
+            })
+            .catch(e => console.error('Failed to fetch vx products:', e))
+        fetch('http://localhost:8080/api/settings')
+            .then(r => r.json())
+            .then(data => {
+                if (data.success && data.data.defaultAttachment) {
+                    setFormData(prev => prev.attachment ? prev : ({...prev, attachment: data.data.defaultAttachment}))
+                }
+            })
+            .catch(e => console.error('Failed to fetch settings:', e))
     }, [])
-
     const handleManagerSelect = (name) => {
         const m = managers.find(mg => mg.name === name)
         if (m) setFormData(prev => ({...prev, manager: m.name, department: m.department, companyPhone: m.phone, mobilePhone: m.mobile, email: m.email, companyAddress: m.address}))
     }
-
-    const productSpecs = {
-        'ETK-COB1.2': {
-            size: '600x337.5',
-            pixel: '1.2 Pixel',
-            brightness: '800 Nit',
-            power: '75/25 W',
-            resolution: '480x270 Dpi',
-            altPixel: '1.5 Pixel',
-            altPower: '70/25 W',
-            altRes: '384x216 Dpi'
-        },
-        'ETK-COB1.5': {
-            size: '600x337.5',
-            pixel: '1.5 Pixel',
-            brightness: '800 Nit',
-            power: '70/25 W',
-            resolution: '384x216 Dpi',
-            altPixel: '1.2 Pixel',
-            altPower: '75/25 W',
-            altRes: '480x270 Dpi'
-        }
-    }
-
     const handleChange = (field, value) => {
         setFormData(prev => {
             const newData = {...prev, [field]: value}
-            if (field === 'productName' && productSpecs[value]) {
-                const spec = productSpecs[value]
-                newData.productSize = spec.size
-                newData.pixel = spec.pixel
-                newData.brightness = spec.brightness
-                newData.power = spec.power
-                newData.resolution = spec.resolution
+            if (field === 'productName') {
+                const p = products.find(pr => pr.name === value)
+                if (!p) {
+                    newData.productSize = ""; newData.pixel = ""; newData.brightness = ""; newData.power = ""; newData.resolution = "";
+                    newData.width = 0; newData.height = 0; newData.totalPanels = 0;
+                    newData.ledSizeW = ""; newData.ledSizeH = ""; newData.ledResW = ""; newData.ledResH = ""; newData.totalPower = 0;
+                }
+                if (p) {
+                    const [sizeW, sizeH] = (p.size || '600x337.5').split('x').map(Number)
+                    const [resW, resH] = (p.resolution || '480x270').split('x').map(Number)
+                    const maxPower = parseFloat((p.power || '75/25').split('/')[0])
+                    newData.productSize = p.size
+                    newData.pixel = p.pixel + ' Pixel'
+                    newData.brightness = p.brightness + ' Nit'
+                    newData.power = p.power + ' W'
+                    newData.resolution = p.resolution + ' Dpi'
+                    const w = prev.width || 0, h = prev.height || 0
+                    newData.totalPanels = w * h
+                    newData.ledSizeW = w * sizeW
+                    newData.ledSizeH = Math.round(h * sizeH)
+                    newData.ledResW = w * resW
+                    newData.ledResH = h * resH
+                    newData.totalPower = Math.round((w * h * maxPower / 1000) * 10) / 10
+                }
+            }
+            if (field === 'processorModel') {
+                const v = vxProducts.find(vx => vx.modelName === value)
+                if (!v) newData.processorPrice = 0;
+                if (v) newData.processorPrice = v.unitPrice
             }
             if (field === 'width' || field === 'height') {
                 const w = field === 'width' ? parseInt(value) || 0 : prev.width
                 const h = field === 'height' ? parseInt(value) || 0 : prev.height
+                const cp = products.find(pr => pr.name === prev.productName)
+                const [sW, sH] = (cp?.size || '600x337.5').split('x').map(Number)
+                const [rW, rH] = (cp?.resolution || '480x270').split('x').map(Number)
+                const maxPower = parseFloat((cp?.power || '75/25').split('/')[0])
                 newData.totalPanels = w * h
-                newData.ledSizeW = w * 600
-                newData.ledSizeH = Math.round(h * 337.5)
-                newData.ledResW = w * 480
-                newData.ledResH = h * 270
-                newData.totalPower = Math.round((w * h * 75 / 1000) * 10) / 10
+                newData.ledSizeW = w * sW
+                newData.ledSizeH = Math.round(h * sH)
+                newData.ledResW = w * rW
+                newData.ledResH = h * rH
+                newData.totalPower = Math.round((w * h * maxPower / 1000) * 10) / 10
             }
             return newData
         })
     }
-
     const [showModal, setShowModal] = useState(false)
     const [showQuote, setShowQuote] = useState(false)
-
-    const currentSpec = productSpecs[formData.productName]
+    const fileInputRef = useRef(null)
+    const businessCardRef = useRef(null)
+    const handleFileUpload = async (e) => {
+        const file = e.target.files[0]
+        if (!file) return
+        const fd = new FormData()
+        fd.append('file', file)
+        try {
+            const res = await fetch('http://localhost:8080/api/products/upload', {method: 'POST', body: fd})
+            const data = await res.json()
+            if (data.success) setFormData(prev => ({...prev, attachment: data.data}))
+        } catch (err) { console.error('Upload failed:', err) }
+    }
+    const handleBusinessCard = async (e) => {
+        const file = e.target.files[0]
+        if (!file) return
+        setFormData(prev => ({...prev, businessCard: file.name}))
+        const fd = new FormData()
+        fd.append('file', file)
+        try {
+            const res = await fetch('http://localhost:8080/api/ocr/business-card', {method: 'POST', body: fd})
+            const data = await res.json()
+            if (data.success && data.data) {
+                const d = data.data
+                setFormData(prev => ({
+                    ...prev,
+                    clientCompany: d.company || '',
+                    clientDepartment: d.department || '',
+                    clientManager: d.name || '',
+                    clientPhone: d.phone || '',
+                    clientMobile: d.mobile || '',
+                    clientEmail: d.email || ''
+                }))
+            }
+        } catch (err) { console.error('OCR failed:', err) }
+    }
     const labelCyan = {backgroundColor: '#25CAD2'}
     const labelGreen = {backgroundColor: '#8cc63f'}
     const labelBlue = {backgroundColor: '#0071BC'}
-
     return (
         <div className="estimate-page">
             {showModal && <ViewModal formData={formData} onClose={() => setShowModal(false)} onQuote={() => {
@@ -628,16 +660,7 @@ function EstimateForm() {
                                            style={{paddingRight: '35px'}}/>
                                     <input type="date"
                                            onChange={(e) => handleChange('date', e.target.value.replace(/-/g, '.'))}
-                                           style={{
-                                               position: 'absolute',
-                                               right: '8px',
-                                               top: '50%',
-                                               transform: 'translateY(-50%)',
-                                               width: '20px',
-                                               height: '20px',
-                                               opacity: 0,
-                                               cursor: 'pointer'
-                                           }}/>
+                                           style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer'}}/>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
                                          fill="none" stroke="currentColor" strokeWidth="2" style={{
                                         position: 'absolute',
@@ -706,13 +729,13 @@ function EstimateForm() {
                             <div className="form-row file-row">
                                 <div className="form-label" style={labelCyan}>첨부파일</div>
                                 <div className="form-input file-input">
-                                    <input type="text" value={formData.attachment} readOnly/>
-                                    <button className="attach-btn">첨부하기</button>
+                                    <input type="text" value={((formData.attachment || '').split('/').pop().replace(/^[^_]*_/, ''))} readOnly/>
+                                    <button className="attach-btn" onClick={() => fileInputRef.current.click()}>첨부하기</button>
+                                    <input type="file" ref={fileInputRef} style={{display:'none'}} onChange={handleFileUpload}/>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                     {/* 업체 담당자 등록 */}
                     <div className="section-card border-green">
                         <div className="section-header green">
@@ -722,7 +745,7 @@ function EstimateForm() {
                             <div className="form-row">
                                 <div className="form-label" style={labelGreen}>기관/업체명</div>
                                 <div className="form-input">
-                                    <input type="text" value={formData.clientCompany}
+                                    <input type="text" value={formData.clientCompany} placeholder="기관/업체명 입력"
                                            onChange={(e) => handleChange('clientCompany', e.target.value)}/>
                                 </div>
                             </div>
@@ -730,14 +753,14 @@ function EstimateForm() {
                                 <div className="form-row">
                                     <div className="form-label" style={labelGreen}>부서명</div>
                                     <div className="form-input">
-                                        <input type="text" value={formData.clientDepartment}
+                                        <input type="text" value={formData.clientDepartment} placeholder="부서명 입력"
                                                onChange={(e) => handleChange('clientDepartment', e.target.value)}/>
                                     </div>
                                 </div>
                                 <div className="form-row">
                                     <div className="form-label" style={labelGreen}>업체 담당자</div>
                                     <div className="form-input">
-                                        <input type="text" value={formData.clientManager}
+                                        <input type="text" value={formData.clientManager} placeholder="담당자명 입력"
                                                onChange={(e) => handleChange('clientManager', e.target.value)}/>
                                     </div>
                                 </div>
@@ -746,14 +769,14 @@ function EstimateForm() {
                                 <div className="form-row">
                                     <div className="form-label" style={labelGreen}>회사 연락처</div>
                                     <div className="form-input">
-                                        <input type="text" value={formData.clientPhone}
+                                        <input type="text" value={formData.clientPhone} placeholder="02-0000-0000"
                                                onChange={(e) => handleChange('clientPhone', e.target.value)}/>
                                     </div>
                                 </div>
                                 <div className="form-row">
                                     <div className="form-label" style={labelGreen}>핸드폰 번호</div>
                                     <div className="form-input">
-                                        <input type="text" value={formData.clientMobile}
+                                        <input type="text" value={formData.clientMobile} placeholder="010-0000-0000"
                                                onChange={(e) => handleChange('clientMobile', e.target.value)}/>
                                     </div>
                                 </div>
@@ -761,7 +784,7 @@ function EstimateForm() {
                             <div className="form-row">
                                 <div className="form-label" style={labelGreen}>E-mail</div>
                                 <div className="form-input">
-                                    <input type="text" value={formData.clientEmail}
+                                    <input type="text" value={formData.clientEmail} placeholder="example@company.com"
                                            onChange={(e) => handleChange('clientEmail', e.target.value)}/>
                                 </div>
                             </div>
@@ -769,12 +792,12 @@ function EstimateForm() {
                                 <div className="form-label" style={labelGreen}>명함 촬영</div>
                                 <div className="form-input file-input">
                                     <input type="text" value={formData.businessCard} readOnly/>
-                                    <button className="camera-btn" style={{backgroundColor: '#8cc63f'}}>사진찍기</button>
+                                    <button className="camera-btn" style={{backgroundColor: '#8cc63f'}} onClick={() => businessCardRef.current.click()}>사진찍기</button>
+                                    <input type="file" accept="image/*" ref={businessCardRef} style={{display:'none'}} onChange={handleBusinessCard}/>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                     {/* 설치 정보 등록 */}
                     <div className="section-card border-blue">
                         <div className="section-header blue">
@@ -784,9 +807,19 @@ function EstimateForm() {
                             <div className="form-row-group">
                                 <div className="form-row">
                                     <div className="form-label" style={labelBlue}>예상 설치날짜</div>
-                                    <div className="form-input">
-                                        <input type="text" value={formData.installDate}
-                                               onChange={(e) => handleChange('installDate', e.target.value)}/>
+                                    <div className="form-input" style={{position: 'relative'}}>
+                                        <input type="text" value={formData.installDate} placeholder="2026.01.28"
+                                               onChange={(e) => handleChange('installDate', e.target.value)}
+                                               style={{paddingRight: '35px'}}/>
+                                        <input type="date"
+                                               onChange={(e) => handleChange('installDate', e.target.value.replace(/-/g, '.'))}
+                                               style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer'}}/>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none'}}>
+                                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                                        </svg>
                                     </div>
                                 </div>
                                 <div className="form-row">
@@ -804,14 +837,14 @@ function EstimateForm() {
                                 <div className="form-row">
                                     <div className="form-label" style={labelBlue}>설치 장소</div>
                                     <div className="form-input">
-                                        <input type="text" value={formData.installLocation}
+                                        <input type="text" value={formData.installLocation} placeholder="설치 장소명 입력"
                                                onChange={(e) => handleChange('installLocation', e.target.value)}/>
                                     </div>
                                 </div>
                                 <div className="form-row">
                                     <div className="form-label" style={labelBlue}>세부 장소</div>
                                     <div className="form-input">
-                                        <input type="text" value={formData.installDetailLocation}
+                                        <input type="text" value={formData.installDetailLocation} placeholder="실내/실외, 층수 등"
                                                onChange={(e) => handleChange('installDetailLocation', e.target.value)}/>
                                     </div>
                                 </div>
@@ -819,16 +852,14 @@ function EstimateForm() {
                             <div className="form-row">
                                 <div className="form-label" style={labelBlue}>기타 내용</div>
                                 <div className="form-input">
-                                    <input type="text" value={formData.etcContent}
+                                    <input type="text" value={formData.etcContent} placeholder="기타 전달사항 입력"
                                            onChange={(e) => handleChange('etcContent', e.target.value)}/>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <div className="center-divider"></div>
-
                 <div className="right-column">
                     {/* LED Display 제품 정보 */}
                     <div className="section-card border-cyan">
@@ -838,11 +869,13 @@ function EstimateForm() {
                         <div className="section-body">
                             <div className="form-row">
                                 <div className="form-label" style={labelCyan}>제품명</div>
-                                <div className="form-input" style={{maxWidth: '37.2%'}}>
+                                <div className="split-input">
                                     <select value={formData.productName}
                                             onChange={(e) => handleChange('productName', e.target.value)}>
-                                        <option>ETK-COB1.2</option>
-                                        <option>ETK-COB1.5</option>
+                                        <option value="">--선택--</option>
+                                        {products.map(p => (
+                                            <option key={p.id} value={p.name}>{p.name}</option>
+                                        ))}
                                     </select>
                                 </div>
                             </div>
@@ -890,7 +923,7 @@ function EstimateForm() {
                             </div>
                             <div className="form-row">
                                 <div className="form-label" style={labelCyan}>해상도</div>
-                                <div className="form-input" style={{maxWidth: '37.2%'}}>
+                                <div className="split-input">
                                     <div style={{
                                         padding: '6px 10px',
                                         background: '#f5f5f5',
@@ -903,7 +936,6 @@ function EstimateForm() {
                             </div>
                         </div>
                     </div>
-
                     {/* LED Display 구매 수량 */}
                     <div className="section-card border-cyan">
                         <div className="section-header cyan">
@@ -948,22 +980,10 @@ function EstimateForm() {
                                     <input type="text" value={formData.ledResH} readOnly/>
                                 </div>
                             </div>
-                            <div className="form-row-group">
-                                <div className="form-row">
-                                    <div className="form-label" style={labelCyan}>전체 전력</div>
-                                    <div className="form-input">
-                                        <input type="text" value={formData.totalPower + ' Kw'} readOnly/>
-                                    </div>
-                                </div>
-                                <div className="form-row">
-                                    <div className="form-label" style={labelCyan}>설치인원</div>
-                                    <div className="form-input">
-                                        <select value={formData.installPersonnel}
-                                                onChange={(e) => handleChange('installPersonnel', e.target.value)}>
-                                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => <option key={n}
-                                                                                              value={n}>{n}명</option>)}
-                                        </select>
-                                    </div>
+                            <div className="form-row">
+                                <div className="form-label" style={labelCyan}>전체 전력</div>
+                                <div className="split-input">
+                                    <input type="text" value={formData.totalPower + ' Kw'} readOnly/>
                                 </div>
                             </div>
                             <div className="form-row-group">
@@ -972,11 +992,8 @@ function EstimateForm() {
                                     <div className="form-input">
                                         <select value={formData.processorModel}
                                                 onChange={(e) => handleChange('processorModel', e.target.value)}>
-                                            <option>VX400</option>
-                                            <option>VX600</option>
-                                            <option>VX600 Pro</option>
-                                            <option>VX1000</option>
-                                            <option>VX2000</option>
+                                            <option value="">--선택--</option>
+                                            {vxProducts.map(v => <option key={v.id} value={v.modelName}>{v.modelName}</option>)}
                                         </select>
                                     </div>
                                 </div>
@@ -1018,7 +1035,7 @@ function EstimateForm() {
                                 <div className="form-row">
                                     <div className="form-label" style={labelCyan}>지방 출장비 외</div>
                                     <div className="form-input">
-                                        <input type="text" value={'₩ ' + (formData.travelCost || 300000).toLocaleString()} 
+                                        <input type="text" value={'₩ ' + (formData.travelCost ?? 0).toLocaleString()} 
                                                onChange={(e) => handleChange('travelCost', parseInt(e.target.value.replace(/[^\d]/g, '')) || 0)}/>
                                     </div>
                                 </div>
@@ -1037,14 +1054,13 @@ function EstimateForm() {
                                 <div className="form-row">
                                     <div className="form-label" style={labelCyan}>기타 재료비 외</div>
                                     <div className="form-input">
-                                        <input type="text" value={'₩ ' + (formData.materialCost || 100000).toLocaleString()} 
+                                        <input type="text" value={'₩ ' + (formData.materialCost ?? 0).toLocaleString()} 
                                                onChange={(e) => handleChange('materialCost', parseInt(e.target.value.replace(/[^\d]/g, '')) || 0)}/>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                     {/* LED Display 예상도 */}
                     <div className="section-card border-cyan">
                         <div className="section-header cyan">
@@ -1085,7 +1101,6 @@ function EstimateForm() {
                     </div>
                 </div>
             </div>
-
             <div className="bottom-actions">
                 <button className="btn-view-saved" onClick={() => setShowModal(true)}>전체 내용 보기</button>
                 <button className="btn-view-quote" onClick={() => setShowQuote(true)}>견적서 보기</button>
@@ -1093,5 +1108,4 @@ function EstimateForm() {
         </div>
     )
 }
-
 export default EstimateForm

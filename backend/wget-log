@@ -1,0 +1,6 @@
+--2026-03-05 13:03:28--  https://repo.maven.apache.org/maven2/org/apache/maven/wrapper/maven-wrapper/3.2.0/maven-wrapper-3.2.0.jar%0D
+Resolving repo.maven.apache.org (repo.maven.apache.org)... 104.18.18.12, 104.18.19.12, 2606:4700::6812:120c, ...
+Connecting to repo.maven.apache.org (repo.maven.apache.org)|104.18.18.12|:443... connected.
+HTTP request sent, awaiting response... 404 Not Found
+2026-03-05 13:03:28 ERROR 404: Not Found.
+

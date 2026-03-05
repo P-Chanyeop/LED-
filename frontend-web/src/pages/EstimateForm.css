@@ -260,6 +260,23 @@
   font-size: 14px;
 }
 
+.split-input select {
+  flex: 1;
+  padding: 6px 30px 6px 10px;
+  border: 1px solid #ddd !important;
+  font-size: 14px;
+  color: #333;
+  background: white;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%2325CAD2' d='M12 16L4 8h16z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  height: 100%;
+}
+
 .x-mark { color: #333; font-weight: 600; font-size: 14px; }
 
 /* Preview Section */
