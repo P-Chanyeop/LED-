@@ -6,21 +6,24 @@ import modalLogoImg1 from '../assets/modal-logo.png'
 import printIconImg from '../assets/print-icon.png'
 import stampImg from '../assets/stamp.png'
 function QuoteModal({formData, onClose}) {
-    const unitPrice = 950000
-    const sqmPrice = 4691358
+    const unitPrice = formData.unitPrice || 0
     const ledQty = formData.totalPanels
     const ledSqm = Math.round((formData.ledSizeW * formData.ledSizeH) / 1000000 * 100) / 100
     const ledTotal = unitPrice * ledQty
+    const panelSqm = formData.productSize ? formData.productSize.split('x').map(Number).reduce((a,b) => a * b) / 1000000 : 0
+    const sqmPrice = panelSqm > 0 ? Math.round(Math.floor(1 / panelSqm * 100000) / 100000 * unitPrice) : 0
     const processorPrice = formData.processorPrice || 0
-    const laborPrice = 300000
-    const etcPrice = 100000
+    const laborPrice = formData.laborPrice || 300000
+    
     const laborQty = formData.installPersonnel
-    const sub1 = ledTotal
+    const sqmTotal = Math.round(sqmPrice * ledSqm)
+    const sub1 = ledTotal + sqmTotal
     const sub2 = processorPrice
     const sub3 = laborPrice * laborQty
-    const sub4 = etcPrice * 2
-    const grandTotal = sub1 + sub2 + sub3 + sub4
-    const addCost = 2200000
+    const sub4 = formData.materialCost || 0
+    const sub5 = formData.travelCost || 0
+    const grandTotal = sub1 + sub2 + sub3 + sub4 + sub5
+    const addCost = sub3 + sub4 + sub5
     const fmt = (n) => n.toLocaleString()
     return createPortal(
         <div className="modal-overlay" onClick={onClose}>
@@ -85,7 +88,7 @@ function QuoteModal({formData, onClose}) {
                                 <td className="qi-center">{formData.productSize}</td>
                                 <td className="qi-center">{ledQty}</td>
                                 <td className="qi-right">₩      {fmt(unitPrice)}</td>
-                                <td className="qi-right" rowSpan={2}>₩      {fmt(ledTotal)}</td>
+                                <td className="qi-right" rowSpan={2}>₩      {fmt(sub1)}</td>
                             </tr>
                             <tr>
                                 <td style={{textAlign: "center"}}>sqm</td>
@@ -478,6 +481,7 @@ function EstimateForm() {
         installDetailLocation: '',
         etcContent: '',
         productName: '',
+        unitPrice: 0,
         productSize: '',
         pixel: '',
         brightness: '',
@@ -491,9 +495,10 @@ function EstimateForm() {
         ledResW: '',
         ledResH: '',
         totalPower: 0,
-        installPersonnel: 0,
+        installPersonnel: 1,
+        laborPrice: 300000,
         processorModel: '',
-        processorQuantity: 0,
+        processorQuantity: 1,
         processorPrice: 0,
         installPlace: '',
         travelCost: 0,
@@ -534,8 +539,9 @@ function EstimateForm() {
         fetch('http://localhost:8080/api/settings')
             .then(r => r.json())
             .then(data => {
-                if (data.success && data.data.defaultAttachment) {
-                    setFormData(prev => prev.attachment ? prev : ({...prev, attachment: data.data.defaultAttachment}))
+                if (data.success) {
+                    if (data.data.laborCostPerDay) setFormData(prev => ({...prev, laborPrice: parseInt(data.data.laborCostPerDay) || 300000}))
+                    if (data.data.defaultAttachment) setFormData(prev => prev.attachment ? prev : ({...prev, attachment: data.data.defaultAttachment}))
                 }
             })
             .catch(e => console.error('Failed to fetch settings:', e))
@@ -550,7 +556,7 @@ function EstimateForm() {
             if (field === 'productName') {
                 const p = products.find(pr => pr.name === value)
                 if (!p) {
-                    newData.productSize = ""; newData.pixel = ""; newData.brightness = ""; newData.power = ""; newData.resolution = "";
+                    newData.unitPrice = 0; newData.productSize = ""; newData.pixel = ""; newData.brightness = ""; newData.power = ""; newData.resolution = "";
                     newData.width = 0; newData.height = 0; newData.totalPanels = 0;
                     newData.ledSizeW = ""; newData.ledSizeH = ""; newData.ledResW = ""; newData.ledResH = ""; newData.totalPower = 0;
                 }
@@ -558,6 +564,7 @@ function EstimateForm() {
                     const [sizeW, sizeH] = (p.size || '600x337.5').split('x').map(Number)
                     const [resW, resH] = (p.resolution || '480x270').split('x').map(Number)
                     const maxPower = parseFloat((p.power || '75/25').split('/')[0])
+                    newData.unitPrice = p.unitPrice || 0
                     newData.productSize = p.size
                     newData.pixel = p.pixel + ' Pixel'
                     newData.brightness = p.brightness + ' Nit'
@@ -576,6 +583,10 @@ function EstimateForm() {
                 const v = vxProducts.find(vx => vx.modelName === value)
                 if (!v) newData.processorPrice = 0;
                 if (v) newData.processorPrice = v.unitPrice
+            }
+            if (field === 'installPlace') {
+                const free = ['서울', '경기', '인천']
+                newData.travelCost = free.includes(value) ? 0 : 300000
             }
             if (field === 'width' || field === 'height') {
                 const w = field === 'width' ? parseInt(value) || 0 : prev.width
@@ -1012,8 +1023,9 @@ function EstimateForm() {
                                 <div className="form-row">
                                     <div className="form-label" style={labelCyan}>납품 설치 장소</div>
                                     <div className="form-input">
-                                        <select value={formData.installPlace || '부산'}
+                                        <select value={formData.installPlace}
                                                 onChange={(e) => handleChange('installPlace', e.target.value)}>
+                                            <option value="">--선택--</option>
                                             <option>서울</option>
                                             <option>경기</option>
                                             <option>인천</option>
@@ -1103,7 +1115,7 @@ function EstimateForm() {
             </div>
             <div className="bottom-actions">
                 <button className="btn-view-saved" onClick={() => setShowModal(true)}>전체 내용 보기</button>
-                <button className="btn-view-quote" onClick={() => setShowQuote(true)}>견적서 보기</button>
+                <button className="btn-view-quote" onClick={() => { if (!formData.productName) return alert('제품명을 선택해주세요'); if (!formData.processorModel) return alert('프로세서 사양을 선택해주세요'); if (!formData.installPlace) return alert('납품 설치 장소를 선택해주세요'); setShowQuote(true) }}>견적서 보기</button>
             </div>
         </div>
     )
