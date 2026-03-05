@@ -5,7 +5,9 @@ import modalLogoImg from '../assets/modal-logo2.png'
 import modalLogoImg1 from '../assets/modal-logo.png'
 import printIconImg from '../assets/print-icon.png'
 import stampImg from '../assets/stamp.png'
-function QuoteModal({formData, onClose}) {
+function QuoteModal({formData, products, vxProducts, onClose}) {
+    const prod = products?.find(p => p.name === formData.productName)
+    const vx = vxProducts?.find(v => v.modelName === formData.processorModel)
     const unitPrice = formData.unitPrice || 0
     const ledQty = formData.totalPanels
     const ledSqm = Math.round((formData.ledSizeW * formData.ledSizeH) / 1000000 * 100) / 100
@@ -82,9 +84,7 @@ function QuoteModal({formData, onClose}) {
                             {/* 1. LED */}
                             <tr style={{borderTop: 'none'}}>
                                 <td rowSpan={2} style={{height: '60px'}} className="qi-center">1</td>
-                                <td rowSpan={2} className="qi-product">
-                                </td>
-                                    {/* TODO: DB 연동 시 이미지 추가 - <img src={productImage} alt={formData.productName} style={{maxWidth:'100%',maxHeight:'50px'}} /> */}
+                                <td rowSpan={2} className="qi-product" style={{textAlign:"center"}}>{prod?.imageUrl && <img src={`http://localhost:8080${prod.imageUrl}`} alt={formData.productName} style={{maxWidth:"100%",maxHeight:"40px"}}/>}<br/><span style={{fontSize:"11px"}}>{formData.productName}</span></td>
                                 <td className="qi-center">{formData.productSize}</td>
                                 <td className="qi-center">{ledQty}</td>
                                 <td className="qi-right">₩      {fmt(unitPrice)}</td>
@@ -102,9 +102,7 @@ function QuoteModal({formData, onClose}) {
                             {/* 2. 프로세서 */}
                             <tr className="qi-item-after-subtotal" style={{height: '60px'}}>
                                 <td className="qi-center">2</td>
-                                <td className="qi-product">
-                                </td>
-                                    {/* TODO: DB 연동 시 이미지 추가 - <img src={processorImage} alt={formData.processorModel} style={{maxWidth:'100%',maxHeight:'50px'}} /> */}
+                                <td className="qi-product" style={{textAlign:"center"}}>{vx?.imageUrl && <img src={`http://localhost:8080${vx.imageUrl}`} alt={formData.processorModel} style={{maxWidth:"100%",maxHeight:"40px"}}/>}<br/><span style={{fontSize:"11px"}}>{formData.processorModel}</span></td>
                                 <td className="qi-center">EA</td>
                                 <td className="qi-center">{formData.processorQuantity}</td>
                                 <td className="qi-right">₩      {fmt(processorPrice)}</td>
@@ -178,7 +176,7 @@ function QuoteModal({formData, onClose}) {
                             <tr className="qt-grand">
                                 <td colSpan={2} className="qt-grand-label">합 계</td>
                                 <td className="qt-amount"><span className="qt-won">₩</span><span
-                                    className="qt-num">{fmt(sub1 + sub2)}</span></td>
+                                    className="qt-num">{fmt(grandTotal)}</span></td>
                             </tr>
                             </tbody>
                         </table>
@@ -482,13 +480,14 @@ function EstimateForm() {
         etcContent: '',
         productName: '',
         unitPrice: 0,
+        productImage: '',
         productSize: '',
         pixel: '',
         brightness: '',
         power: '',
         resolution: '',
-        width: 0,
-        height: 0,
+        width: 1,
+        height: 1,
         totalPanels: 0,
         ledSizeW: '',
         ledSizeH: '',
@@ -500,6 +499,7 @@ function EstimateForm() {
         processorModel: '',
         processorQuantity: 1,
         processorPrice: 0,
+        processorImage: '',
         installPlace: '',
         travelCost: 0,
         materialCost: 0
@@ -556,15 +556,17 @@ function EstimateForm() {
             if (field === 'productName') {
                 const p = products.find(pr => pr.name === value)
                 if (!p) {
-                    newData.unitPrice = 0; newData.productSize = ""; newData.pixel = ""; newData.brightness = ""; newData.power = ""; newData.resolution = "";
+                    newData.unitPrice = 0; newData.productImage = ""; newData.productSize = ""; newData.pixel = ""; newData.brightness = ""; newData.power = ""; newData.resolution = "";
                     newData.width = 0; newData.height = 0; newData.totalPanels = 0;
                     newData.ledSizeW = ""; newData.ledSizeH = ""; newData.ledResW = ""; newData.ledResH = ""; newData.totalPower = 0;
                 }
                 if (p) {
+                    console.log('DEBUG product:', JSON.stringify(p))
                     const [sizeW, sizeH] = (p.size || '600x337.5').split('x').map(Number)
                     const [resW, resH] = (p.resolution || '480x270').split('x').map(Number)
                     const maxPower = parseFloat((p.power || '75/25').split('/')[0])
                     newData.unitPrice = p.unitPrice || 0
+                    newData.productImage = p.imageUrl || ''
                     newData.productSize = p.size
                     newData.pixel = p.pixel + ' Pixel'
                     newData.brightness = p.brightness + ' Nit'
@@ -581,8 +583,8 @@ function EstimateForm() {
             }
             if (field === 'processorModel') {
                 const v = vxProducts.find(vx => vx.modelName === value)
-                if (!v) newData.processorPrice = 0;
-                if (v) newData.processorPrice = v.unitPrice
+                if (!v) { newData.processorPrice = 0; newData.processorImage = '' }
+                if (v) { newData.processorPrice = v.unitPrice; newData.processorImage = v.imageUrl || '' }
             }
             if (field === 'installPlace') {
                 const free = ['서울', '경기', '인천']
@@ -652,7 +654,7 @@ function EstimateForm() {
                 setShowModal(false);
                 setShowQuote(true)
             }}/>}
-            {showQuote && <QuoteModal formData={formData} onClose={() => setShowQuote(false)}/>}
+            {showQuote && <QuoteModal formData={formData} products={products} vxProducts={vxProducts} onClose={() => setShowQuote(false)}/>}
             <div className="main-content-area">
                 {/* ===== LEFT COLUMN ===== */}
                 <div className="left-column">
