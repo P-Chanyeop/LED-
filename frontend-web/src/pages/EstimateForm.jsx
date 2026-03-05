@@ -33,7 +33,7 @@ function QuoteModal({formData, products, vxProducts, onClose}) {
                 <div className="quote-outer">
                     {/* 헤더 */}
                     <div className="quote-header">
-                        <button className="modal-print-btn" title="인쇄하기" style={{flexShrink: 0}}>
+                        <button className="modal-print-btn" title="인쇄하기" style={{flexShrink: 0}} onClick={() => window.print()}>
                             <img src={printIconImg} alt="인쇄하기" style={{height: '80px'}}/>
                         </button>
                         <div className="quote-title-text">견 적 서</div>
@@ -229,7 +229,7 @@ function ViewModal({formData, onClose, onQuote}) {
                 <div className="modal-border-outer">
                     {/* 헤더: 인쇄버튼(좌 끝) + 로고(중앙 왼쪽) */}
                     <div className="modal-header">
-                        <button className="modal-print-btn" title="인쇄하기">
+                        <button className="modal-print-btn" title="인쇄하기" onClick={() => window.print()}>
                             <img src={printIconImg} alt="인쇄하기" style={{height: '80px'}}/>
                         </button>
                         <div className="modal-logo"

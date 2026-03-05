@@ -1333,3 +1333,11 @@ div.section {
   font-size: 11px;
   color: #999;
 }
+
+@media print {
+  body * { visibility: hidden; }
+  .quote-wrapper, .quote-wrapper * { visibility: visible; }
+  .quote-wrapper { position: absolute; left: 0; top: 0; width: 100%; }
+  .modal-overlay { position: absolute; background: none; }
+  .modal-print-btn, .modal-footer { display: none !important; }
+}
