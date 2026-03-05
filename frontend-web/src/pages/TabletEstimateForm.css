@@ -439,3 +439,115 @@
   height: auto;
   object-fit: contain;
 }
+
+.tb-inp--dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.tb-inp--dropdown input {
+  flex: 1;
+  padding-right: 5vw;
+}
+
+.tb-dropdown-btn {
+  position: absolute;
+  right: 1vw;
+  background: none;
+  border: none;
+  font-size: 2.5vw;
+  color: #41C1CC;
+  cursor: pointer;
+  padding: 0.5vw 1vw;
+}
+
+.tb-dropdown-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 0.2vw solid #ddd;
+  border-radius: 0.5vw;
+  max-height: 40vw;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 0.5vw 1.5vw rgba(0,0,0,0.15);
+}
+
+.tb-dropdown-item {
+  padding: 2vw 2.5vw;
+  font-size: 2.5vw;
+  cursor: pointer;
+  border-bottom: 0.1vw solid #eee;
+}
+
+.tb-dropdown-item:hover {
+  background: #f5f5f5;
+}
+
+.tb-dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.tb-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.tb-photo-modal {
+  background: white;
+  border-radius: 2vw;
+  padding: 4vw;
+  width: 70vw;
+  max-width: 500px;
+}
+
+.tb-photo-modal h3 {
+  font-size: 3.5vw;
+  margin: 0 0 3vw 0;
+  text-align: center;
+  color: #333;
+}
+
+.tb-photo-option {
+  width: 100%;
+  padding: 3vw;
+  margin-bottom: 2vw;
+  font-size: 3vw;
+  background: #41C1CC;
+  color: white;
+  border: none;
+  border-radius: 1vw;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.tb-photo-option:hover {
+  background: #36a8b3;
+}
+
+.tb-photo-cancel {
+  width: 100%;
+  padding: 3vw;
+  font-size: 3vw;
+  background: #ddd;
+  color: #666;
+  border: none;
+  border-radius: 1vw;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.tb-photo-cancel:hover {
+  background: #ccc;
+}

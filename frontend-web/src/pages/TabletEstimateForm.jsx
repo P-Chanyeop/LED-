@@ -1,8 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './TabletEstimateForm.css'
 import modalLogoImg from '../assets/modal-logo2.png'
 import easytechLogo from '../assets/easytech-logo.png'
 import stampImg from '../assets/stamp.png'
+import html2canvas from 'html2canvas'
+import { jsPDF } from 'jspdf'
 
 const REGIONS = ['서울','경기','인천','부산','경남','대구','울산','경북','대전','세종','충남','충북','전북','광주','전남','강원','제주']
 const FREE_REGIONS = ['서울','경기','인천']
@@ -10,6 +12,12 @@ const FREE_REGIONS = ['서울','경기','인천']
 function TabletEstimateForm() {
     const [step, setStep] = useState(1)
     const [showQuote, setShowQuote] = useState(false)
+    const [managerList, setManagerList] = useState([])
+    const [showManagerDropdown, setShowManagerDropdown] = useState(false)
+    const [attachmentFile, setAttachmentFile] = useState(null)
+    const [showPhotoOptions, setShowPhotoOptions] = useState(false)
+    const [products, setProducts] = useState([])
+    const [vxProducts, setVxProducts] = useState([])
     const [formData, setFormData] = useState({
         date: new Date().toISOString().split('T')[0],
         managerName: '', department: '', managerPhone: '', managerMobile: '',
@@ -17,41 +25,195 @@ function TabletEstimateForm() {
         clientName: '', clientDepartment: '', clientManager: '',
         clientPhone: '', clientMobile: '', clientEmail: '', businessCard: '',
         installDate: '', installPeriod: '2일', installLocation: '', installDetail: '', installNote: '',
-        productName: 'ETK-COB1.2', productSize: '600x337.5', pixel: '1.2 Pixel',
-        brightness: '800 Nit', power: '75/25 W', resolution: '480x270 Dpi',
-        ledWidth: 7, ledHeight: 7, ledSizeW: 4200, ledSizeH: 2363,
-        ledResolutionW: 3360, ledResolutionH: 1890, totalPower: '3.7 Kw',
-        processorModel: 'VX600 Pro', processorQuantity: 1, totalPanels: 49,
+        productName: '', productSize: '', pixel: '',
+        brightness: '', power: '', resolution: '',
+        ledWidth: 7, ledHeight: 7, ledSizeW: 0, ledSizeH: 0,
+        ledResolutionW: 0, ledResolutionH: 0, totalPower: '',
+        processorModel: '', processorQuantity: 1, totalPanels: 49,
         installWorkers: 3,
         deliveryLocation: '서울',
         regionalTravelCost: 0,
         materialCost: 100000,
     })
 
+    useEffect(() => {
+        fetch('/api/managers')
+            .then(res => res.json())
+            .then(response => {
+                if (response.success && response.data) {
+                    setManagerList(response.data)
+                }
+            })
+            .catch(err => console.error('담당자 목록 로드 실패:', err))
+        fetch('/api/products/led')
+            .then(r => r.json())
+            .then(data => { if (data.success && data.data.length > 0) setProducts(data.data) })
+            .catch(e => console.error('Failed to fetch products:', e))
+        fetch('/api/products/vx')
+            .then(r => r.json())
+            .then(data => { if (data.success && data.data.length > 0) setVxProducts(data.data) })
+            .catch(e => console.error('Failed to fetch vx products:', e))
+    }, [])
+
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (showManagerDropdown && !e.target.closest('.tb-inp--dropdown')) {
+                setShowManagerDropdown(false)
+            }
+        }
+        document.addEventListener('click', handleClickOutside)
+        return () => document.removeEventListener('click', handleClickOutside)
+    }, [showManagerDropdown])
+
+    const selectManager = (manager) => {
+        setFormData(prev => ({
+            ...prev,
+            managerName: manager.name,
+            department: manager.department,
+            managerPhone: manager.phone,
+            managerMobile: manager.mobile,
+            managerEmail: manager.email,
+            companyAddress: manager.address
+        }))
+        setShowManagerDropdown(false)
+    }
+
+    const handleAttachmentClick = () => {
+        document.getElementById('attachment-input').click()
+    }
+
+    const handleAttachmentChange = (e) => {
+        const file = e.target.files[0]
+        if (file) {
+            setAttachmentFile(file)
+            h('attachment', file.name)
+        }
+    }
+
+    const handlePhotoClick = () => {
+        setShowPhotoOptions(true)
+    }
+
+    const handleCameraCapture = () => {
+        document.getElementById('camera-input').click()
+        setShowPhotoOptions(false)
+    }
+
+    const handleGallerySelect = () => {
+        document.getElementById('gallery-input').click()
+        setShowPhotoOptions(false)
+    }
+
+    const handleBusinessCardChange = async (e) => {
+        const file = e.target.files[0]
+        if (file) {
+            h('businessCard', file.name)
+            
+            // OCR 처리
+            const formData = new FormData()
+            formData.append('file', file)
+            
+            try {
+                console.log('OCR 요청 시작...')
+                const response = await fetch('/api/ocr/business-card', {
+                    method: 'POST',
+                    body: formData
+                })
+                const result = await response.json()
+                console.log('OCR 결과:', result)
+                
+                if (result.success && result.data) {
+                    const data = result.data
+                    console.log('인식된 데이터:', data)
+                    setFormData(prev => ({
+                        ...prev,
+                        clientName: data.company || prev.clientName,
+                        clientManager: data.name || prev.clientManager,
+                        clientDepartment: data.department || prev.clientDepartment,
+                        clientPhone: data.phone || prev.clientPhone,
+                        clientMobile: data.mobile || prev.clientMobile,
+                        clientEmail: data.email || prev.clientEmail
+                    }))
+                    alert('명함 정보가 입력되었습니다!')
+                } else {
+                    alert('명함 인식 실패: ' + (result.message || '알 수 없는 오류'))
+                }
+            } catch (err) {
+                console.error('명함 인식 실패:', err)
+                alert('명함 인식 중 오류가 발생했습니다.')
+            }
+        }
+    }
+
     const h = (field, value) => {
         setFormData(prev => {
             const updated = { ...prev, [field]: value }
+            if (field === 'productName') {
+                const p = products.find(pr => pr.name === value)
+                if (!p) {
+                    updated.productSize = ''; updated.pixel = ''; updated.brightness = ''; updated.power = ''; updated.resolution = ''
+                } else {
+                    const [sW, sH] = (p.size || '600x337.5').split('x').map(Number)
+                    const [rW, rH] = (p.resolution || '480x270').split('x').map(Number)
+                    const maxPower = parseFloat((p.power || '75/25').split('/')[0])
+                    updated.productSize = p.size
+                    updated.pixel = p.pixel + ' Pixel'
+                    updated.brightness = p.brightness + ' Nit'
+                    updated.power = p.power + ' W'
+                    updated.resolution = p.resolution + ' Dpi'
+                    updated.ledSizeW = prev.ledWidth * sW
+                    updated.ledSizeH = Math.round(prev.ledHeight * sH)
+                    updated.ledResolutionW = prev.ledWidth * rW
+                    updated.ledResolutionH = prev.ledHeight * rH
+                    updated.totalPower = (maxPower * prev.ledWidth * prev.ledHeight / 1000).toFixed(1) + ' Kw'
+                }
+            }
+            if (field === 'processorModel') {
+                const v = vxProducts.find(vx => vx.modelName === value)
+                if (v) updated.processorPrice = v.unitPrice
+            }
             if (field === 'ledWidth' || field === 'ledHeight') {
                 const w = field === 'ledWidth' ? value : prev.ledWidth
-                const h = field === 'ledHeight' ? value : prev.ledHeight
-                updated.totalPanels = w * h
-                updated.ledSizeW = w * 600
-                updated.ledSizeH = Math.round(h * 337.5)
-                updated.ledResolutionW = w * 480
-                updated.ledResolutionH = h * 270
-                console.log('Updated:', { w, h, ledSizeW: updated.ledSizeW, ledSizeH: updated.ledSizeH })
+                const ht = field === 'ledHeight' ? value : prev.ledHeight
+                const cp = products.find(pr => pr.name === prev.productName)
+                const [sW, sH] = (cp?.size || '600x337.5').split('x').map(Number)
+                const [rW, rH] = (cp?.resolution || '480x270').split('x').map(Number)
+                const maxPower = parseFloat((cp?.power || '75/25').split('/')[0])
+                updated.totalPanels = w * ht
+                updated.ledSizeW = w * sW
+                updated.ledSizeH = Math.round(ht * sH)
+                updated.ledResolutionW = w * rW
+                updated.ledResolutionH = ht * rH
+                updated.totalPower = (maxPower * w * ht / 1000).toFixed(1) + ' Kw'
             }
             return updated
         })
     }
-    const nextStep = () => { if (step < 3) setStep(step + 1) }
-    const prevStep = () => { if (step > 1) setStep(step - 1) }
+    const nextStep = () => { 
+        if (step < 3) {
+            setStep(step + 1)
+            window.scrollTo(0, 0)
+        }
+    }
+    const prevStep = () => { 
+        if (step > 1) {
+            setStep(step - 1)
+            window.scrollTo(0, 0)
+        }
+    }
     const handleRegionChange = (region) => {
         h('deliveryLocation', region)
-        if (FREE_REGIONS.includes(region)) h('regionalTravelCost', 0)
+        if (FREE_REGIONS.includes(region)) {
+            h('regionalTravelCost', 0)
+        } else {
+            h('regionalTravelCost', 300000)
+        }
     }
 
-    const panelPrice = 950000, sqmPrice = 4691358, processorPrice = 3000000, workerPrice = 300000
+    const panelPrice = 950000, processorPrice = 3000000, workerPrice = 300000
+    const ledSqm = Math.round((formData.ledSizeW * formData.ledSizeH) / 1000000 * 100) / 100
+    const panelSqm = formData.productSize ? formData.productSize.split('x').map(Number).reduce((a,b) => a * b) / 1000000 : 0
+    const sqmPrice = panelSqm > 0 ? Math.round(Math.floor(1 / panelSqm * 100000) / 100000 * panelPrice) : 0
     const ledTotal = panelPrice * formData.totalPanels
     const processorTotal = processorPrice * formData.processorQuantity
     const laborTotal = workerPrice * formData.installWorkers
@@ -61,6 +223,11 @@ function TabletEstimateForm() {
     const addTotal = laborTotal + materialTotal + travelTotal
     const grandTotal = salesTotal + addTotal
     const fmt = (n) => n.toLocaleString()
+
+    const currentProduct = products.find(p => p.name === formData.productName)
+    const currentVx = vxProducts.find(v => v.modelName === formData.processorModel)
+    const productImageUrl = currentProduct?.imageUrl && currentProduct.imageUrl.trim() ? `http://localhost:8080${currentProduct.imageUrl}` : null
+    const processorImageUrl = currentVx?.imageUrl && currentVx.imageUrl.trim() ? `http://localhost:8080${currentVx.imageUrl}` : null
 
     return (
         <div className="tb-container">
@@ -81,7 +248,33 @@ function TabletEstimateForm() {
                             </div>
                             <div className="tb-row">
                                 <div className="tb-lbl">담당자</div>
-                                <div className="tb-inp"><input type="text" value={formData.managerName} onChange={e=>h('managerName',e.target.value)} /></div>
+                                <div className="tb-inp tb-inp--dropdown">
+                                    <input 
+                                        type="text" 
+                                        value={formData.managerName} 
+                                        onChange={e=>h('managerName',e.target.value)}
+                                        onFocus={() => setShowManagerDropdown(true)}
+                                    />
+                                    <button 
+                                        className="tb-dropdown-btn"
+                                        onClick={() => setShowManagerDropdown(!showManagerDropdown)}
+                                    >
+                                        ▼
+                                    </button>
+                                    {showManagerDropdown && managerList.length > 0 && (
+                                        <div className="tb-dropdown-list">
+                                            {managerList.map((manager, idx) => (
+                                                <div 
+                                                    key={idx} 
+                                                    className="tb-dropdown-item"
+                                                    onClick={() => selectManager(manager)}
+                                                >
+                                                    {manager.name} ({manager.department})
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
                                 <div className="tb-lbl">부서</div>
                                 <div className="tb-inp"><input type="text" value={formData.department} onChange={e=>h('department',e.target.value)} /></div>
                             </div>
@@ -101,8 +294,17 @@ function TabletEstimateForm() {
                             </div>
                             <div className="tb-row">
                                 <div className="tb-lbl">첨부파일</div>
-                                <div className="tb-inp" style={{flex:2}}><input type="text" value={formData.attachment} onChange={e=>h('attachment',e.target.value)} /></div>
-                                <button className="tb-btn-action">첨부하기</button>
+                                <div className="tb-inp" style={{flex:2}}>
+                                    <input type="text" value={formData.attachment} readOnly placeholder="파일을 선택하세요" />
+                                </div>
+                                <input 
+                                    type="file" 
+                                    id="attachment-input" 
+                                    style={{display: 'none'}}
+                                    onChange={handleAttachmentChange}
+                                    accept="image/*,application/pdf,.doc,.docx"
+                                />
+                                <button className="tb-btn-action" onClick={handleAttachmentClick}>첨부하기</button>
                             </div>
                         </div>
                     </div>
@@ -132,8 +334,25 @@ function TabletEstimateForm() {
                             </div>
                             <div className="tb-row">
                                 <div className="tb-lbl tb-lbl--green">명함 촬영</div>
-                                <div className="tb-inp" style={{flex:2}}><input type="text" value={formData.businessCard} onChange={e=>h('businessCard',e.target.value)} /></div>
-                                <button className="tb-btn-action tb-btn-action--green">사진찍기</button>
+                                <div className="tb-inp" style={{flex:2}}>
+                                    <input type="text" value={formData.businessCard} readOnly placeholder="사진을 선택하세요" />
+                                </div>
+                                <input 
+                                    type="file" 
+                                    id="camera-input" 
+                                    style={{display: 'none'}}
+                                    onChange={handleBusinessCardChange}
+                                    accept="image/*"
+                                    capture="environment"
+                                />
+                                <input 
+                                    type="file" 
+                                    id="gallery-input" 
+                                    style={{display: 'none'}}
+                                    onChange={handleBusinessCardChange}
+                                    accept="image/*"
+                                />
+                                <button className="tb-btn-action tb-btn-action--green" onClick={handlePhotoClick}>사진찍기</button>
                             </div>
                         </div>
                     </div>
@@ -175,7 +394,7 @@ function TabletEstimateForm() {
                         <div className="tb-sb">
                             <div className="tb-row">
                                 <div className="tb-lbl">제품명</div>
-                                <div className="tb-inp" style={{flex:1}}><select value={formData.productName} onChange={e=>h('productName',e.target.value)}><option>ETK-COB1.2</option><option>ETK-COB1.5</option></select></div>
+                                <div className="tb-inp" style={{flex:1}}><select value={formData.productName} onChange={e=>h('productName',e.target.value)}><option value="">--선택--</option>{products.map(p => <option key={p.id} value={p.name}>{p.name}</option>)}</select></div>
                                 <div style={{flex:1}}></div>
                             </div>
                             <div className="tb-row">
@@ -237,7 +456,7 @@ function TabletEstimateForm() {
                             </div>
                             <div className="tb-row">
                                 <div className="tb-lbl">프로세스 사양</div>
-                                <div className="tb-inp"><select value={formData.processorModel} onChange={e=>h('processorModel',e.target.value)}><option>VX600 Pro</option><option>VX1000 Pro</option></select></div>
+                                <div className="tb-inp"><select value={formData.processorModel} onChange={e=>h('processorModel',e.target.value)}><option value="">--선택--</option>{vxProducts.map(v => <option key={v.id} value={v.modelName}>{v.modelName}</option>)}</select></div>
                                 <div className="tb-lbl">프로세스 수량</div>
                                 <div className="tb-inp"><select value={formData.processorQuantity} onChange={e=>h('processorQuantity',Number(e.target.value))}><option value={1}>1</option><option value={2}>2</option><option value={3}>3</option></select></div>
                             </div>
@@ -394,7 +613,7 @@ function TabletEstimateForm() {
 
                     <div className="tb-footer">
                         <button className="tb-btn-next" onClick={prevStep}>수정하기</button>
-                        <button className="tb-btn-next" style={{background:'#8BC53E'}} onClick={() => setShowQuote(true)}>견적서 보기</button>
+                        <button className="tb-btn-next" style={{background:'#8BC53E'}} onClick={() => { setShowQuote(true); window.scrollTo(0, 0); }}>견적서 보기</button>
                     </div>
                 </div>
             )}
@@ -438,7 +657,7 @@ function TabletEstimateForm() {
                                 <tr>
                                     <td rowSpan={2} className="tb-it-center">1</td>
                                     <td rowSpan={2} className="tb-it-product">
-                                        {/* TODO: DB 연동 시 이미지 추가 - <img src={productImage} alt={formData.productName} style={{maxWidth:'100%',maxHeight:'8vw'}} /> */}
+                                        {productImageUrl && <img src={productImageUrl} alt={formData.productName} style={{maxWidth:'100%',maxHeight:'8vw',display:'block',margin:'0 auto 0.3vw'}} />}
                                         {formData.productName}
                                     </td>
                                     <td className="tb-it-center">{formData.productSize}</td>
@@ -448,7 +667,7 @@ function TabletEstimateForm() {
                                 </tr>
                                 <tr>
                                     <td className="tb-it-center">sqm</td>
-                                    <td className="tb-it-center">12.96</td>
+                                    <td className="tb-it-center">{ledSqm}</td>
                                     <td className="tb-it-right">₩ {fmt(sqmPrice)}</td>
                                 </tr>
                                 <tr className="tb-it-subtotal">
@@ -458,7 +677,7 @@ function TabletEstimateForm() {
                                 <tr className="tb-it-after-sub">
                                     <td className="tb-it-center">2</td>
                                     <td className="tb-it-product">
-                                        {/* TODO: DB 연동 시 이미지 추가 - <img src={processorImage} alt={formData.processorModel} style={{maxWidth:'100%',maxHeight:'8vw'}} /> */}
+                                        {processorImageUrl && <img src={processorImageUrl} alt={formData.processorModel} style={{maxWidth:'100%',maxHeight:'8vw',display:'block',margin:'0 auto 0.3vw'}} />}
                                         {formData.processorModel}
                                     </td>
                                     <td className="tb-it-center">-</td>
@@ -549,8 +768,49 @@ function TabletEstimateForm() {
                     </div>
 
                     <div className="tb-footer">
-                        <button className="tb-btn-next" onClick={() => { setStep(1); setShowQuote(false); }}>처음으로</button>
-                        <button className="tb-btn-next">메일 보내기</button>
+                        <button className="tb-btn-next" onClick={() => { setStep(1); setShowQuote(false); window.scrollTo(0, 0); }}>처음으로</button>
+                        <button className="tb-btn-next" onClick={async () => {
+                            const to = prompt('받는 사람 이메일 주소를 입력하세요:', formData.clientEmail || '')
+                            if (!to) return
+                            try {
+                                const el = document.querySelector('.tb-container')
+                                const footer = el.querySelector('.tb-footer')
+                                if (footer) footer.style.display = 'none'
+                                await new Promise(r => setTimeout(r, 100))
+                                const canvas = await html2canvas(el, {scale: 2, useCORS: true, allowTaint: true, scrollX: 0, scrollY: 0, width: el.scrollWidth, height: el.scrollHeight})
+                                if (footer) footer.style.display = ''
+                                const imgW = 210
+                                const imgH = canvas.height * imgW / canvas.width
+                                const pdf = new jsPDF('p', 'mm', [imgW, imgH])
+                                pdf.addImage(canvas.toDataURL('image/jpeg', 0.85), 'JPEG', 0, 0, imgW, imgH)
+                                const pdfBlob = pdf.output('blob')
+                                const fd = new FormData()
+                                fd.append('to', to)
+                                fd.append('subject', `[LED 견적서] ${formData.clientName || ''}`)
+                                fd.append('body', `${formData.clientName || ''} ${formData.clientManager || ''}님께 보내는 LED 견적서입니다.`)
+                                fd.append('file', pdfBlob, '견적서.pdf')
+                                const res = await fetch('http://localhost:8080/api/email/send', {method: 'POST', body: fd})
+                                const data = await res.json()
+                                alert(data.success ? '메일이 발송되었습니다.' : data.message)
+                            } catch (e) { alert('메일 발송 실패: ' + e.message) }
+                        }}>메일 보내기</button>
+                    </div>
+                </div>
+            )}
+
+            {showPhotoOptions && (
+                <div className="tb-modal-overlay" onClick={() => setShowPhotoOptions(false)}>
+                    <div className="tb-photo-modal" onClick={(e) => e.stopPropagation()}>
+                        <h3>사진 선택</h3>
+                        <button className="tb-photo-option" onClick={handleCameraCapture}>
+                            카메라로 촬영
+                        </button>
+                        <button className="tb-photo-option" onClick={handleGallerySelect}>
+                            갤러리에서 선택
+                        </button>
+                        <button className="tb-photo-cancel" onClick={() => setShowPhotoOptions(false)}>
+                            취소
+                        </button>
                     </div>
                 </div>
             )}
