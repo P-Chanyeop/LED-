@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './TabletEstimateForm.css'
 import modalLogoImg from '../assets/modal-logo2.png'
+import easytechLogo from '../assets/easytech-logo.png'
 import stampImg from '../assets/stamp.png'
 
 const REGIONS = ['서울','경기','인천','부산','경남','대구','울산','경북','대전','세종','충남','충북','전북','광주','전남','강원','제주']
@@ -255,7 +256,7 @@ function TabletEstimateForm() {
                             </div>
                             <div className="tb-row">
                                 <div className="tb-lbl">설치인원</div>
-                                <div className="tb-inp"><select value={formData.installWorkers} onChange={e=>h('installWorkers',Number(e.target.value))}><option value={3}>3명</option><option value={4}>4명</option><option value={5}>5명</option></select></div>
+                                <div className="tb-inp"><select value={formData.installWorkers} onChange={e=>h('installWorkers',Number(e.target.value))}><option value={3}>3명</option><option value={4}>4명</option><option value={5}>5명</option><option value={6}>6명</option><option value={7}>7명</option><option value={8}>8명</option><option value={9}>9명</option><option value={10}>10명</option></select></div>
                                 <div className="tb-lbl">기타 재료비 외</div>
                                 <div className="tb-inp" style={{gap:'4px'}}>
                                     <span style={{fontSize:'2.4vw',fontWeight:700,whiteSpace:'nowrap'}}>₩</span>
@@ -404,7 +405,7 @@ function TabletEstimateForm() {
                         <div className="tb-quote-header">
                             <div></div>
                             <div className="tb-quote-title">견 적 서</div>
-                            <div className="tb-quote-logo"><img src={modalLogoImg} alt="logo" /></div>
+                            <div className="tb-quote-logo"><img src={easytechLogo} alt="logo" /></div>
                         </div>
                         <div className="tb-quote-date">DATE : {formData.date}</div>
 
@@ -440,7 +441,7 @@ function TabletEstimateForm() {
                                         {/* TODO: DB 연동 시 이미지 추가 - <img src={productImage} alt={formData.productName} style={{maxWidth:'100%',maxHeight:'8vw'}} /> */}
                                         {formData.productName}
                                     </td>
-                                    <td>{formData.productSize}</td>
+                                    <td className="tb-it-center">{formData.productSize}</td>
                                     <td className="tb-it-center">{formData.totalPanels}</td>
                                     <td className="tb-it-right">₩ {fmt(panelPrice)}</td>
                                     <td className="tb-it-right" rowSpan={2}>₩ {fmt(ledTotal)}</td>
@@ -520,6 +521,7 @@ function TabletEstimateForm() {
                                     <td className="tb-tt-desc">시공비 + 기타 재료비 + 지방출장비</td>
                                     <td className="tb-tt-amount">₩ {fmt(addTotal)}</td>
                                 </tr>
+                                <tr style={{height: '0'}}><td colSpan={3} style={{background: 'transparent', border: 'none'}}></td></tr>
                                 <tr className="tb-tt-grand">
                                     <td colSpan={2} className="tb-tt-label">합 계</td>
                                     <td className="tb-tt-amount">₩ {fmt(grandTotal)}</td>

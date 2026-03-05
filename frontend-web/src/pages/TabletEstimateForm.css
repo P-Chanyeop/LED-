@@ -127,7 +127,7 @@
 }
 .tb-inp input, .tb-inp select, .tb-inp textarea {
   width: 100%; flex: 1;
-  font-size: 3.1vw;
+  font-size: 2.1vw;
   font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
   padding: 0 1.8vw;
   height: 100%;
@@ -137,7 +137,7 @@
   border-radius: 0.6vw;
   box-sizing: border-box;
 }
-.tb-inp input[readonly] { background: #CCDFE0; }
+.tb-inp input[readonly] { background: #F2F2F2; }
 .tb-inp select {
   cursor: pointer; appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%2341C1CC' d='M12 16L4 8h16z'/%3E%3C/svg%3E");
@@ -145,14 +145,14 @@
   background-position: right 1.4vw center;
   background-size: 3.5vw;
   padding-right: 5vw;
-  background-color: #CCDFE0;
+  background-color: #F2F2F2;
 }
 
 /* 값 표시 (Step3) */
 .tb-val {
   flex: 1; padding: 0 1.8vw;
-  background: #CCDFE0; border: 0.25vw solid #a0c4c8;
-  border-radius: 0.6vw; font-size: 3.1vw;
+  background: #F2F2F2; border: 0.25vw solid #a0c4c8;
+  border-radius: 0.6vw; font-size: 2.1vw;
   height: 100%; display: flex; align-items: center;
   box-sizing: border-box;
 }
@@ -329,9 +329,9 @@
    ============================================ */
 .tb-quote { padding: 0; margin: 5.5vw 3.2vw 0; }
 .tb-quote-header { display: grid; grid-template-columns: 7vw 1fr 16vw; margin-bottom: 2.2vw; align-items: flex-end; }
-.tb-quote-title { text-align: center; font-size: 5.5vw; font-weight: 900; color: #41C1CC; letter-spacing: 1.4vw; }
+.tb-quote-title { text-align: center; font-size: 7vw; font-weight: 900; color: #41C1CC; letter-spacing: 1.4vw; }
 .tb-quote-logo { display: flex; align-items: flex-end; justify-content: flex-end; }
-.tb-quote-logo img { height: 10vw !important; width: auto !important; }
+.tb-quote-logo img { height: 14vw !important; width: auto !important; }
 .tb-quote-date { font-size: 2.6vw; color: #555; margin-bottom: 1.4vw; }
 
 .tb-quote-section { border-radius: 1.3vw; border: 0.14vw solid #41C1CC; margin-bottom: 0.7vw; }
@@ -345,39 +345,58 @@
 .tb-ct-label { background: #8BC53E; color: white; font-weight: 600; width: 15vw; text-align: center; white-space: nowrap; }
 .tb-ct-value { background: white; color: #333; }
 
-.tb-quote-divider { border: none; border-top: 0.14vw dashed #41C1CC; margin: 0.7vw 0; }
-
-.tb-it { width: 100%; border-collapse: collapse; font-size: 2.6vw; table-layout: fixed; }
-.tb-it th {
-  background: #41C1CC; color: white; padding: 1.1vw 0.9vw; text-align: center;
-  border-bottom: 0.06vw solid #0A8186; border-right: 0.06vw solid #0A8186; font-weight: 600;
+.tb-quote-divider { 
+  border: none; 
+  border-top: 0.3vw dashed #41C1CC; 
+  margin: 3vw 0;
+  border-image: repeating-linear-gradient(90deg, #41C1CC 0, #41C1CC 1.5vw, transparent 1.5vw, transparent 3vw) 1;
+  border-image-slice: 1;
+  border-top-style: solid;
 }
-.tb-it th:nth-child(1), .tb-it td:nth-child(1) { width: 8%; }
+
+.tb-it { width: calc(100% - 2vw); border-collapse: collapse; font-size: 2.2vw; table-layout: fixed; margin: 0 1vw; }
+.tb-it th {
+  background: #41C1CC; color: white; padding: 0.6vw 0.5vw; text-align: center;
+  border: 0.19vw solid #47A0A4; font-weight: 600; font-size: 2.2vw; white-space: nowrap;
+}
+.tb-it th:nth-child(1), .tb-it td:nth-child(1) { width: 6%; }
 .tb-it th:nth-child(2), .tb-it td:nth-child(2) { width: 22%; }
-.tb-it th:nth-child(3), .tb-it td:nth-child(3) { width: 18%; }
-.tb-it th:nth-child(4), .tb-it td:nth-child(4) { width: 12%; }
+.tb-it th:nth-child(3), .tb-it td:nth-child(3) { width: 19%; }
+.tb-it th:nth-child(4), .tb-it td:nth-child(4) { width: 13%; }
 .tb-it th:nth-child(5), .tb-it td:nth-child(5) { width: 20%; }
 .tb-it th:nth-child(6), .tb-it td:nth-child(6) { width: 20%; }
-.tb-it th:last-child { border-right: none; }
-.tb-it td { border: 0.1vw solid #41C1CC; padding: 1.1vw 0.9vw; color: #333; vertical-align: middle; font-size: 2.4vw; }
+.tb-it td { padding: 1.8vw 0.9vw; color: #333; vertical-align: middle; font-size: 2.4vw; }
+.tb-it tr:not(.tb-it-subtotal) td { border: 0.19vw solid #47A0A4; }
+.tb-it tr:has(td[rowSpan]) > td:first-child { background: #41C1CC; color: white; text-align: center; }
+.tb-it-after-sub > td:first-child { background: #41C1CC; color: white; }
 .tb-it-center { text-align: center; }
 .tb-it-right { text-align: right; }
 .tb-it-product { text-align: center; vertical-align: middle; font-size: 2.4vw; height: 12vw; }
+/* 소계 행 스타일 - 테두리 색상 #47A0A4 */
 .tb-it-subtotal td {
-  background: white; font-weight: 700; color: #333; text-align: center;
-  border-top: none !important; height: 4.5vw; padding: 0.6vw 1.1vw;
+  background: white !important; 
+  font-weight: 700; 
+  color: #333 !important; 
+  text-align: center;
+  height: 4.5vw; 
+  padding: 0.6vw 1.1vw;
+  border: 0.19vw solid #47A0A4 !important;
 }
-.tb-it-subtotal td:first-child { border-top: 0.06vw solid #0A8186 !important; }
+.tb-it-subtotal td:first-child { 
+  border: 0.19vw solid #47A0A4 !important;
+}
 .tb-it-subtotal td:last-child {
-  text-align: right; background: #41C1CC; color: white;
-  border-top: 0.06vw solid #0A8186 !important; border-bottom: 0.06vw solid #0A8186 !important;
+  text-align: right !important; 
+  background: #41C1CC !important; 
+  color: white !important;
+  border: 0.19vw solid #47A0A4 !important;
 }
 .tb-it-after-sub td { border-top: none !important; }
 
 .tb-quote-note { font-size: 1.6vw; color: #C1272C; text-align: right; padding: 1.4vw; }
 
-.tb-tt { width: 100%; border-collapse: separate; border-spacing: 0 0.7vw; font-size: 2.6vw; margin-bottom: 0.7vw; }
-.tb-tt td { padding: 1vw 1.8vw; height: 5vw; border: none; }
+.tb-tt { width: calc(100% - 2vw); border-collapse: separate; border-spacing: 0 0.7vw; font-size: 2.6vw; margin: 0 1vw 0.7vw 1vw; }
+.tb-tt td { padding: 1vw 1.8vw; height: 1vw; border: none; }
 .tb-tt-label { color: #333; font-weight: 700; text-align: center; width: 11vw; font-size: 2.8vw; }
 .tb-tt-desc { color: #333; text-align: center; font-weight: 600; font-size: 2.4vw; }
 .tb-tt-amount { font-weight: 700; color: white; width: 32vw; text-align: right; font-size: 3vw; padding-right: 2.5vw; }
@@ -388,8 +407,8 @@
 .tb-tt-green td { background: #EAFFCA; border: 0.15vw solid #006837; }
 .tb-tt-green td.tb-tt-label { background: #EAFFCA;  }
 .tb-tt-green td.tb-tt-amount { background: #8CC63F !important; color: white !important; }
-.tb-tt-grand { border-top: 2.5vw solid transparent; }
-.tb-tt-grand td { background: #FFEDE1; font-weight: 700;  border: 4.5px solid #9F4100; }
+/* 합계 칸 스타일 */
+.tb-tt-grand td { background: #FFEDE1; font-weight: 700;  border: 0.2vw solid #9F4100; }
 .tb-tt-grand td.tb-tt-label { background: #FFEDE1; font-size: 3vw; letter-spacing: 0.3vw; }
 .tb-tt-grand td.tb-tt-amount { background: #F47921 !important; color: white !important; }
 
