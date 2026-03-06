@@ -226,8 +226,8 @@ function TabletEstimateForm() {
 
     const currentProduct = products.find(p => p.name === formData.productName)
     const currentVx = vxProducts.find(v => v.modelName === formData.processorModel)
-    const productImageUrl = currentProduct?.imageUrl && currentProduct.imageUrl.trim() ? `${import.meta.env.VITE_API_URL}${currentProduct.imageUrl}` : null
-    const processorImageUrl = currentVx?.imageUrl && currentVx.imageUrl.trim() ? `${import.meta.env.VITE_API_URL}${currentVx.imageUrl}` : null
+    const productImageUrl = currentProduct?.imageUrl && currentProduct.imageUrl.trim() ? `http://localhost:8080${currentProduct.imageUrl}` : null
+    const processorImageUrl = currentVx?.imageUrl && currentVx.imageUrl.trim() ? `http://localhost:8080${currentVx.imageUrl}` : null
 
     return (
         <div className="tb-container">
@@ -773,11 +773,17 @@ function TabletEstimateForm() {
                             const to = prompt('받는 사람 이메일 주소를 입력하세요:', formData.clientEmail || '')
                             if (!to) return
                             try {
-                                const el = document.querySelector('.tb-container')
+                                const el = document.querySelector('.tb-step')
                                 const footer = el.querySelector('.tb-footer')
                                 if (footer) footer.style.display = 'none'
-                                await new Promise(r => setTimeout(r, 100))
-                                const canvas = await html2canvas(el, {scale: 2, useCORS: true, allowTaint: true, scrollX: 0, scrollY: 0, width: el.scrollWidth, height: el.scrollHeight})
+                                const saved = { overflow: el.style.overflow, width: el.style.width, boxSizing: el.style.boxSizing }
+                                el.style.overflow = 'visible'
+                                el.style.width = (el.offsetWidth) + 'px'
+                                el.style.boxSizing = 'border-box'
+                                await new Promise(r => setTimeout(r, 200))
+                                const rect = el.getBoundingClientRect()
+                                const canvas = await html2canvas(el, {scale: 2, useCORS: true, allowTaint: true, scrollX: 0, scrollY: 0, width: rect.width, height: rect.height - 14, windowWidth: rect.width + 50, windowHeight: rect.height + 50})
+                                Object.assign(el.style, saved)
                                 if (footer) footer.style.display = ''
                                 const imgW = 210
                                 const imgH = canvas.height * imgW / canvas.width
@@ -786,10 +792,11 @@ function TabletEstimateForm() {
                                 const pdfBlob = pdf.output('blob')
                                 const fd = new FormData()
                                 fd.append('to', to)
-                                fd.append('subject', `[LED 견적서] ${formData.clientName || ''}`)
-                                fd.append('body', `${formData.clientName || ''} ${formData.clientManager || ''}님께 보내는 LED 견적서입니다.`)
-                                fd.append('file', pdfBlob, '견적서.pdf')
-                                const res = await fetch(import.meta.env.VITE_API_URL + '/api/email/send', {method: 'POST', body: fd})
+                                fd.append('subject', '이지텍인터내셔널 - LED Display 견적 송부의 건')
+                                fd.append('body', '안녕하십니까.\n\nLED 디스플레이 전문업체 이지텍인터내셔널입니다.\n\nLED Display 견적 송부 드리오니 확인 부탁드리겠습니다.\n\n감사합니다.')
+                                const pdfDate = formData.date ? formData.date.slice(2).replace(/-/g, '.') : ''
+                                fd.append('file', pdfBlob, `${formData.clientName || '업체'}_${formData.productName || '제품'} 견적서_${pdfDate}.pdf`)
+                                const res = await fetch('http://localhost:8080/api/email/send', {method: 'POST', body: fd})
                                 const data = await res.json()
                                 alert(data.success ? '메일이 발송되었습니다.' : data.message)
                             } catch (e) { alert('메일 발송 실패: ' + e.message) }
