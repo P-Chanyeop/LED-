@@ -10,7 +10,8 @@ import logoImage from './assets/logo.png'
 
 function PrivateRoute({ children }) {
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true'
-  return isLoggedIn ? children : <Navigate to="/login" />
+  const location = useLocation()
+  return isLoggedIn ? children : <Navigate to="/login" state={{from: location.pathname + location.search}} />
 }
 
 function Header() {

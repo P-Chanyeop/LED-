@@ -10,6 +10,7 @@ const REGIONS = ['서울','경기','인천','부산','경남','대구','울산',
 const FREE_REGIONS = ['서울','경기','인천']
 
 function TabletEstimateForm() {
+    useEffect(() => { document.title = 'LED 자동견적 시스템 - 태블릿' }, [])
     const [step, setStep] = useState(1)
     const [showQuote, setShowQuote] = useState(false)
     const [managerList, setManagerList] = useState([])
@@ -315,7 +316,7 @@ function TabletEstimateForm() {
                                     id="attachment-input" 
                                     style={{display: 'none'}}
                                     onChange={handleAttachmentChange}
-                                    accept="*/*"
+                                    
                                 />
                                 <button className="tb-btn-action" onClick={handleAttachmentClick}>첨부하기</button>
                             </div>

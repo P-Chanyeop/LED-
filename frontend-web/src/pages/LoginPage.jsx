@@ -1,11 +1,13 @@
 import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, useLocation, Link } from 'react-router-dom'
 import './LoginPage.css'
 
 function LoginPage() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const navigate = useNavigate()
+  const location = useLocation()
+  const from = location.state?.from || '/'
 
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -18,7 +20,7 @@ function LoginPage() {
       if (data.success) {
         localStorage.setItem('isLoggedIn', 'true')
         localStorage.setItem('user', JSON.stringify(data.data))
-        navigate('/')
+        navigate(from)
       } else {
         alert(data.message || '아이디 또는 비밀번호가 올바르지 않습니다.')
       }
