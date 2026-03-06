@@ -1013,14 +1013,12 @@ function EstimateForm() {
                                         {Array.from({length: 15}, (_, i) => i + 1).map(n => <option key={n}
                                                                                                     value={n}>{n}</option>)}
                                     </select>
-                                    <span className="quantity-range">1 ~ 15</span>
                                     <span className="dim-label">X H:</span>
                                     <select value={formData.height}
                                             onChange={(e) => handleChange('height', e.target.value)}>
                                         {Array.from({length: 15}, (_, i) => i + 1).map(n => <option key={n}
                                                                                                     value={n}>{n}</option>)}
                                     </select>
-                                    <span className="quantity-range">1 ~ 15</span>
                                     <span className="equals">=</span>
                                     <input type="text" className="result-field" value={formData.totalPanels} readOnly/>
                                     <span className="unit">EA</span>
