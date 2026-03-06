@@ -1009,15 +1009,19 @@ function EstimateForm() {
                                 <div className="form-input quantity-input">
                                     <span className="dim-label">W:</span>
                                     <select value={formData.width}
-                                            onChange={(e) => handleChange('width', e.target.value)}>
+                                            onChange={(e) => { if (e.target.value === 'custom') { const v = prompt('가로 수량 입력:'); if (v) handleChange('width', v) } else handleChange('width', e.target.value) }}>
                                         {Array.from({length: 15}, (_, i) => i + 1).map(n => <option key={n}
                                                                                                     value={n}>{n}</option>)}
+                                        {formData.width > 15 && <option value={formData.width}>{formData.width}</option>}
+                                        <option value="custom">직접입력</option>
                                     </select>
                                     <span className="dim-label">X H:</span>
                                     <select value={formData.height}
-                                            onChange={(e) => handleChange('height', e.target.value)}>
+                                            onChange={(e) => { if (e.target.value === 'custom') { const v = prompt('세로 수량 입력:'); if (v) handleChange('height', v) } else handleChange('height', e.target.value) }}>
                                         {Array.from({length: 15}, (_, i) => i + 1).map(n => <option key={n}
                                                                                                     value={n}>{n}</option>)}
+                                        {formData.height > 15 && <option value={formData.height}>{formData.height}</option>}
+                                        <option value="custom">직접입력</option>
                                     </select>
                                     <span className="equals">=</span>
                                     <input type="text" className="result-field" value={formData.totalPanels} readOnly/>
@@ -1106,9 +1110,11 @@ function EstimateForm() {
                                     <div className="form-label" style={labelCyan}>설치인원</div>
                                     <div className="form-input">
                                         <select value={formData.installPersonnel}
-                                                onChange={(e) => handleChange('installPersonnel', e.target.value)}>
+                                                onChange={(e) => { if (e.target.value === 'custom') { const v = prompt('설치인원 입력:'); if (v) handleChange('installPersonnel', v) } else handleChange('installPersonnel', e.target.value) }}>
                                             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => <option key={n}
                                                                                               value={n}>{n}명</option>)}
+                                            {formData.installPersonnel > 10 && <option value={formData.installPersonnel}>{formData.installPersonnel}명</option>}
+                                            <option value="custom">직접입력</option>
                                         </select>
                                     </div>
                                 </div>

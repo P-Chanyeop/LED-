@@ -436,13 +436,17 @@ function TabletEstimateForm() {
                                 <div className="tb-lbl">수량</div>
                                 <div className="tb-inp quantity-row">
                                     <span>W:</span>
-                                    <select value={formData.ledWidth} onChange={e=>h('ledWidth',Number(e.target.value))}>
+                                    <select value={formData.ledWidth} onChange={e=>{if(e.target.value==='custom'){const v=prompt('가로 수량 입력:');if(v)h('ledWidth',Number(v))}else h('ledWidth',Number(e.target.value))}}>
                                         {Array.from({length:15},(_,i)=>i+1).map(n=><option key={n} value={n}>{n}</option>)}
+                                        {formData.ledWidth > 15 && <option value={formData.ledWidth}>{formData.ledWidth}</option>}
+                                        <option value="custom">직접입력</option>
                                     </select>
                                     <span>X</span>
                                     <span>H:</span>
-                                    <select value={formData.ledHeight} onChange={e=>h('ledHeight',Number(e.target.value))}>
+                                    <select value={formData.ledHeight} onChange={e=>{if(e.target.value==='custom'){const v=prompt('세로 수량 입력:');if(v)h('ledHeight',Number(v))}else h('ledHeight',Number(e.target.value))}}>
                                         {Array.from({length:15},(_,i)=>i+1).map(n=><option key={n} value={n}>{n}</option>)}
+                                        {formData.ledHeight > 15 && <option value={formData.ledHeight}>{formData.ledHeight}</option>}
+                                        <option value="custom">직접입력</option>
                                     </select>
                                     <span>=</span>
                                     <input type="text" value={formData.totalPanels} readOnly />
@@ -488,7 +492,7 @@ function TabletEstimateForm() {
                             </div>
                             <div className="tb-row">
                                 <div className="tb-lbl">설치인원</div>
-                                <div className="tb-inp"><select value={formData.installWorkers} onChange={e=>h('installWorkers',Number(e.target.value))}><option value={3}>3명</option><option value={4}>4명</option><option value={5}>5명</option><option value={6}>6명</option><option value={7}>7명</option><option value={8}>8명</option><option value={9}>9명</option><option value={10}>10명</option></select></div>
+                                <div className="tb-inp"><select value={formData.installWorkers} onChange={e=>{if(e.target.value==='custom'){const v=prompt('설치인원 입력:');if(v)h('installWorkers',Number(v))}else h('installWorkers',Number(e.target.value))}}>{[1,2,3,4,5,6,7,8,9,10].map(n=><option key={n} value={n}>{n}명</option>)}{formData.installWorkers > 10 && <option value={formData.installWorkers}>{formData.installWorkers}명</option>}<option value="custom">직접입력</option></select></div>
                                 <div className="tb-lbl">기타 재료비 외</div>
                                 <div className="tb-inp" style={{gap:'4px'}}>
                                     <span style={{fontSize:'2.4vw',fontWeight:700,whiteSpace:'nowrap'}}>₩</span>
@@ -625,7 +629,7 @@ function TabletEstimateForm() {
                     </div>
 
                     <div className="tb-footer">
-                        <button className="tb-btn-next" onClick={prevStep}>수정하기</button>
+                        <button className="tb-btn-next" onClick={() => { setStep(1); window.scrollTo(0,0); }}>수정하기</button>
                         <button className="tb-btn-next" style={{background:'#8BC53E'}} onClick={() => { if (!formData.productName) return alert('제품명을 선택해주세요'); if (!formData.processorModel) return alert('프로세서 사양을 선택해주세요'); if (!formData.installLocation) return alert('납품 설치 장소를 선택해주세요'); setShowQuote(true); window.scrollTo(0, 0); }}>견적서 보기</button>
                     </div>
                 </div>
