@@ -13,7 +13,7 @@ function SignupPage() {
     if (password !== confirmPassword) return alert('비밀번호가 일치하지 않습니다.')
     if (password.length < 6) return alert('비밀번호는 6자 이상이어야 합니다.')
     try {
-      const res = await fetch('http://localhost:8080/api/auth/signup', {
+      const res = await fetch(import.meta.env.VITE_API_URL + '/api/auth/signup', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
       })

@@ -11,7 +11,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.time.LocalDate;
 import java.util.Base64;
 
-@Component
+//@Component
 @RequiredArgsConstructor
 public class DataInitializer implements CommandLineRunner {
     

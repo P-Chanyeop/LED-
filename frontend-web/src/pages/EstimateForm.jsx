@@ -86,7 +86,7 @@ function QuoteModal({formData, products, vxProducts, onClose}) {
                             {/* 1. LED */}
                             <tr style={{borderTop: 'none'}}>
                                 <td rowSpan={2} style={{height: '60px'}} className="qi-center">1</td>
-                                <td rowSpan={2} className="qi-product" style={{textAlign:"center"}}>{prod?.imageUrl && <img src={`http://localhost:8080${prod.imageUrl}`} alt={formData.productName} style={{maxWidth:"100%",maxHeight:"40px"}}/>}<br/><span style={{fontSize:"11px"}}>{formData.productName}</span></td>
+                                <td rowSpan={2} className="qi-product" style={{textAlign:"center"}}>{prod?.imageUrl && <img src={`${import.meta.env.VITE_API_URL}${prod.imageUrl}`} alt={formData.productName} style={{maxWidth:"100%",maxHeight:"40px"}}/>}<br/><span style={{fontSize:"11px"}}>{formData.productName}</span></td>
                                 <td className="qi-center">{formData.productSize}</td>
                                 <td className="qi-center">{ledQty}</td>
                                 <td className="qi-right">₩      {fmt(unitPrice)}</td>
@@ -104,7 +104,7 @@ function QuoteModal({formData, products, vxProducts, onClose}) {
                             {/* 2. 프로세서 */}
                             <tr className="qi-item-after-subtotal" style={{height: '60px'}}>
                                 <td className="qi-center">2</td>
-                                <td className="qi-product" style={{textAlign:"center"}}>{vx?.imageUrl && <img src={`http://localhost:8080${vx.imageUrl}`} alt={formData.processorModel} style={{maxWidth:"100%",maxHeight:"40px"}}/>}<br/><span style={{fontSize:"11px"}}>{formData.processorModel}</span></td>
+                                <td className="qi-product" style={{textAlign:"center"}}>{vx?.imageUrl && <img src={`${import.meta.env.VITE_API_URL}${vx.imageUrl}`} alt={formData.processorModel} style={{maxWidth:"100%",maxHeight:"40px"}}/>}<br/><span style={{fontSize:"11px"}}>{formData.processorModel}</span></td>
                                 <td className="qi-center">EA</td>
                                 <td className="qi-center">{formData.processorQuantity}</td>
                                 <td className="qi-right">₩      {fmt(processorPrice)}</td>
@@ -243,7 +243,7 @@ function QuoteModal({formData, products, vxProducts, onClose}) {
                                     fd.append('subject', `[LED 견적서] ${formData.clientCompany || ''}`)
                                     fd.append('body', `${formData.clientCompany || ''} ${formData.clientManager || ''}님께 보내는 LED 견적서입니다.`)
                                     fd.append('file', pdfBlob, '견적서.pdf')
-                                    const res = await fetch('http://localhost:8080/api/email/send', {method: 'POST', body: fd})
+                                    const res = await fetch(import.meta.env.VITE_API_URL + '/api/email/send', {method: 'POST', body: fd})
                                     const data = await res.json()
                                     alert(data.success ? '메일이 발송되었습니다.' : data.message)
                                 } catch (e) { alert('메일 발송 실패: ' + e.message) }
@@ -552,7 +552,7 @@ function EstimateForm() {
     const [products, setProducts] = useState([])
     const [vxProducts, setVxProducts] = useState([])
     useEffect(() => {
-        fetch('http://localhost:8080/api/managers')
+        fetch(import.meta.env.VITE_API_URL + '/api/managers')
             .then(r => r.json())
             .then(data => {
                 if (data.success && data.data.length > 0) {
@@ -562,7 +562,7 @@ function EstimateForm() {
                 }
             })
             .catch(e => console.error('Failed to fetch managers:', e))
-        fetch('http://localhost:8080/api/products/led')
+        fetch(import.meta.env.VITE_API_URL + '/api/products/led')
             .then(r => r.json())
             .then(data => {
                 if (data.success && data.data.length > 0) {
@@ -570,7 +570,7 @@ function EstimateForm() {
                 }
             })
             .catch(e => console.error('Failed to fetch products:', e))
-        fetch('http://localhost:8080/api/products/vx')
+        fetch(import.meta.env.VITE_API_URL + '/api/products/vx')
             .then(r => r.json())
             .then(data => {
                 if (data.success && data.data.length > 0) {
@@ -580,7 +580,7 @@ function EstimateForm() {
                 }
             })
             .catch(e => console.error('Failed to fetch vx products:', e))
-        fetch('http://localhost:8080/api/settings')
+        fetch(import.meta.env.VITE_API_URL + '/api/settings')
             .then(r => r.json())
             .then(data => {
                 if (data.success) {
@@ -661,7 +661,7 @@ function EstimateForm() {
         const fd = new FormData()
         fd.append('file', file)
         try {
-            const res = await fetch('http://localhost:8080/api/products/upload', {method: 'POST', body: fd})
+            const res = await fetch(import.meta.env.VITE_API_URL + '/api/products/upload', {method: 'POST', body: fd})
             const data = await res.json()
             if (data.success) setFormData(prev => ({...prev, attachment: data.data}))
         } catch (err) { console.error('Upload failed:', err) }
@@ -673,7 +673,7 @@ function EstimateForm() {
         const fd = new FormData()
         fd.append('file', file)
         try {
-            const res = await fetch('http://localhost:8080/api/ocr/business-card', {method: 'POST', body: fd})
+            const res = await fetch(import.meta.env.VITE_API_URL + '/api/ocr/business-card', {method: 'POST', body: fd})
             const data = await res.json()
             if (data.success && data.data) {
                 const d = data.data

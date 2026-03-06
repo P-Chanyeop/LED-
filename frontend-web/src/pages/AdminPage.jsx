@@ -7,7 +7,7 @@ import modalLogoImg1 from '../assets/modal-logo.png'
 import printIconImg from '../assets/print-icon.png'
 import stampImg from '../assets/stamp.png'
 
-const API_BASE = 'http://localhost:8080/api'
+const API_BASE = import.meta.env.VITE_API_URL + '/api'
 
 function QuoteModal({formData, onClose}) {
     const unitPrice = 950000
@@ -1002,7 +1002,7 @@ function AdminPage() {
             {products.map((prod, index) => (
               <tr key={prod.id}>
                 <td>{index + 1}</td>
-                <td>{prod.imageUrl ? <img src={`http://localhost:8080${prod.imageUrl}`} alt={prod.name} style={{width: '130px', height: '130px', objectFit: 'contain', borderRadius: '4px'}} /> : '-'}</td>
+                <td>{prod.imageUrl ? <img src={`${import.meta.env.VITE_API_URL}${prod.imageUrl}`} alt={prod.name} style={{width: '130px', height: '130px', objectFit: 'contain', borderRadius: '4px'}} /> : '-'}</td>
                 <td>{prod.name}</td>
                 <td>{prod.size}</td>
                 <td>{prod.pixel}</td>
@@ -1051,7 +1051,7 @@ function AdminPage() {
             {vxProducts.map(vx => (
               <tr key={vx.id}>
                 <td>{vx.id}</td>
-                <td>{vx.imageUrl ? <img src={`http://localhost:8080${vx.imageUrl}`} alt={vx.model} style={{width: '130px', height: '130px', objectFit: 'contain', borderRadius: '4px'}} /> : '-'}</td>
+                <td>{vx.imageUrl ? <img src={`${import.meta.env.VITE_API_URL}${vx.imageUrl}`} alt={vx.model} style={{width: '130px', height: '130px', objectFit: 'contain', borderRadius: '4px'}} /> : '-'}</td>
                 <td>{vx.model}</td>
                 <td>{vx.resolution}</td>
                 <td>{vx.ports}개</td>

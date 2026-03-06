@@ -226,8 +226,8 @@ function TabletEstimateForm() {
 
     const currentProduct = products.find(p => p.name === formData.productName)
     const currentVx = vxProducts.find(v => v.modelName === formData.processorModel)
-    const productImageUrl = currentProduct?.imageUrl && currentProduct.imageUrl.trim() ? `http://localhost:8080${currentProduct.imageUrl}` : null
-    const processorImageUrl = currentVx?.imageUrl && currentVx.imageUrl.trim() ? `http://localhost:8080${currentVx.imageUrl}` : null
+    const productImageUrl = currentProduct?.imageUrl && currentProduct.imageUrl.trim() ? `${import.meta.env.VITE_API_URL}${currentProduct.imageUrl}` : null
+    const processorImageUrl = currentVx?.imageUrl && currentVx.imageUrl.trim() ? `${import.meta.env.VITE_API_URL}${currentVx.imageUrl}` : null
 
     return (
         <div className="tb-container">
@@ -789,7 +789,7 @@ function TabletEstimateForm() {
                                 fd.append('subject', `[LED 견적서] ${formData.clientName || ''}`)
                                 fd.append('body', `${formData.clientName || ''} ${formData.clientManager || ''}님께 보내는 LED 견적서입니다.`)
                                 fd.append('file', pdfBlob, '견적서.pdf')
-                                const res = await fetch('http://localhost:8080/api/email/send', {method: 'POST', body: fd})
+                                const res = await fetch(import.meta.env.VITE_API_URL + '/api/email/send', {method: 'POST', body: fd})
                                 const data = await res.json()
                                 alert(data.success ? '메일이 발송되었습니다.' : data.message)
                             } catch (e) { alert('메일 발송 실패: ' + e.message) }
