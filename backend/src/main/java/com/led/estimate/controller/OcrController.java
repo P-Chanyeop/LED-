@@ -37,6 +37,8 @@ public class OcrController {
             String body = response.body();
 
             // fullTextAnnotation.text 추출
+
+
             int idx = body.indexOf("\"text\"");
             if (idx == -1) return ApiResponse.error("텍스트를 인식할 수 없습니다");
 

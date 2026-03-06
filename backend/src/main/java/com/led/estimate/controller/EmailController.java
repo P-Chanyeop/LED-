@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import jakarta.mail.internet.MimeMessage;
+import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -59,6 +60,14 @@ public class EmailController {
 
             if (file != null && !file.isEmpty()) {
                 helper.addAttachment(file.getOriginalFilename(), file);
+            }
+
+            String defaultAttachment = settings.get("defaultAttachment");
+            if (defaultAttachment != null && !defaultAttachment.isEmpty()) {
+                File attachFile = new File(defaultAttachment.startsWith("/") ? defaultAttachment.substring(1) : defaultAttachment);
+                if (attachFile.exists()) {
+                    helper.addAttachment(attachFile.getName().replaceFirst("^[^_]*_", ""), attachFile);
+                }
             }
 
             sender.send(message);

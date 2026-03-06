@@ -1174,42 +1174,6 @@ function AdminPage() {
       <h2>설정</h2>
       
       <div className="settings-card">
-        <h3>회사 정보</h3>
-        <div className="setting-row">
-          <label>회사명</label>
-          <input type="text" value={sf.companyName} onChange={e => set('companyName', e.target.value)} />
-        </div>
-        <div className="setting-row">
-          <label>주소</label>
-          <input type="text" value={sf.companyAddress} onChange={e => set('companyAddress', e.target.value)} />
-        </div>
-        <div className="setting-row">
-          <label>전화</label>
-          <input type="text" value={sf.companyPhone} onChange={e => set('companyPhone', e.target.value)} />
-        </div>
-        <div className="setting-row">
-          <label>이메일</label>
-          <input type="text" value={sf.companyEmail} onChange={e => set('companyEmail', e.target.value)} />
-        </div>
-      </div>
-
-      <div className="settings-card">
-        <h3>견적서 설정</h3>
-        <div className="setting-row">
-          <label>견적 유효기간</label>
-          <input type="text" value={sf.quoteValidity} onChange={e => set('quoteValidity', e.target.value)} />
-        </div>
-        <div className="setting-row">
-          <label>결제 조건</label>
-          <input type="text" value={sf.paymentTerms} onChange={e => set('paymentTerms', e.target.value)} />
-        </div>
-        <div className="setting-row">
-          <label>A/S 기간</label>
-          <input type="text" value={sf.warrantyPeriod} onChange={e => set('warrantyPeriod', e.target.value)} />
-        </div>
-      </div>
-
-      <div className="settings-card">
         <h3>이메일 설정</h3>
         <div className="setting-row">
           <label>SMTP 서버</label>

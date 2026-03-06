@@ -16,6 +16,7 @@ function TabletEstimateForm() {
     const [showManagerDropdown, setShowManagerDropdown] = useState(false)
     const [attachmentFile, setAttachmentFile] = useState(null)
     const [showPhotoOptions, setShowPhotoOptions] = useState(false)
+    const [isSendingEmail, setIsSendingEmail] = useState(false)
     const [products, setProducts] = useState([])
     const [vxProducts, setVxProducts] = useState([])
     const [formData, setFormData] = useState({
@@ -53,6 +54,12 @@ function TabletEstimateForm() {
             .then(r => r.json())
             .then(data => { if (data.success && data.data.length > 0) setVxProducts(data.data) })
             .catch(e => console.error('Failed to fetch vx products:', e))
+        fetch('/api/settings')
+            .then(r => r.json())
+            .then(data => {
+                if (data.success && data.data.defaultAttachment) setFormData(prev => prev.attachment ? prev : ({...prev, attachment: data.data.defaultAttachment}))
+            })
+            .catch(e => console.error('Failed to fetch settings:', e))
     }, [])
 
     useEffect(() => {
@@ -295,7 +302,7 @@ function TabletEstimateForm() {
                             <div className="tb-row">
                                 <div className="tb-lbl">첨부파일</div>
                                 <div className="tb-inp" style={{flex:2}}>
-                                    <input type="text" value={formData.attachment} readOnly placeholder="파일을 선택하세요" />
+                                    <input type="text" value={(formData.attachment || '').split('/').pop().replace(/^[^_]*_/, '')} readOnly placeholder="파일을 선택하세요" />
                                 </div>
                                 <input 
                                     type="file" 
@@ -630,7 +637,7 @@ function TabletEstimateForm() {
 
                         <div className="tb-quote-section">
                             <div className="tb-quote-section-title">판매 견적서</div>
-                            <table className="tb-ct"><tbody>
+                            <table className="tb-ct"><colgroup><col style={{width:'15vw'}}/><col/><col style={{width:'15vw'}}/><col/></colgroup><tbody>
                                 <tr>
                                     <td className="tb-ct-label">기관/업체명</td>
                                     <td className="tb-ct-value" colSpan={3}>{formData.clientName}</td>
@@ -769,9 +776,10 @@ function TabletEstimateForm() {
 
                     <div className="tb-footer">
                         <button className="tb-btn-next" onClick={() => { setStep(1); setShowQuote(false); window.scrollTo(0, 0); }}>처음으로</button>
-                        <button className="tb-btn-next" onClick={async () => {
+                        <button className="tb-btn-next" disabled={isSendingEmail} onClick={async () => {
                             const to = prompt('받는 사람 이메일 주소를 입력하세요:', formData.clientEmail || '')
                             if (!to) return
+                            setIsSendingEmail(true)
                             try {
                                 const el = document.querySelector('.tb-step')
                                 const footer = el.querySelector('.tb-footer')
@@ -800,7 +808,17 @@ function TabletEstimateForm() {
                                 const data = await res.json()
                                 alert(data.success ? '메일이 발송되었습니다.' : data.message)
                             } catch (e) { alert('메일 발송 실패: ' + e.message) }
+                            finally { setIsSendingEmail(false) }
                         }}>메일 보내기</button>
+                    </div>
+                </div>
+            )}
+
+            {isSendingEmail && (
+                <div className="tb-modal-overlay">
+                    <div className="tb-spinner-wrap">
+                        <div className="tb-spinner"></div>
+                        <p>메일 발송 중...</p>
                     </div>
                 </div>
             )}
