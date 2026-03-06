@@ -19,7 +19,7 @@ function TabletEstimateForm() {
     const [isSendingEmail, setIsSendingEmail] = useState(false)
     const [products, setProducts] = useState([])
     const [vxProducts, setVxProducts] = useState([])
-    const [formData, setFormData] = useState({
+    const initialFormData = {
         date: new Date().toISOString().split('T')[0],
         managerName: '', department: '', managerPhone: '', managerMobile: '',
         managerEmail: '', companyAddress: '', attachment: '',
@@ -35,7 +35,8 @@ function TabletEstimateForm() {
         deliveryLocation: '',
         regionalTravelCost: 0,
         materialCost: 0,
-    })
+    }
+    const [formData, setFormData] = useState(initialFormData)
 
     useEffect(() => {
         fetch(import.meta.env.VITE_API_URL + '/api/managers')
@@ -250,7 +251,7 @@ function TabletEstimateForm() {
                     <div className="tb-section">
                         <div className="tb-sh">
                             <span>담당자 등록</span>
-                            <button className="tb-btn-reset">Reset</button>
+                            <button className="tb-btn-reset" onClick={() => setFormData({...initialFormData, date: new Date().toISOString().split('T')[0]})}>Reset</button>
                         </div>
                         <div className="tb-sb">
                             <div className="tb-row">
@@ -314,7 +315,7 @@ function TabletEstimateForm() {
                                     id="attachment-input" 
                                     style={{display: 'none'}}
                                     onChange={handleAttachmentChange}
-                                    accept="image/*,application/pdf,.doc,.docx"
+                                    accept="*/*"
                                 />
                                 <button className="tb-btn-action" onClick={handleAttachmentClick}>첨부하기</button>
                             </div>

@@ -506,53 +506,17 @@ function ViewModal({formData, onClose, onQuote}) {
     )
 }
 function EstimateForm() {
-    const [formData, setFormData] = useState({
+    const initialFormData = {
         date: new Date().toISOString().slice(0,10).replace(/-/g,'.'),
-        manager: '',
-        department: '',
-        companyPhone: '',
-        mobilePhone: '',
-        email: '',
-        companyAddress: '',
-        attachment: '',
-        clientCompany: '',
-        clientDepartment: '',
-        clientManager: '',
-        clientPhone: '',
-        clientMobile: '',
-        clientEmail: '',
-        businessCard: '',
-        installDate: '',
-        installPeriod: '',
-        installLocation: '',
-        installDetailLocation: '',
-        etcContent: '',
-        productName: '',
-        unitPrice: 0,
-        productImage: '',
-        productSize: '',
-        pixel: '',
-        brightness: '',
-        power: '',
-        resolution: '',
-        width: 1,
-        height: 1,
-        totalPanels: 0,
-        ledSizeW: '',
-        ledSizeH: '',
-        ledResW: '',
-        ledResH: '',
-        totalPower: 0,
-        installPersonnel: 1,
-        laborPrice: 300000,
-        processorModel: '',
-        processorQuantity: 1,
-        processorPrice: 0,
-        processorImage: '',
-        installPlace: '',
-        travelCost: 0,
-        materialCost: 0
-    })
+        manager: '', managerName: '', department: '', companyPhone: '', mobilePhone: '', email: '', companyAddress: '', attachment: '',
+        clientCompany: '', clientDepartment: '', clientManager: '', clientPhone: '', clientMobile: '', clientEmail: '', businessCard: '',
+        installDate: '', installPeriod: '', installLocation: '', installDetailLocation: '', etcContent: '',
+        productName: '', unitPrice: 0, productImage: '', productSize: '', pixel: '', brightness: '', power: '', resolution: '',
+        width: 1, height: 1, totalPanels: 0, ledSizeW: '', ledSizeH: '', ledResW: '', ledResH: '', totalPower: 0,
+        installPersonnel: 1, laborPrice: 300000, processorModel: '', processorQuantity: 1, processorPrice: 0, processorImage: '',
+        installPlace: '', travelCost: 0, materialCost: 0
+    }
+    const [formData, setFormData] = useState(initialFormData)
     const [managers, setManagers] = useState([])
     const [products, setProducts] = useState([])
     const [vxProducts, setVxProducts] = useState([])
@@ -710,7 +674,7 @@ function EstimateForm() {
                     <div className="section-card border-cyan">
                         <div className="section-header cyan">
                             <span>담당자 등록</span>
-                            <button className="reset-btn">Reset</button>
+                            <button className="reset-btn" onClick={() => setFormData({...initialFormData, date: new Date().toISOString().slice(0,10).replace(/-/g,'.')})}>Reset</button>
                         </div>
                         <div className="section-body">
                             <div className="form-row">
