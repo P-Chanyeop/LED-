@@ -793,7 +793,7 @@ function TabletEstimateForm() {
                                 const fd = new FormData()
                                 fd.append('to', to)
                                 fd.append('subject', '이지텍인터내셔널 - LED Display 견적 송부의 건')
-                                fd.append('body', '안녕하십니까.\n\nLED 디스플레이 전문업체 이지텍인터내셔널입니다.\n\nLED Display 견적 송부 드리오니 확인 부탁드리겠습니다.\n\n감사합니다.')
+                                fd.append('body', `안녕하십니까.\n\nLED 디스플레이 전문업체 이지텍인터내셔널입니다.\n\nLED Display 견적 송부 드리오니 확인 부탁드리겠습니다.\n\n감사합니다.\n\n${formData.managerName || ''} 드림.`)
                                 const pdfDate = formData.date ? formData.date.slice(2).replace(/-/g, '.') : ''
                                 fd.append('file', pdfBlob, `${formData.clientName || '업체'}_${formData.productName || '제품'} 견적서_${pdfDate}.pdf`)
                                 const res = await fetch('http://localhost:8080/api/email/send', {method: 'POST', body: fd})
