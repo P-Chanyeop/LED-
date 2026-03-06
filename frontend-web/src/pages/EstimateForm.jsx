@@ -7,7 +7,7 @@ import modalLogoImg from '../assets/modal-logo2.png'
 import modalLogoImg1 from '../assets/modal-logo.png'
 import printIconImg from '../assets/print-icon.png'
 import stampImg from '../assets/stamp.png'
-function QuoteModal({formData, products, vxProducts, onClose}) {
+function QuoteModal({formData, products, vxProducts, onClose, readOnly}) {
     const prod = products?.find(p => p.name === formData.productName)
     const vx = vxProducts?.find(v => v.modelName === formData.processorModel)
     const unitPrice = formData.unitPrice || 0
@@ -21,14 +21,19 @@ function QuoteModal({formData, products, vxProducts, onClose}) {
     
     const laborQty = formData.installPersonnel
     const sqmTotal = Math.round(sqmPrice * ledSqm)
-    const sub1 = ledTotal + sqmTotal
-    const sub2 = processorPrice
-    const sub3 = laborPrice * laborQty
+    const sub1 = readOnly ? (formData._ledPrice || ledTotal + sqmTotal) : ledTotal + sqmTotal
+    const sub2 = readOnly ? (formData._processorPrice || processorPrice) : processorPrice
+    const sub3 = readOnly ? (formData._installPrice || laborPrice * laborQty) : laborPrice * laborQty
     const sub4 = formData.materialCost || 0
     const sub5 = formData.travelCost || 0
-    const grandTotal = sub1 + sub2 + sub3 + sub4 + sub5
+    const grandTotal = readOnly ? (formData._totalPrice || sub1 + sub2 + sub3 + sub4 + sub5) : sub1 + sub2 + sub3 + sub4 + sub5
     const addCost = sub3 + sub4 + sub5
     const fmt = (n) => n.toLocaleString()
+    const savedRef = useRef(false)
+    useEffect(() => {
+        if (savedRef.current || readOnly) return; savedRef.current = true
+        fetch(import.meta.env.VITE_API_URL + '/api/estimates', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:formData.date,managerName:formData.managerName,department:formData.department,companyPhone:formData.companyPhone,mobilePhone:formData.mobilePhone,email:formData.email,companyAddress:formData.companyAddress,clientCompanyName:formData.clientCompany,clientDepartment:formData.clientDepartment,clientManager:formData.clientManager,clientPhone:formData.clientPhone,clientMobile:formData.clientMobile,clientEmail:formData.clientEmail,installDate:formData.installDate,installPeriod:formData.installPeriod,installLocation:formData.installPlace,installDetailLocation:formData.installDetailPlace,etcContent:formData.etcContent,productName:formData.productName,width:formData.width,height:formData.height,quantity:ledQty,ledSize:(formData.ledSizeW||0)+'x'+(formData.ledSizeH||0),ledResolution:formData.resolution||'',totalPower:formData.totalPower,installPersonnel:formData.installPersonnel,processorModel:formData.processorModel,processorQuantity:formData.processorQuantity,ledPrice:sub1,processorPrice:sub2,installPrice:sub3,etcPrice:sub4,travelCost:sub5,totalPrice:grandTotal})}).catch(e=>console.error(e))
+    }, [])
     return createPortal(
         <div className="modal-overlay" onClick={onClose}>
             <div className="quote-wrapper" onClick={e => e.stopPropagation()}>
@@ -329,7 +334,7 @@ function ViewModal({formData, onClose, onQuote}) {
                                 <div className="modal-label">첨부파일</div>
                                 <div className="modal-value modal-value-cyan">
                                     <a href="#"
-                                       style={{color: '#25CAD2', textDecoration: 'underline'}}>{formData.attachment}</a>
+                                       style={{color: '#25CAD2', textDecoration: 'underline'}}>{(formData.attachment || '').split('/').pop().replace(/^[^_]*_/, '')}</a>
                                 </div>
                             </div>
                             <div className="modal-divider"></div>
@@ -502,7 +507,7 @@ function ViewModal({formData, onClose, onQuote}) {
 }
 function EstimateForm() {
     const [formData, setFormData] = useState({
-        date: '',
+        date: new Date().toISOString().slice(0,10).replace(/-/g,'.'),
         manager: '',
         department: '',
         companyPhone: '',
@@ -557,8 +562,6 @@ function EstimateForm() {
             .then(data => {
                 if (data.success && data.data.length > 0) {
                     setManagers(data.data)
-                    const m = data.data[0]
-                    setFormData(prev => ({...prev, manager: m.name, department: m.department, companyPhone: m.phone, mobilePhone: m.mobile, email: m.email, companyAddress: m.address}))
                 }
             })
             .catch(e => console.error('Failed to fetch managers:', e))
@@ -591,8 +594,9 @@ function EstimateForm() {
             .catch(e => console.error('Failed to fetch settings:', e))
     }, [])
     const handleManagerSelect = (name) => {
+        if (!name) { setFormData(prev => ({...prev, manager: '', managerName: '', department: '', companyPhone: '', mobilePhone: '', email: '', companyAddress: ''})); return }
         const m = managers.find(mg => mg.name === name)
-        if (m) setFormData(prev => ({...prev, manager: m.name, department: m.department, companyPhone: m.phone, mobilePhone: m.mobile, email: m.email, companyAddress: m.address}))
+        if (m) setFormData(prev => ({...prev, manager: m.name, managerName: m.name, department: m.department, companyPhone: m.phone, mobilePhone: m.mobile, email: m.email, companyAddress: m.address}))
     }
     const handleChange = (field, value) => {
         setFormData(prev => {
@@ -739,6 +743,7 @@ function EstimateForm() {
                                     <div className="form-input">
                                         <select value={formData.manager}
                                                 onChange={(e) => handleManagerSelect(e.target.value)}>
+                                            <option value="">--선택--</option>
                                             {managers.map(m => (
                                                 <option key={m.id} value={m.name}>{m.name}</option>
                                             ))}
@@ -1166,4 +1171,5 @@ function EstimateForm() {
         </div>
     )
 }
+export { QuoteModal }
 export default EstimateForm

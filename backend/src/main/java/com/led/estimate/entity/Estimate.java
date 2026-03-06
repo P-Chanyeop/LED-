@@ -52,5 +52,6 @@ public class Estimate {
     private Long processorPrice;
     private Long installPrice;
     private Long etcPrice;
+    private Long travelCost;
     private Long totalPrice;
 }

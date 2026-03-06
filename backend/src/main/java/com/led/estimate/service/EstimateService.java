@@ -6,6 +6,8 @@ import com.led.estimate.repository.EstimateRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -14,9 +16,16 @@ public class EstimateService {
     
     private final EstimateRepository estimateRepository;
     
+    private LocalDate parseDate(String s) {
+        if (s == null || s.isBlank()) return null;
+        try { return LocalDate.parse(s); } catch (Exception e) {}
+        try { return LocalDate.parse(s, DateTimeFormatter.ofPattern("yyyy.MM.dd")); } catch (Exception e) {}
+        return null;
+    }
+    
     public Estimate createEstimate(EstimateRequestDto request) {
         Estimate estimate = new Estimate();
-        estimate.setDate(request.getDate());
+        estimate.setDate(parseDate(request.getDate()));
         estimate.setManagerName(request.getManagerName());
         estimate.setDepartment(request.getDepartment());
         estimate.setCompanyPhone(request.getCompanyPhone());
@@ -31,7 +40,7 @@ public class EstimateService {
         estimate.setClientMobile(request.getClientMobile());
         estimate.setClientEmail(request.getClientEmail());
         
-        estimate.setInstallDate(request.getInstallDate());
+        estimate.setInstallDate(parseDate(request.getInstallDate()));
         estimate.setInstallPeriod(request.getInstallPeriod());
         estimate.setInstallLocation(request.getInstallLocation());
         estimate.setInstallDetailLocation(request.getInstallDetailLocation());
@@ -43,11 +52,17 @@ public class EstimateService {
         estimate.setInstallPersonnel(request.getInstallPersonnel());
         estimate.setProcessorModel(request.getProcessorModel());
         
-        int totalPanels = request.getWidth() * request.getHeight();
-        estimate.setQuantity(totalPanels);
-        estimate.setLedSize(String.format("%.0f x %.0f", request.getWidth() * 600.0, request.getHeight() * 337.5));
-        estimate.setLedResolution(String.format("%d x %d", request.getWidth() * 480, request.getHeight() * 270));
-        estimate.setTotalPower((totalPanels * 75.0) / 1000.0);
+        estimate.setQuantity(request.getQuantity());
+        estimate.setLedSize(request.getLedSize());
+        estimate.setLedResolution(request.getLedResolution());
+        estimate.setTotalPower(request.getTotalPower());
+        estimate.setProcessorQuantity(request.getProcessorQuantity());
+        estimate.setLedPrice(request.getLedPrice());
+        estimate.setProcessorPrice(request.getProcessorPrice());
+        estimate.setInstallPrice(request.getInstallPrice());
+        estimate.setEtcPrice(request.getEtcPrice());
+        estimate.setTravelCost(request.getTravelCost());
+        estimate.setTotalPrice(request.getTotalPrice());
         
         return estimateRepository.save(estimate);
     }

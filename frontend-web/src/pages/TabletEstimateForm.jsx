@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './TabletEstimateForm.css'
 import modalLogoImg from '../assets/modal-logo2.png'
 import easytechLogo from '../assets/easytech-logo.png'
@@ -25,20 +25,20 @@ function TabletEstimateForm() {
         managerEmail: '', companyAddress: '', attachment: '',
         clientName: '', clientDepartment: '', clientManager: '',
         clientPhone: '', clientMobile: '', clientEmail: '', businessCard: '',
-        installDate: '', installPeriod: '2일', installLocation: '', installDetail: '', installNote: '',
+        installDate: '', installPeriod: '', installLocation: '', installDetail: '', installNote: '',
         productName: '', productSize: '', pixel: '',
         brightness: '', power: '', resolution: '',
-        ledWidth: 7, ledHeight: 7, ledSizeW: 0, ledSizeH: 0,
-        ledResolutionW: 0, ledResolutionH: 0, totalPower: '',
-        processorModel: '', processorQuantity: 1, totalPanels: 49,
-        installWorkers: 3,
-        deliveryLocation: '서울',
+        ledWidth: 1, ledHeight: 1, ledSizeW: 0, ledSizeH: 0,
+        ledResolutionW: 0, ledResolutionH: 0, totalPower: 0,
+        processorModel: '', processorQuantity: 1, totalPanels: 0,
+        installWorkers: 1,
+        deliveryLocation: '',
         regionalTravelCost: 0,
-        materialCost: 100000,
+        materialCost: 0,
     })
 
     useEffect(() => {
-        fetch('/api/managers')
+        fetch(import.meta.env.VITE_API_URL + '/api/managers')
             .then(res => res.json())
             .then(response => {
                 if (response.success && response.data) {
@@ -46,15 +46,15 @@ function TabletEstimateForm() {
                 }
             })
             .catch(err => console.error('담당자 목록 로드 실패:', err))
-        fetch('/api/products/led')
+        fetch(import.meta.env.VITE_API_URL + '/api/products/led')
             .then(r => r.json())
             .then(data => { if (data.success && data.data.length > 0) setProducts(data.data) })
             .catch(e => console.error('Failed to fetch products:', e))
-        fetch('/api/products/vx')
+        fetch(import.meta.env.VITE_API_URL + '/api/products/vx')
             .then(r => r.json())
             .then(data => { if (data.success && data.data.length > 0) setVxProducts(data.data) })
             .catch(e => console.error('Failed to fetch vx products:', e))
-        fetch('/api/settings')
+        fetch(import.meta.env.VITE_API_URL + '/api/settings')
             .then(r => r.json())
             .then(data => {
                 if (data.success && data.data.defaultAttachment) setFormData(prev => prev.attachment ? prev : ({...prev, attachment: data.data.defaultAttachment}))
@@ -122,7 +122,7 @@ function TabletEstimateForm() {
             
             try {
                 console.log('OCR 요청 시작...')
-                const response = await fetch('/api/ocr/business-card', {
+                const response = await fetch(import.meta.env.VITE_API_URL + '/api/ocr/business-card', {
                     method: 'POST',
                     body: formData
                 })
@@ -230,6 +230,11 @@ function TabletEstimateForm() {
     const addTotal = laborTotal + materialTotal + travelTotal
     const grandTotal = salesTotal + addTotal
     const fmt = (n) => n.toLocaleString()
+    const savedRef = useRef(false)
+    useEffect(() => {
+        if (savedRef.current) return; savedRef.current = true
+        fetch(import.meta.env.VITE_API_URL + '/api/estimates', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:formData.date,managerName:formData.managerName,department:formData.department,companyPhone:formData.companyPhone,mobilePhone:formData.mobilePhone,email:formData.email,companyAddress:formData.companyAddress,clientCompanyName:formData.clientCompany,clientDepartment:formData.clientDepartment,clientManager:formData.clientManager,clientPhone:formData.clientPhone,clientMobile:formData.clientMobile,clientEmail:formData.clientEmail,installDate:formData.installDate,installPeriod:formData.installPeriod,installLocation:formData.installPlace,installDetailLocation:formData.installDetailPlace,etcContent:formData.etcContent,productName:formData.productName,width:formData.width,height:formData.height,quantity:formData.totalPanels,ledSize:(formData.ledSizeW||0)+'x'+(formData.ledSizeH||0),ledResolution:formData.resolution||'',totalPower:formData.totalPower,installPersonnel:formData.installWorkers,processorModel:formData.processorModel,processorQuantity:formData.processorQuantity,ledPrice:salesTotal,processorPrice:processorTotal,installPrice:laborTotal,etcPrice:materialTotal,travelCost:travelTotal,totalPrice:grandTotal})}).catch(e=>console.error(e))
+    }, [])
 
     const currentProduct = products.find(p => p.name === formData.productName)
     const currentVx = vxProducts.find(v => v.modelName === formData.processorModel)
@@ -471,6 +476,7 @@ function TabletEstimateForm() {
                                 <div className="tb-lbl">납품 설치 장소</div>
                                 <div className="tb-inp">
                                     <select value={formData.deliveryLocation} onChange={e=>handleRegionChange(e.target.value)}>
+                                        <option value="">--선택--</option>
                                         {REGIONS.map(r=><option key={r}>{r}</option>)}
                                     </select>
                                 </div>
@@ -520,7 +526,7 @@ function TabletEstimateForm() {
                     </div>
 
                     <div className="tb-footer">
-                        <button className="tb-btn-next" onClick={nextStep}>전채 내용 보기</button>
+                        <button className="tb-btn-next" onClick={nextStep}>전체 내용 보기</button>
                     </div>
                 </div>
             )}
@@ -543,7 +549,7 @@ function TabletEstimateForm() {
                             </div>
                             <div className="tb-row"><div className="tb-lbl">E-mail</div><div className="tb-val" style={{flex:3}}>{formData.managerEmail}</div></div>
                             <div className="tb-row"><div className="tb-lbl">회사 주소</div><div className="tb-val" style={{flex:3}}>{formData.companyAddress}</div></div>
-                            <div className="tb-row"><div className="tb-lbl">첨부파일</div><div className="tb-val" style={{flex:3}}>{formData.attachment}</div></div>
+                            <div className="tb-row"><div className="tb-lbl">첨부파일</div><div className="tb-val" style={{flex:3}}>{(formData.attachment || '').split('/').pop().replace(/^[^_]*_/, '')}</div></div>
 
                             <div className="tb-divider"></div>
 
@@ -620,7 +626,7 @@ function TabletEstimateForm() {
 
                     <div className="tb-footer">
                         <button className="tb-btn-next" onClick={prevStep}>수정하기</button>
-                        <button className="tb-btn-next" style={{background:'#8BC53E'}} onClick={() => { setShowQuote(true); window.scrollTo(0, 0); }}>견적서 보기</button>
+                        <button className="tb-btn-next" style={{background:'#8BC53E'}} onClick={() => { if (!formData.productName) return alert('제품명을 선택해주세요'); if (!formData.processorModel) return alert('프로세서 사양을 선택해주세요'); if (!formData.installLocation) return alert('납품 설치 장소를 선택해주세요'); setShowQuote(true); window.scrollTo(0, 0); }}>견적서 보기</button>
                     </div>
                 </div>
             )}

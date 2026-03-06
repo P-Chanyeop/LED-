@@ -44,7 +44,6 @@ function LoginPage() {
           <button type="submit" className="login-btn">로그인</button>
         </form>
         <div className="login-footer">
-          <Link to="/signup">회원가입</Link>
         </div>
       </div>
     </div>

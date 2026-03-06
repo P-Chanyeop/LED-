@@ -5,7 +5,7 @@ import java.time.LocalDate;
 
 @Data
 public class EstimateRequestDto {
-    private LocalDate date;
+    private String date;
     private String managerName;
     private String department;
     private String companyPhone;
@@ -20,15 +20,27 @@ public class EstimateRequestDto {
     private String clientMobile;
     private String clientEmail;
     
-    private LocalDate installDate;
+    private String installDate;
     private String installPeriod;
     private String installLocation;
     private String installDetailLocation;
     private String etcContent;
     
     private String productName;
-    private int width;
-    private int height;
-    private int installPersonnel;
+    private Integer width;
+    private Integer height;
+    private Integer quantity;
+    private String ledSize;
+    private String ledResolution;
+    private Double totalPower;
+    private Integer installPersonnel;
     private String processorModel;
+    private Integer processorQuantity;
+    
+    private Long ledPrice;
+    private Long processorPrice;
+    private Long installPrice;
+    private Long etcPrice;
+    private Long travelCost;
+    private Long totalPrice;
 }

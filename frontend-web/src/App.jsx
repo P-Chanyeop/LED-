@@ -78,7 +78,7 @@ function Layout() {
 
 function App() {
   return (
-    <Router basename="/LED-">
+    <Router >
       <Layout />
     </Router>
   )

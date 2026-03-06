@@ -6,224 +6,9 @@ import modalLogoImg from '../assets/modal-logo2.png'
 import modalLogoImg1 from '../assets/modal-logo.png'
 import printIconImg from '../assets/print-icon.png'
 import stampImg from '../assets/stamp.png'
+import { QuoteModal } from './EstimateForm'
 
 const API_BASE = import.meta.env.VITE_API_URL + '/api'
-
-function QuoteModal({formData, onClose}) {
-    const unitPrice = 950000
-    const sqmPrice = 4691358
-    const ledQty = formData.totalPanels
-    const ledSqm = Math.round((formData.ledSizeW * formData.ledSizeH) / 1000000 * 100) / 100
-    const ledTotal = unitPrice * ledQty
-    const processorPrice = 3000000
-    const laborPrice = 300000
-    const etcPrice = 100000
-    const laborQty = formData.installPersonnel
-    const sub1 = ledTotal
-    const sub2 = processorPrice
-    const sub3 = laborPrice * laborQty
-    const sub4 = etcPrice * 2
-    const grandTotal = sub1 + sub2 + sub3 + sub4
-    const addCost = 2200000
-
-    const fmt = (n) => n.toLocaleString()
-
-    return createPortal(
-        <div className="modal-overlay" onClick={onClose}>
-            <div className="quote-wrapper" onClick={e => e.stopPropagation()}>
-                <div className="quote-outer">
-                    {/* 헤더 */}
-                    <div className="quote-header">
-                        <button className="modal-print-btn" title="인쇄하기" style={{flexShrink: 0}}>
-                            <img src={printIconImg} alt="인쇄하기" style={{height: '80px'}}/>
-                        </button>
-                        <div className="quote-title-text">견 적 서</div>
-                        <div className="quote-header-logo">
-                            <img src={modalLogoImg1} alt="logo"
-                                 style={{height: '75px', verticalAlign: 'bottom', imageRendering: 'crisp-edges'}}/>
-                        </div>
-                    </div>
-
-                    <div className="quote-date">DATE : {formData.date}</div>
-
-                    {/* 판매 견적서 타이틀바 */}
-                    <div className="section">
-                        <div className="quote-section-title">판매 견적서</div>
-
-                        {/* 업체 정보 */}
-                        <table className="quote-client-table">
-                            <tbody>
-                            <tr>
-                                <td className="qct-label">기관/업체명</td>
-                                <td className="qct-value" colSpan={3}>{formData.clientCompany}</td>
-                            </tr>
-                            <tr>
-                                <td className="qct-label">부서명</td>
-                                <td className="qct-value">{formData.clientDepartment}</td>
-                                <td className="qct-label">업체 담당자</td>
-                                <td className="qct-value">{formData.clientManager}</td>
-                            </tr>
-                            <tr>
-                                <td className="qct-label">회사 연락처</td>
-                                <td className="qct-value">{formData.clientPhone}</td>
-                                <td className="qct-label">핸드폰 번호</td>
-                                <td className="qct-value">{formData.clientMobile}</td>
-                            </tr>
-                            </tbody>
-                        </table>
-
-                        <div className="quote-divider"></div>
-                        {/* 상품 테이블 */}
-                        <table className="quote-items-table">
-                            <thead>
-                            <tr>
-                                <th>순번</th>
-                                <th>품명</th>
-                                <th>규격</th>
-                                <th>수량</th>
-                                <th>단가</th>
-                                <th>가격</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {/* 1. LED */}
-                            <tr style={{borderTop: 'none'}}>
-                                <td rowSpan={2} style={{height: '60px'}} className="qi-center">1</td>
-                                <td rowSpan={2} className="qi-product">
-                                </td>
-                                <td className="qi-center">{formData.productSize}</td>
-                                <td className="qi-center">{ledQty}</td>
-                                <td className="qi-right">₩      {fmt(unitPrice)}</td>
-                                <td className="qi-right" rowSpan={2}>₩      {fmt(ledTotal)}</td>
-                            </tr>
-                            <tr>
-                                <td style={{textAlign: "center"}}>sqm</td>
-                                <td className="qi-center">{ledSqm}</td>
-                                <td className="qi-right">₩      {fmt(sqmPrice)}</td>
-                            </tr>
-                            <tr className="qi-subtotal">
-                                <td colSpan={4} className="qi-center">소계</td>
-                                <td colSpan={2} className="qi-right">₩      {fmt(sub1)}</td>
-                            </tr>
-                            {/* 2. 프로세서 */}
-                            <tr className="qi-item-after-subtotal" style={{height: '60px'}}>
-                                <td className="qi-center">2</td>
-                                <td className="qi-product">
-                                </td>
-                                <td className="qi-center">—</td>
-                                <td className="qi-center">{formData.processorQuantity}</td>
-                                <td className="qi-right">₩      {fmt(processorPrice)}</td>
-                                <td className="qi-right">₩      {fmt(sub2)}</td>
-                            </tr>
-                            <tr className="qi-subtotal">
-                                <td colSpan={4} className="qi-center">소계</td>
-                                <td colSpan={2} className="qi-right">₩      {fmt(sub2)}</td>
-                            </tr>
-                            {/* 3. 시공 인건비 */}
-                            <tr className="qi-item-after-subtotal" style={{height: '60px'}}>
-                                <td className="qi-center">3</td>
-                                <td className="qi-product">시공 인건비</td>
-                                <td className="qi-center">인</td>
-                                <td className="qi-center">{laborQty}</td>
-                                <td className="qi-right">₩      {fmt(laborPrice)}</td>
-                                <td className="qi-right">₩      {fmt(sub3)}</td>
-                            </tr>
-                            <tr className="qi-subtotal">
-                                <td colSpan={4} className="qi-center">소계</td>
-                                <td colSpan={2} className="qi-right">₩      {fmt(sub3)}</td>
-                            </tr>
-                            {/* 4. 기타 비용 */}
-                            <tr className="qi-item-after-subtotal" style={{height: '60px'}}>
-                                <td className="qi-center">4</td>
-                                <td className="qi-product">기타 비용</td>
-                                <td className="qi-center">—</td>
-                                <td className="qi-center">2</td>
-                                <td className="qi-right">₩      {fmt(etcPrice)}</td>
-                                <td className="qi-right">₩      {fmt(sub4)}</td>
-                            </tr>
-                            <tr className="qi-subtotal">
-                                <td colSpan={4} className="qi-center">소계</td>
-                                <td colSpan={2} className="qi-right">₩      {fmt(sub4)}</td>
-                            </tr>
-                            {/* 5. 지방 출장비 */}
-                            <tr className="qi-item-after-subtotal" style={{height: '60px'}}>
-                                <td className="qi-center">5</td>
-                                <td className="qi-product">지방 출장비 [{formData.installPlace}]<br/><span style={{fontSize: '10px', color: '#666'}}>(운송비,숙박,기타)</span></td>
-                                <td className="qi-center">지역</td>
-                                <td className="qi-center">1</td>
-                                <td className="qi-right">₩      {fmt(formData.travelCost || 0)}</td>
-                                <td className="qi-right">₩      {fmt(formData.travelCost || 0)}</td>
-                            </tr>
-                            <tr className="qi-subtotal">
-                                <td colSpan={4} className="qi-center">소계</td>
-                                <td colSpan={2} className="qi-right">₩      {fmt(formData.travelCost || 0)}</td>
-                            </tr>
-                            </tbody>
-                        </table>
-
-                        <div className="quote-note">*설치 구조물 / UTP케이블 작업 / 전기 공사 비용은 현장실측 이후 측정 합니다.</div>
-
-                        {/* 합계 */}
-                        <table className="quote-total-table">
-                            <tbody>
-                            <tr className="qt-mint-row">
-                                <td className="qt-label">판매</td>
-                                <td className="qt-desc">LED 디스플레이 판매가 (1+2)</td>
-                                <td className="qt-amount"><span className="qt-won">₩</span><span
-                                    className="qt-num">{fmt(sub1 + sub2)}</span></td>
-                            </tr>
-                            <tr className="qt-green-row">
-                                <td className="qt-label">추가</td>
-                                <td className="qt-desc">시공비 + 기타 비용</td>
-                                <td className="qt-amount"><span className="qt-won">₩</span><span
-                                    className="qt-num">{fmt(addCost)}</span></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <table className="quote-total-table quote-grand-table">
-                            <tbody>
-                            <tr className="qt-grand">
-                                <td colSpan={2} className="qt-grand-label">합 계</td>
-                                <td className="qt-amount"><span className="qt-won">₩</span><span
-                                    className="qt-num">{fmt(sub1 + sub2)}</span></td>
-                            </tr>
-                            </tbody>
-                        </table>
-
-                        {/* 약관 + 도장 */}
-                        <div className="quote-terms-wrapper">
-                        <div className="quote-stamp">
-                            <img src={stampImg} alt="stamp" className="quote-stamp-img" />
-                        </div>
-
-                        <div className="quote-terms">
-                            <div className="quote-terms-text">
-                                <p className="qt-bold qt-icon">견적조건</p>
-                                <p className="qt-bold qt-indent">1. 견적서 항목 외 추가 사항이나, 현장 추가 사항은 별도의 금액이 추가됩니다.</p>
-                                <p className="qt-bold qt-indent">2. 전력 및 통신은 고객사가 기본 제공하며 , 미 제공시 증설 공사 금액이 추가됩니다.</p>
-                                <p className="qt-bold qt-indent">3. 현장 상황에 따라 보강 구조물 필요시 제작 비용이 추가됩니다.</p>
-                                <p className="qt-bold qt-indent">4. 인,허가 사항은 별도 입니다.</p>
-                                <p className="qt-bold qt-icon">결제조건 : 발주시 계약금 60% , 잔금 40%로 진행 됩니다</p>
-                                <p className="qt-bold qt-icon">납  기  일: 발주일로 부터 30일 (모델 및 수량에 따라 변동 될 수 있습니다)</p>
-                                <p className="qt-bold qt-icon">A/S 기간 : 납기일로 부터 2년 무상 (단, 천재지변 및 고객 부주의로 인한 제품 파손 시 비용이 청구 됩니다)</p>
-                                <p className="qt-bold qt-icon">제품의 성능 향상을 위해 제품 스펙은 일부 변경 될 수 있습니다.</p>
-                                <p className="qt-bold qt-icon">입금계좌 : 하나은행 471-910014-06704 예금주 : ㈜이지텍인터내셔널</p>
-                            </div>
-                            </div>
-                        </div>
-                        {/* 하단 버튼 */}
-                        <div className="quote-footer">
-                            <button className="modal-btn-close" onClick={onClose}>닫기</button>
-                            <button className="quote-btn-email">메일 보내기</button>
-                        </div>
-                </div>
-                    </div>
-            </div>
-        </div>,
-
-        document.body
-    )
-}
 
 
 function ViewModal({formData, onClose, onQuote}) {
@@ -549,11 +334,11 @@ function AdminPage() {
     if (!est?.raw) return defaultFormData
     const e = est.raw
     const p = products.find(pr => pr.name === e.productName)
+    const vx = vxProducts.find(v => v.modelName === e.processorModel)
     const [sW, sH] = (e.ledSize || '0x0').split('x').map(Number)
-    const [rW, rH] = (e.ledResolution || '0x0').split('x').map(Number)
     return {
       date: e.date?.replace(/-/g, '.') || '',
-      manager: e.managerName || '', department: e.department || '',
+      managerName: e.managerName || '', manager: e.managerName || '', department: e.department || '',
       companyPhone: e.companyPhone || '', mobilePhone: e.mobilePhone || '',
       email: e.email || '', companyAddress: e.companyAddress || '',
       attachment: e.attachmentFile || '',
@@ -568,12 +353,17 @@ function AdminPage() {
       productSize: p?.size || '', pixel: (p?.pixel || '') + ' Pixel',
       brightness: (p?.brightness || '') + ' Nit', power: (p?.power || '') + ' W',
       resolution: (p?.resolution || '') + ' Dpi',
+      unitPrice: p?.unitPrice || 0,
       width: e.width || 0, height: e.height || 0, totalPanels: e.quantity || 0,
-      ledSizeW: sW, ledSizeH: sH, ledResW: rW, ledResH: rH,
+      ledSizeW: sW, ledSizeH: sH,
       totalPower: e.totalPower || 0, installPersonnel: e.installPersonnel || 0,
-      processorModel: e.processorModel || '', processorQuantity: e.processorQuantity || 0,
-      processorPrice: e.processorPrice || 0,
-      installPlace: e.installLocation || '', travelCost: 0, materialCost: 0
+      processorModel: e.processorModel || '', processorQuantity: e.processorQuantity || 1,
+      processorPrice: vx?.unitPrice || e.processorPrice || 0,
+      laborPrice: laborCost || 300000,
+      installPlace: e.installLocation || '',
+      materialCost: e.etcPrice || 0, travelCost: e.travelCost || 0,
+      _ledPrice: e.ledPrice || 0, _processorPrice: e.processorPrice || 0,
+      _installPrice: e.installPrice || 0, _totalPrice: e.totalPrice || 0
     }
   }
   const [productTotal, setProductTotal] = useState(0)
@@ -1845,6 +1635,9 @@ function AdminPage() {
       {showQuoteModal && selectedEstimate && (
         <QuoteModal 
           formData={toFormData(selectedEstimate)}
+          products={products}
+          vxProducts={vxProducts}
+          readOnly
           onClose={() => setShowQuoteModal(false)}
         />
       )}
@@ -1895,12 +1688,6 @@ function AdminPage() {
             onClick={() => setActiveTab('settings')}
           >
             설정
-          </button>
-          <button 
-            className={activeTab === 'accounts' ? 'active' : ''}
-            onClick={() => setActiveTab('accounts')}
-          >
-            계정 관리
           </button>
         </nav>
       </aside>
