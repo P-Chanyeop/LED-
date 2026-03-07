@@ -18,6 +18,7 @@ function TabletEstimateForm() {
     const [attachmentFile, setAttachmentFile] = useState(null)
     const [showPhotoOptions, setShowPhotoOptions] = useState(false)
     const [isSendingEmail, setIsSendingEmail] = useState(false)
+    const viewContentRef = useRef(null)
     const [products, setProducts] = useState([])
     const [vxProducts, setVxProducts] = useState([])
     const initialFormData = {
@@ -240,8 +241,8 @@ function TabletEstimateForm() {
 
     const currentProduct = products.find(p => p.name === formData.productName)
     const currentVx = vxProducts.find(v => v.modelName === formData.processorModel)
-    const productImageUrl = currentProduct?.imageUrl && currentProduct.imageUrl.trim() ? `http://localhost:8080${currentProduct.imageUrl}` : null
-    const processorImageUrl = currentVx?.imageUrl && currentVx.imageUrl.trim() ? `http://localhost:8080${currentVx.imageUrl}` : null
+    const productImageUrl = currentProduct?.imageUrl && currentProduct.imageUrl.trim() ? `${import.meta.env.VITE_API_URL}${currentProduct.imageUrl}` : null
+    const processorImageUrl = currentVx?.imageUrl && currentVx.imageUrl.trim() ? `${import.meta.env.VITE_API_URL}${currentVx.imageUrl}` : null
 
     return (
         <div className="tb-container">
@@ -638,7 +639,41 @@ function TabletEstimateForm() {
             )}
 
             {step === 3 && showQuote && (
-                <div className="tb-step">
+                <>
+                <div ref={viewContentRef} style={{position:'absolute',left:'-9999px',top:0,width:'1000px',fontSize:'2.2vw'}}>
+                    <div className="tb-step" style={{padding:'3vw'}}>
+                        <div className="tb-header"><img src={modalLogoImg} alt="logo" /></div>
+                        <div className="tb-section">
+                            <div className="tb-sh" style={{justifyContent:'center'}}><span>LED Display 전체 내용 보기</span></div>
+                            <div className="tb-sb">
+                                <div className="tb-row"><div className="tb-lbl">날짜</div><div className="tb-val">{formData.date.replace(/^(\d{4})-(\d{2})-(\d{2})$/,(m,y,mo,d)=>`${y.slice(2)}.${mo}.${d}`)}</div></div>
+                                <div className="tb-row"><div className="tb-lbl">담당자</div><div className="tb-val">{formData.managerName}</div><div className="tb-lbl">부서</div><div className="tb-val">{formData.department}</div></div>
+                                <div className="tb-row"><div className="tb-lbl">회사 연락처</div><div className="tb-val"><span style={{fontSize:'1.5vw'}}>{formData.managerPhone}</span></div><div className="tb-lbl">핸드폰 번호</div><div className="tb-val"><span style={{fontSize:'1.5vw'}}>{formData.managerMobile}</span></div></div>
+                                <div className="tb-row"><div className="tb-lbl">E-mail</div><div className="tb-val" style={{flex:3}}>{formData.managerEmail}</div></div>
+                                <div className="tb-row"><div className="tb-lbl">회사 주소</div><div className="tb-val" style={{flex:3}}>{formData.companyAddress}</div></div>
+                                <div className="tb-row"><div className="tb-lbl">첨부파일</div><div className="tb-val" style={{flex:3}}>{(formData.attachment||'').split('/').pop().replace(/^[^_]*_/,'')}</div></div>
+                                <div className="tb-divider"></div>
+                                <div className="tb-row"><div className="tb-lbl tb-lbl--blue">예상 설치날짜</div><div className="tb-val">{formData.installDate.replace(/^(\d{4})-(\d{2})-(\d{2})$/,(m,y,mo,d)=>`${y.slice(2)}.${mo}.${d}`)}</div><div className="tb-lbl tb-lbl--blue">예상 설치기간</div><div className="tb-val">{formData.installPeriod}</div></div>
+                                <div className="tb-row"><div className="tb-lbl tb-lbl--blue">설치 장소</div><div className="tb-val">{formData.installLocation}</div><div className="tb-lbl tb-lbl--blue">세부 장소</div><div className="tb-val">{formData.installDetail}</div></div>
+                                <div className="tb-row"><div className="tb-lbl tb-lbl--blue">기타 내용</div><div className="tb-val" style={{flex:3}}>{formData.installNote}</div></div>
+                                <div className="tb-divider"></div>
+                                <div className="tb-row"><div className="tb-lbl">제품명</div><div className="tb-val" style={{flex:3}}>{formData.productName}</div></div>
+                                <div className="tb-row"><div className="tb-lbl">제품 사이즈</div><div className="tb-val">{formData.productSize}</div><div className="tb-lbl">픽셀</div><div className="tb-val">{formData.pixel}</div></div>
+                                <div className="tb-row"><div className="tb-lbl">밝기</div><div className="tb-val">{formData.brightness}</div><div className="tb-lbl">전력</div><div className="tb-val">{formData.power}</div></div>
+                                <div className="tb-row"><div className="tb-lbl">해상도</div><div className="tb-val" style={{flex:3}}>{formData.resolution}</div></div>
+                                <div className="tb-divider"></div>
+                                <div className="tb-row"><div className="tb-lbl">수량</div><div className="tb-val" style={{flex:3}}>W : {formData.ledWidth} X H : {formData.ledHeight} = {formData.totalPanels}EA</div></div>
+                                <div className="tb-row"><div className="tb-lbl">LED 사이즈</div><div className="tb-val" style={{flex:3}}>{formData.ledSizeW} x {formData.ledSizeH}</div></div>
+                                <div className="tb-row"><div className="tb-lbl">LED 해상도</div><div className="tb-val" style={{flex:3}}>{formData.ledResolutionW} x {formData.ledResolutionH}</div></div>
+                                <div className="tb-row"><div className="tb-lbl">전체 전력</div><div className="tb-val">{formData.totalPower}</div><div style={{flex:1}}></div></div>
+                                <div className="tb-row"><div className="tb-lbl">프로세스 사양</div><div className="tb-val">{formData.processorModel}</div><div className="tb-lbl">프로세스 수량</div><div className="tb-val">{formData.processorQuantity}EA</div></div>
+                                <div className="tb-row"><div className="tb-lbl">납품 설치 장소</div><div className="tb-val">{formData.deliveryLocation}</div><div className="tb-lbl">지방 출장비 외</div><div className="tb-val">₩ {fmt(formData.regionalTravelCost)}</div></div>
+                                <div className="tb-row"><div className="tb-lbl">설치인원</div><div className="tb-val">{formData.installWorkers}명</div><div className="tb-lbl">기타 재료비 외</div><div className="tb-val">₩ {fmt(formData.materialCost)}</div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="tb-step" id="tb-quote-step">
                     <div className="tb-quote">
                         <div className="tb-quote-header">
                             <div></div>
@@ -776,7 +811,7 @@ function TabletEstimateForm() {
                                 <p className="tb-terms-indent">4. 인,허가 사항은 별도 입니다.</p>
                                 <p className="tb-terms-icon">결제조건 : 발주시 계약금 60% , 잔금 40%로 진행 됩니다</p>
                                 <p className="tb-terms-icon">납  기  일: 발주일로 부터 30일 (모델 및 수량에 따라 변동 될 수 있습니다)</p>
-                                <p className="tb-terms-icon">A/S 기간 : 납기일로 부터 2년 무상 (단, 천재지변 및 고객 부주의로 인한 제품 파손 시 비용이 청구 됩니다)</p>
+                                <p className="tb-terms-icon">A/S 기간 : 납기일로 부터 5년 무상 (단, 천재지변 및 고객 부주의로 인한 제품 파손 시 비용이 청구 됩니다)</p>
                                 <p className="tb-terms-icon">제품의 성능 향상을 위해 제품 스펙은 일부 변경 될 수 있습니다.</p>
                                 <p className="tb-terms-icon">입금계좌 : 하나은행 471-910014-06704 예금주 : ㈜이지텍인터내셔널</p>
                             </div>
@@ -793,7 +828,12 @@ function TabletEstimateForm() {
                             if (!to) return
                             setIsSendingEmail(true)
                             try {
-                                const el = document.querySelector('.tb-step')
+                                // 1) 전체내용보기 캡처
+                                const viewEl = viewContentRef.current
+                                await new Promise(r => setTimeout(r, 200))
+                                const viewCanvas = await html2canvas(viewEl, {scale: 2, useCORS: true, allowTaint: true, width: viewEl.scrollWidth, height: viewEl.scrollHeight, windowWidth: viewEl.scrollWidth + 50, windowHeight: viewEl.scrollHeight + 50})
+                                // 2) 견적서 캡처
+                                const el = document.getElementById('tb-quote-step')
                                 const footer = el.querySelector('.tb-footer')
                                 if (footer) footer.style.display = 'none'
                                 const saved = { overflow: el.style.overflow, width: el.style.width, boxSizing: el.style.boxSizing }
@@ -802,13 +842,17 @@ function TabletEstimateForm() {
                                 el.style.boxSizing = 'border-box'
                                 await new Promise(r => setTimeout(r, 200))
                                 const rect = el.getBoundingClientRect()
-                                const canvas = await html2canvas(el, {scale: 2, useCORS: true, allowTaint: true, scrollX: 0, scrollY: 0, width: rect.width, height: rect.height - 14, windowWidth: rect.width + 50, windowHeight: rect.height + 50})
+                                const quoteCanvas = await html2canvas(el, {scale: 2, useCORS: true, allowTaint: true, scrollX: 0, scrollY: 0, width: rect.width, height: rect.height - 14, windowWidth: rect.width + 50, windowHeight: rect.height + 50})
                                 Object.assign(el.style, saved)
                                 if (footer) footer.style.display = ''
+                                // 3) 2페이지 PDF
                                 const imgW = 210
-                                const imgH = canvas.height * imgW / canvas.width
-                                const pdf = new jsPDF('p', 'mm', [imgW, imgH])
-                                pdf.addImage(canvas.toDataURL('image/jpeg', 0.85), 'JPEG', 0, 0, imgW, imgH)
+                                const vH = viewCanvas.height * imgW / viewCanvas.width
+                                const qH = quoteCanvas.height * imgW / quoteCanvas.width
+                                const pdf = new jsPDF('p', 'mm', [imgW, vH])
+                                pdf.addImage(viewCanvas.toDataURL('image/jpeg', 0.85), 'JPEG', 0, 0, imgW, vH)
+                                pdf.addPage([imgW, qH])
+                                pdf.addImage(quoteCanvas.toDataURL('image/jpeg', 0.85), 'JPEG', 0, 0, imgW, qH)
                                 const pdfBlob = pdf.output('blob')
                                 const fd = new FormData()
                                 fd.append('to', to)
@@ -816,7 +860,7 @@ function TabletEstimateForm() {
                                 fd.append('body', `안녕하십니까.\n\nLED 디스플레이 전문업체 이지텍인터내셔널입니다.\n\nLED Display 견적 송부 드리오니 확인 부탁드리겠습니다.\n\n감사합니다.\n\n${formData.managerName || ''} 드림.`)
                                 const pdfDate = formData.date ? formData.date.slice(2).replace(/-/g, '.') : ''
                                 fd.append('file', pdfBlob, `${formData.clientName || '업체'}_${formData.productName || '제품'} 견적서_${pdfDate}.pdf`)
-                                const res = await fetch('http://localhost:8080/api/email/send', {method: 'POST', body: fd})
+                                const res = await fetch(import.meta.env.VITE_API_URL + '/api/email/send', {method: 'POST', body: fd})
                                 const data = await res.json()
                                 alert(data.success ? '메일이 발송되었습니다.' : data.message)
                             } catch (e) { alert('메일 발송 실패: ' + e.message) }
@@ -824,6 +868,7 @@ function TabletEstimateForm() {
                         }}>메일 보내기</button>
                     </div>
                 </div>
+                </>
             )}
 
             {isSendingEmail && (

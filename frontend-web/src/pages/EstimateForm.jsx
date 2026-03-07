@@ -34,8 +34,50 @@ function QuoteModal({formData, products, vxProducts, onClose, readOnly}) {
         if (savedRef.current || readOnly) return; savedRef.current = true
         fetch(import.meta.env.VITE_API_URL + '/api/estimates', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:formData.date,managerName:formData.managerName,department:formData.department,companyPhone:formData.companyPhone,mobilePhone:formData.mobilePhone,email:formData.email,companyAddress:formData.companyAddress,clientCompanyName:formData.clientCompany,clientDepartment:formData.clientDepartment,clientManager:formData.clientManager,clientPhone:formData.clientPhone,clientMobile:formData.clientMobile,clientEmail:formData.clientEmail,installDate:formData.installDate,installPeriod:formData.installPeriod,installLocation:formData.installPlace,installDetailLocation:formData.installDetailPlace,etcContent:formData.etcContent,productName:formData.productName,width:formData.width,height:formData.height,quantity:ledQty,ledSize:(formData.ledSizeW||0)+'x'+(formData.ledSizeH||0),ledResolution:formData.resolution||'',totalPower:formData.totalPower,installPersonnel:formData.installPersonnel,processorModel:formData.processorModel,processorQuantity:formData.processorQuantity,ledPrice:sub1,processorPrice:sub2,installPrice:sub3,etcPrice:sub4,travelCost:sub5,totalPrice:grandTotal})}).catch(e=>console.error(e))
     }, [])
+    const viewRef = useRef(null)
+    const [isSendingEmail, setIsSendingEmail] = useState(false)
+    const maxGridW = 450, maxGridH = 250, gap = 2, padding = 2
+    const panelW = (maxGridW - (formData.width - 1) * gap - padding * 2) / formData.width
+    const panelH = (maxGridH - (formData.height - 1) * gap - padding * 2) / formData.height
     return createPortal(
         <div className="modal-overlay" onClick={onClose}>
+            {/* 숨겨진 전체내용보기 (메일 캡처용) */}
+            <div ref={viewRef} style={{position:'absolute',left:'-9999px',top:0,width:'570px',background:'white',padding:'16px'}}>
+                <div className="modal-border-outer" style={{border:'1px solid #3BC1CC',borderRadius:'8px',padding:'10px'}}>
+                    <div className="modal-logo" style={{display:'flex',justifyContent:'flex-start',paddingLeft:'20px',marginBottom:'8px'}}>
+                        <img src={modalLogoImg} alt="logo" style={{height:'75px',imageRendering:'crisp-edges'}}/>
+                    </div>
+                    <div className="modal-inner" style={{border:'1px solid #3BC1CC',borderRadius:'4px'}}>
+                        <div className="modal-title">LED Display 전체 내용 보기</div>
+                        <div className="modal-content" style={{overflow:'visible'}}>
+                            <div className="modal-row full"><div className="modal-label">날짜</div><div className="modal-value modal-value-cyan">{formData.date}</div></div>
+                            <div className="modal-row-group"><div className="modal-row"><div className="modal-label">담당자</div><div className="modal-value modal-value-cyan">{formData.manager}</div></div><div className="modal-row"><div className="modal-label">부서</div><div className="modal-value modal-value-cyan">{formData.department}</div></div></div>
+                            <div className="modal-row-group"><div className="modal-row"><div className="modal-label">회사 연락처</div><div className="modal-value modal-value-cyan">{formData.companyPhone}</div></div><div className="modal-row"><div className="modal-label">핸드폰 번호</div><div className="modal-value modal-value-cyan">{formData.mobilePhone}</div></div></div>
+                            <div className="modal-row full"><div className="modal-label">E-mail</div><div className="modal-value modal-value-cyan">{formData.email}</div></div>
+                            <div className="modal-row full"><div className="modal-label">회사 주소</div><div className="modal-value modal-value-cyan">{formData.companyAddress}</div></div>
+                            <div className="modal-row full"><div className="modal-label">첨부파일</div><div className="modal-value modal-value-cyan">{(formData.attachment||'').split('/').pop().replace(/^[^_]*_/,'')}</div></div>
+                            <div className="modal-divider"></div>
+                            <div className="modal-row-group"><div className="modal-row"><div className="modal-label modal-label-blue">예상 설치날짜</div><div className="modal-value modal-value-blue">{formData.installDate}</div></div><div className="modal-row"><div className="modal-label modal-label-blue">예상 설치기간</div><div className="modal-value modal-value-blue">{formData.installPeriod}</div></div></div>
+                            <div className="modal-row-group"><div className="modal-row"><div className="modal-label modal-label-blue">설치 장소</div><div className="modal-value modal-value-blue">{formData.installLocation}</div></div><div className="modal-row"><div className="modal-label modal-label-blue">세부 장소</div><div className="modal-value modal-value-blue">{formData.installDetailLocation}</div></div></div>
+                            <div className="modal-row full"><div className="modal-label modal-label-blue">기타 내용</div><div className="modal-value modal-value-blue">{formData.etcContent}</div></div>
+                            <div className="modal-divider"></div>
+                            <div className="modal-row full"><div className="modal-label">제품명</div><div className="modal-value modal-value-cyan">{formData.productName}</div></div>
+                            <div className="modal-row-group"><div className="modal-row"><div className="modal-label">제품 사이즈</div><div className="modal-value modal-value-cyan">{formData.productSize}</div></div><div className="modal-row"><div className="modal-label">픽셀</div><div className="modal-value modal-value-cyan">{formData.pixel}</div></div></div>
+                            <div className="modal-row-group"><div className="modal-row"><div className="modal-label">밝기</div><div className="modal-value modal-value-cyan">{formData.brightness}</div></div><div className="modal-row"><div className="modal-label">전력</div><div className="modal-value modal-value-cyan">{formData.power}</div></div></div>
+                            <div className="modal-row full"><div className="modal-label">해상도</div><div className="modal-value modal-value-cyan">{formData.resolution}</div></div>
+                            <div className="modal-divider"></div>
+                            <div className="modal-row full"><div className="modal-label">수량</div><div className="modal-value modal-value-cyan">W : {formData.width} X H : {formData.height} = {formData.totalPanels}EA</div></div>
+                            <div className="modal-row full"><div className="modal-label">LED 사이즈</div><div className="modal-value modal-value-cyan">{formData.ledSizeW} × {formData.ledSizeH}</div></div>
+                            <div className="modal-row full"><div className="modal-label">LED 해상도</div><div className="modal-value modal-value-cyan">{formData.ledResW} × {formData.ledResH}</div></div>
+                            <div className="modal-row full"><div className="modal-label">전체 전력</div><div className="modal-value modal-value-cyan">{formData.totalPower * 1000} W</div></div>
+                            <div className="modal-row-group"><div className="modal-row"><div className="modal-label">프로세스 사양</div><div className="modal-value modal-value-cyan">{formData.processorModel}</div></div><div className="modal-row"><div className="modal-label">프로세스 수량</div><div className="modal-value modal-value-cyan">{formData.processorQuantity}</div></div></div>
+                            <div className="modal-row-group"><div className="modal-row"><div className="modal-label">납품 설치 장소</div><div className="modal-value modal-value-cyan">{formData.installPlace}</div></div><div className="modal-row"><div className="modal-label">지방 출장비 외</div><div className="modal-value modal-value-cyan">₩ {formData.travelCost?.toLocaleString()}</div></div></div>
+                            <div className="modal-row-group"><div className="modal-row"><div className="modal-label">설치인원</div><div className="modal-value modal-value-cyan">{formData.installPersonnel}명</div></div><div className="modal-row"><div className="modal-label">기타 재료비 외</div><div className="modal-value modal-value-cyan">₩ {formData.materialCost?.toLocaleString()}</div></div></div>
+                            <div className="modal-preview-wrap"><div className="modal-preview-inner"><div className="modal-preview-grid-wrap"><div className="modal-preview-v-dim"><div className="modal-preview-v-line"><span className="modal-preview-v-text">{formData.ledSizeH}mm</span></div></div><div><div className="modal-led-grid" style={{gridTemplateColumns:`repeat(${formData.width},${panelW}px)`,gridTemplateRows:`repeat(${formData.height},${panelH}px)`,width:maxGridW,height:maxGridH}}>{Array.from({length:formData.totalPanels}).map((_,i)=>(<div key={i} className="modal-led-panel"></div>))}</div><div className="modal-preview-h-dim" style={{width:maxGridW}}><div className="modal-preview-h-line"><span className="modal-preview-h-text">{formData.ledSizeW}mm</span></div></div></div></div></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div className="quote-wrapper" onClick={e => e.stopPropagation()}>
                 <div className="quote-outer">
                     {/* 헤더 */}
@@ -201,7 +243,7 @@ function QuoteModal({formData, products, vxProducts, onClose, readOnly}) {
                                 <p className="qt-bold qt-indent">4. 인,허가 사항은 별도 입니다.</p>
                                 <p className="qt-bold qt-icon">결제조건 : 발주시 계약금 60% , 잔금 40%로 진행 됩니다</p>
                                 <p className="qt-bold qt-icon">납  기  일: 발주일로 부터 30일 (모델 및 수량에 따라 변동 될 수 있습니다)</p>
-                                <p className="qt-bold qt-icon">A/S 기간 : 납기일로 부터 2년 무상 (단, 천재지변 및 고객 부주의로 인한 제품 파손 시 비용이 청구 됩니다)</p>
+                                <p className="qt-bold qt-icon">A/S 기간 : 납기일로 부터 5년 무상 (단, 천재지변 및 고객 부주의로 인한 제품 파손 시 비용이 청구 됩니다)</p>
                                 <p className="qt-bold qt-icon">제품의 성능 향상을 위해 제품 스펙은 일부 변경 될 수 있습니다.</p>
                                 <p className="qt-bold qt-icon">입금계좌 : 하나은행 471-910014-06704 예금주 : ㈜이지텍인터내셔널</p>
                             </div>
@@ -210,10 +252,16 @@ function QuoteModal({formData, products, vxProducts, onClose, readOnly}) {
                         {/* 하단 버튼 */}
                         <div className="quote-footer">
                             <button className="modal-btn-close" onClick={onClose}>닫기</button>
-                            <button className="quote-btn-email" onClick={async () => {
+                            <button className="quote-btn-email" disabled={isSendingEmail} onClick={async () => {
                                 const to = prompt('받는 사람 이메일 주소를 입력하세요:', formData.clientEmail || '')
                                 if (!to) return
+                                setIsSendingEmail(true)
                                 try {
+                                    // 1) 전체내용보기 캡처
+                                    const viewEl = viewRef.current
+                                    await new Promise(r => setTimeout(r, 200))
+                                    const viewCanvas = await html2canvas(viewEl, {scale: 2, useCORS: true, allowTaint: true, width: viewEl.scrollWidth, height: viewEl.scrollHeight, windowWidth: viewEl.scrollWidth + 50, windowHeight: viewEl.scrollHeight + 50})
+                                    // 2) 견적서 캡처
                                     const el = document.querySelector('.quote-outer')
                                     const overlay = el.closest('.modal-overlay')
                                     const wrapper = el.closest('.quote-wrapper')
@@ -221,49 +269,60 @@ function QuoteModal({formData, products, vxProducts, onClose, readOnly}) {
                                     const pb = el.querySelector('.modal-print-btn')
                                     if (footer) footer.style.display = 'none'
                                     if (pb) pb.style.visibility = 'hidden'
-                                    // 원본 스타일 저장
                                     const saved = {oOverflow: overlay.style.overflow, oHeight: overlay.style.height, wOverflow: wrapper.style.overflow, wHeight: wrapper.style.height, eOverflow: el.style.overflow, eHeight: el.style.height, scrollTop: overlay.scrollTop}
-                                    // 스크롤 제거, 전체 펼치기
                                     overlay.scrollTop = 0
                                     Object.assign(overlay.style, {overflow:'visible', height:'auto'})
                                     Object.assign(wrapper.style, {overflow:'visible', height:'auto'})
                                     Object.assign(el.style, {overflow:'visible', height:'auto'})
-                                    // 약간 대기 후 캡처
                                     await new Promise(r => setTimeout(r, 100))
-                                    const canvas = await html2canvas(el, {scale: 2, useCORS: true, allowTaint: true, scrollX: 0, scrollY: 0, width: el.scrollWidth, height: el.scrollHeight, windowWidth: el.scrollWidth + 100, windowHeight: el.scrollHeight + 100})
-                                    // 복원
+                                    const quoteCanvas = await html2canvas(el, {scale: 2, useCORS: true, allowTaint: true, scrollX: 0, scrollY: 0, width: el.scrollWidth, height: el.scrollHeight, windowWidth: el.scrollWidth + 100, windowHeight: el.scrollHeight + 100})
                                     Object.assign(overlay.style, {overflow: saved.oOverflow, height: saved.oHeight})
                                     Object.assign(wrapper.style, {overflow: saved.wOverflow, height: saved.wHeight})
                                     Object.assign(el.style, {overflow: saved.eOverflow, height: saved.eHeight})
                                     overlay.scrollTop = saved.scrollTop
                                     if (footer) footer.style.display = ''
                                     if (pb) pb.style.visibility = ''
+                                    // 3) 2페이지 PDF 생성
                                     const imgW = 210
-                                    const imgH = canvas.height * imgW / canvas.width
-                                    const pdf = new jsPDF('p', 'mm', [imgW, imgH])
-                                    pdf.addImage(canvas.toDataURL('image/jpeg', 0.85), 'JPEG', 0, 0, imgW, imgH)
+                                    const vH = viewCanvas.height * imgW / viewCanvas.width
+                                    const qH = quoteCanvas.height * imgW / quoteCanvas.width
+                                    const pdf = new jsPDF('p', 'mm', [imgW, vH])
+                                    pdf.addImage(viewCanvas.toDataURL('image/jpeg', 0.85), 'JPEG', 0, 0, imgW, vH)
+                                    pdf.addPage([imgW, qH])
+                                    pdf.addImage(quoteCanvas.toDataURL('image/jpeg', 0.85), 'JPEG', 0, 0, imgW, qH)
                                     const pdfBlob = pdf.output('blob')
                                     const fd = new FormData()
                                     fd.append('to', to)
-                                    fd.append('subject', `[LED 견적서] ${formData.clientCompany || ''}`)
-                                    fd.append('body', `${formData.clientCompany || ''} ${formData.clientManager || ''}님께 보내는 LED 견적서입니다.`)
-                                    fd.append('file', pdfBlob, '견적서.pdf')
+                                    fd.append('subject', '이지텍인터내셔널 - LED Display 견적 송부의 건')
+                                    fd.append('body', `안녕하십니까.\n\nLED 디스플레이 전문업체 이지텍인터내셔널입니다.\n\nLED Display 견적 송부 드리오니 확인 부탁드리겠습니다.\n\n감사합니다.\n\n${formData.managerName || ''} 드림.`)
+                                    const pdfDate = formData.date ? formData.date.slice(2).replace(/-/g, '.') : ''
+                                    fd.append('file', pdfBlob, `${formData.clientCompany || '업체'}_${formData.productName || '제품'} 견적서_${pdfDate}.pdf`)
                                     const res = await fetch(import.meta.env.VITE_API_URL + '/api/email/send', {method: 'POST', body: fd})
                                     const data = await res.json()
                                     alert(data.success ? '메일이 발송되었습니다.' : data.message)
                                 } catch (e) { alert('메일 발송 실패: ' + e.message) }
+                                finally { setIsSendingEmail(false) }
                             }}>메일 보내기</button>
                         </div>
                 </div>
                     </div>
             </div>
+            {isSendingEmail && (
+                <div style={{position:'fixed',top:0,left:0,right:0,bottom:0,background:'rgba(0,0,0,0.5)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:100000}}>
+                    <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'16px'}}>
+                        <div style={{width:'50px',height:'50px',border:'4px solid rgba(255,255,255,0.3)',borderTopColor:'#fff',borderRadius:'50%',animation:'pc-spin 0.8s linear infinite'}}></div>
+                        <p style={{color:'#fff',fontSize:'16px',fontWeight:500,margin:0}}>메일 발송 중...</p>
+                    </div>
+                    <style>{`@keyframes pc-spin { to { transform: rotate(360deg); } }`}</style>
+                </div>
+            )}
         </div>,
         document.body
     )
 }
 function ViewModal({formData, onClose, onQuote}) {
-    const maxGridW = 600
-    const maxGridH = 360
+    const maxGridW = 450
+    const maxGridH = 250
     const gap = 2
     const padding = 2
     const panelW = (maxGridW - (formData.width - 1) * gap - padding * 2) / formData.width

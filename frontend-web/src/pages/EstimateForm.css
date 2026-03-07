@@ -679,8 +679,8 @@
 }
 /* LED 패널 크기 - 가로로 길게 (v2026-02-26-15:27) */
 .modal-led-panel {
-  width: 40px !important;
-  height: 24px !important;
+  width: 100%;
+  height: 100%;
   background: #1a1a2e;
 }
 
@@ -759,7 +759,7 @@
    ============================================ */
 .quote-wrapper {
   background: white;
-  padding: 25px;
+  padding: 20px;
   border-radius: 0;
   border: none;
   box-shadow: 0 8px 40px rgba(0,0,0,0.3);
@@ -779,23 +779,23 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  padding: 6px;
+  padding: 16px;
 }
 
 .quote-header {
   display: grid;
-  grid-template-columns: 60px 1fr 60px;
-  margin-bottom: 0;
+  grid-template-columns: 60px 1fr 100px;
+  margin-bottom: 10px;
   align-items: flex-end;
 }
 
 .quote-title-text {
   flex: 1;
   text-align: center;
-  font-size: 28px;
+  font-size: 36px;
   font-weight: 900;
   color: #3BC1CC;
-  letter-spacing: 5px;
+  letter-spacing: 8px;
 }
 
 .quote-header-logo {
@@ -810,53 +810,53 @@
 }
 
 .quote-date {
-  font-size: 10px;
+  font-size: 13px;
   color: #555;
-  margin-bottom: 0;
-  padding-left: 2px;
+  margin-bottom: 8px;
+  padding-left: 4px;
 }
 
 div.section {
-  border-radius: 6px;
-  border: 1px solid #3BC1CC;
-  margin-bottom: 2px;
+  border-radius: 8px;
+  border: 1px solid #41C1CC;
+  margin-bottom: 4px;
 }
 
 .quote-section-title {
-  background: #3BC1CC;
+  background: #41C1CC;
   color: white;
   text-align: center;
-  font-size: 9px;
+  font-size: 14px;
   font-weight: 700;
-  border-spacing : 1px;
-  padding: 1px;
+  padding: 6px 0;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
-  margin-bottom: 1px;
+  margin-bottom: 2px;
 }
 
 /* 업체 정보 테이블 */
 .quote-client-table {
   width: 100%;
   border-collapse: separate;
-  border-spacing: 1px;
-  margin-bottom: 1px;
-  font-size: 8px;
+  border-spacing: 4px;
+  font-size: 13px;
 }
 
 .quote-client-table td {
   border: 1px solid #8cc63f;
-  padding: 1px 3px;
-  height: 14px;
+  padding: 6px 8px;
+  height: 28px;
+  border-radius: 3px;
 }
 
 .qct-label {
   background: #8cc63f;
   color: white;
   font-weight: 600;
-  width: 80px;
+  width: 90px;
   text-align: center;
   white-space: nowrap;
+  font-size: 12px;
 }
 
 .qct-value {
@@ -866,28 +866,30 @@ div.section {
 
 .quote-divider {
   border: none;
-  border-top: 1px dashed #3BC1CC;
-  margin: 2px 0;
+  border-top: 2px dashed #41C1CC;
+  margin: 6px 0;
 }
 
 /* 상품 테이블 */
 .quote-items-table {
-  width: calc(100% - 4px);
-  margin: 0 2px 1px;
+  width: calc(100% - 8px);
+  margin: 0 4px 4px;
   border-collapse: collapse;
   table-layout: fixed;
-  font-size: 8px;
+  font-size: 12px;
 }
 
 .quote-items-table th {
-  background: #3BC1CC;
+  background: #41C1CC;
   color: white;
-  padding: 1px 2px;
+  padding: 5px 4px;
   text-align: center;
   border: none;
-  border-bottom: 0.5px solid #0A8186;
-  border-right: 0.5px solid #0A8186;
+  border-bottom: 1px solid #0A8186;
+  border-right: 1px solid #0A8186;
   font-weight: 600;
+  font-size: 12px;
+  white-space: nowrap;
 }
 
 .quote-items-table th:last-child {
@@ -895,36 +897,35 @@ div.section {
 }
 
 .quote-items-table th:first-child {
-  width: 25px;
+  width: 6%;
 }
 
 .quote-items-table th:nth-child(2) {
-  width: auto;
+  width: 22%;
 }
 
 .quote-items-table th:nth-child(3) {
-  width: 70px;
+  width: 19%;
 }
 
-
-
 .quote-items-table th:nth-child(4) {
-  width: 50px;
+  width: 13%;
 }
 
 .quote-items-table th:nth-child(5) {
-  width: 80px;
+  width: 20%;
 }
 
 .quote-items-table th:nth-child(6) {
-  width: 100px;
+  width: 20%;
 }
 
 .quote-items-table td {
-  border: 1px solid #3BC1CC;
-  padding: 1px 2px;
+  border: 1px solid #47A0A4;
+  padding: 8px 5px;
   color: #333;
   vertical-align: middle;
+  font-size: 12px;
 }
 
 .qi-center { text-align: center; }
@@ -934,7 +935,8 @@ div.section {
 .qi-product {
   text-align: center;
   vertical-align: middle;
-  font-size: 10px;
+  font-size: 12px;
+  height: 60px;
 }
 
 .qi-product:not([rowspan]) {
@@ -947,7 +949,6 @@ div.section {
   flex-direction: column;
   align-items: center;
 }
-
 
 .qi-product-img {
   width: 50px;
@@ -972,8 +973,8 @@ div.section {
   color: #333;
   text-align: center;
   border-top: none !important;
-  height: 18px;
-  padding: 2px 6px;
+  height: 24px;
+  padding: 4px 8px;
 }
 
 .qi-item-after-subtotal td {
@@ -988,44 +989,48 @@ div.section {
 
 /* 합계 테이블 */
 .quote-note {
-  font-size: 9px;
-  color: red;
-  margin: 2px 0 4px;
-  text-align: center;
-  padding-left: 70px;
+  font-size: 10px;
+  color: #C1272C;
+  text-align: right;
+  padding: 8px;
 }
 
 .quote-total-table {
   width: 100%;
   border-collapse: separate;
-  border-spacing: 0 1px;
-  font-size: 8px;
-  margin-bottom: 2px;
+  border-spacing: 0 4px;
+  font-size: 13px;
+  margin-bottom: 4px;
 }
 
 .quote-total-table td {
-  padding: 1px 3px;
-  height: 14px;
+  padding: 6px 8px;
+  height: 28px;
   border: none;
 }
 
 .qt-label {
-  color: white;
+  color: #333;
   font-weight: 700;
   text-align: center;
-  width: 50px;
+  width: 60px;
+  font-size: 14px;
 }
 
 .qt-desc {
   color: #333;
   text-align: center;
+  font-weight: 600;
+  font-size: 12px;
 }
 
 .qt-amount {
-  font-weight: 600;
-  color: #333;
-  width: 240px;
-  overflow: hidden;
+  font-weight: 700;
+  color: white;
+  width: 180px;
+  text-align: right;
+  font-size: 15px;
+  padding-right: 14px;
 }
 
 .qt-amount .qt-won {
@@ -1034,15 +1039,17 @@ div.section {
 
 .qt-amount .qt-num {
   float: right;
-  margin-right: 20px;
+  margin-right: 10px;
 }
 
 .qt-mint-row td {
   background: #E1FEFF;
   color: #333;
   font-weight: 600;
-  border: 1px solid #41C1CC;
+  border: 1px solid #0A8186;
 }
+
+.qt-mint-row td.qt-label { background: #E1FEFF; }
 
 .qt-mint-row td.qt-amount {
   background: #41C1CC !important;
@@ -1053,8 +1060,10 @@ div.section {
   background: #EAFFCA;
   color: #333;
   font-weight: 600;
-  border: 1px solid #8CC63F;
+  border: 1px solid #006837;
 }
+
+.qt-green-row td.qt-label { background: #EAFFCA; }
 
 .qt-green-row td.qt-amount {
   background: #8CC63F !important;
@@ -1065,11 +1074,17 @@ div.section {
   background: #FFEDE1;
   color: #333;
   font-weight: 700;
-  border: 1px solid #F47921;
+  border: 1px solid #9F4100;
 }
 
 .quote-grand-table {
   margin-top: 8px !important;
+}
+
+.qt-grand td.qt-label {
+  background: #FFEDE1;
+  font-size: 15px;
+  letter-spacing: 2px;
 }
 
 .qt-grand td.qt-amount {
@@ -1083,46 +1098,18 @@ div.section {
 }
 
 /* 약관 */
+.quote-terms-wrapper {
+  position: relative;
+  margin-top: 14px;
+}
+
 .quote-terms {
   display: flex;
   gap: 8px;
   margin-top: 0;
   margin-bottom: 6px;
   align-items: flex-start;
-}
-
-.quote-terms-text {
-  flex: 1;
-  font-size: 7px;
-  color: #333;
-  line-height: 1.4;
-}
-
-.quote-terms-text p { margin: 0; }
-.qt-bold { font-weight: 700; margin-top: 1px !important; }
-.qt-sub { color: #555; }
-
-.qt-indent {
-  padding-left: 25.5px;
-}
-
-.qt-icon::before {
-  content: '';
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  margin-right: 2px;
-  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAApCAYAAADNjfKJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAALpSURBVFhH7ZY/TFNRFMaPthGwJTaBWJUYNSUYapQGEwdl153JyQkXJ1yccOnmIJOLLLLo5OQiuy4mEKsRAmmjxH8tSSPIK1JS1Pu7fQ8ftff9oTEd5Fvue7ev9/vOued89x74pSBtwkF7bAvaSt5S2l+UV6VgbejnKz0J6Y8f1s9BsSfy56WyPCh8lEpt256pI9l5SG6cOiEjSkg8GrFnzQhFDun08hcpbW7ZMyKpWJcUq1u7hMQU8bVkj4z2JeWYEmRCIHLSS6Ru0qtqcaJ0Fi+q3xDGt24hbMdo31HJJLrtmT/wJLfUIhPvCpJbW7dnRIaOdMuds6eNEfGfp59LOktusYjInkvZb3V4ko/Nzkuh8kM/k95bqZNNIzABATPFsoz01qNvhJE8r6r45tyCfibFRNsKyEhxs7qrI4x9nluz9EjxtEpMPYznFuWlqgc3jORWrabH/li43nWDaCnU2W/f9falGnzA1+HylQ1dxSwUBq9X12Vsbl4V34p0RSIyMXjmrzV8yWmb6eWvcv3VWy3CDxDQIbffLOlqp8p7O6KSXXiv3qv2V3X4ktNaOJdbBFXcDPQ4vzt7S4fQXj8N/eRLnknEZWo4rQzluC4+orm3+EGTkFLSi5jx3JLcVREjEsEgHo3q0QRfcoBP42ZPLp3f6VdEUEykFzEYEeLwgsmhAf2NHwKRO0AEiz+2RZBWACleMHlhoKmZmOBL3qzKsVZETF1MayHPLme0F4Q9Un3J81bdXk3wOrX8YCRPdnbokT7HoVoF28IR64aRnAsBe0n1Yham9goCtoNtabxgGMn5kAJyBFDRtBMHTliYbjWee47ibDq1U9W0EycdLdasEHFAR5xjMF4IfI3CUB6pxckCICNclbBPa1tdID6taHH3VbaCnvmByQHREvWMx/4/HB4M3HKhyB1gqYhwbjkA/2eLwvT6nsgd0ILcTiiosAYDWiJvFb4O9y+xT94W7JO3BfvkbcH/Si7yG7eXfFd2dC9pAAAAAElFTkSuQmCC");
-  background-size: contain;
-  background-repeat: no-repeat;
-  vertical-align: text-top;
-  position: relative;
-  top: 1px;
-}
-
-.quote-terms-wrapper {
-  position: relative;
-  margin-top: 5px;
+  padding: 12px;
 }
 
 .quote-stamp {
@@ -1148,21 +1135,50 @@ div.section {
   margin-right: -10px;
 }
 
+.quote-terms-text {
+  flex: 1;
+  font-size: 10px;
+  color: #333;
+  line-height: 1.5;
+}
+
+.quote-terms-text p { margin: 2px 0; }
+.qt-bold { font-weight: 700; margin-top: 2px !important; }
+.qt-sub { color: #555; }
+
+.qt-indent {
+  padding-left: 18px;
+}
+
+.qt-icon::before {
+  content: '';
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-right: 3px;
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAApCAYAAADNjfKJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAALpSURBVFhH7ZY/TFNRFMaPthGwJTaBWJUYNSUYapQGEwdl153JyQkXJ1yccOnmIJOLLLLo5OQiuy4mEKsRAmmjxH8tSSPIK1JS1Pu7fQ8ftff9oTEd5Fvue7ev9/vOued89x74pSBtwkF7bAvaSt5S2l+UV6VgbejnKz0J6Y8f1s9BsSfy56WyPCh8lEpt256pI9l5SG6cOiEjSkg8GrFnzQhFDun08hcpbW7ZMyKpWJcUq1u7hMQU8bVkj4z2JeWYEmRCIHLSS6Ru0qtqcaJ0Fi+q3xDGt24hbMdo31HJJLrtmT/wJLfUIhPvCpJbW7dnRIaOdMuds6eNEfGfp59LOktusYjInkvZb3V4ko/Nzkuh8kM/k95bqZNNIzABATPFsoz01qNvhJE8r6r45tyCfibFRNsKyEhxs7qrI4x9nluz9EjxtEpMPYznFuWlqgc3jORWrabH/li43nWDaCnU2W/f9falGnzA1+HylQ1dxSwUBq9X12Vsbl4V34p0RSIyMXjmrzV8yWmb6eWvcv3VWy3CDxDQIbffLOlqp8p7O6KSXXiv3qv2V3X4ktNaOJdbBFXcDPQ4vzt7S4fQXj8N/eRLnknEZWo4rQzluC4+orm3+EGTkFLSi5jx3JLcVREjEsEgHo3q0QRfcoBP42ZPLp3f6VdEUEykFzEYEeLwgsmhAf2NHwKRO0AEiz+2RZBWACleMHlhoKmZmOBL3qzKsVZETF1MayHPLme0F4Q9Un3J81bdXk3wOrX8YCRPdnbokT7HoVoF28IR64aRnAsBe0n1Yham9goCtoNtabxgGMn5kAJyBFDRtBMHTliYbjWee47ibDq1U9W0EycdLdasEHFAR5xjMF4IfI3CUB6pxckCICNclbBPa1tdID6taHH3VbaCnvmByQHREvWMx/4/HB4M3HKhyB1gqYhwbjkA/2eLwvT6nsgd0ILcTiiosAYDWiJvFb4O9y+xT94W7JO3BfvkbcH/Si7yG7eXfFd2dC9pAAAAAElFTkSuQmCC");
+  background-size: contain;
+  background-repeat: no-repeat;
+  vertical-align: text-top;
+  position: relative;
+  top: 1px;
+}
+
 /* 하단 버튼 */
 .quote-footer {
   display: flex;
   justify-content: center;
-  gap: 10px;
-  padding: 6px 0 2px;
+  gap: 12px;
+  padding: 10px 0 4px;
 }
 
 .quote-btn-email {
   background: #3BC1CC;
   color: white;
   border: none;
-  padding: 6px 20px;
+  padding: 8px 24px;
   border-radius: 5px;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
 }
@@ -1170,10 +1186,11 @@ div.section {
 
 .quote-footer-note {
   text-align: center;
-  font-size: 9px;
+  font-size: 10px;
   line-height: 1.4;
-  padding-bottom: 2px;
+  padding-bottom: 4px;
 }
+
 
 /* Responsive */
 @media (max-width: 1200px) {
@@ -1335,9 +1352,29 @@ div.section {
 }
 
 @media print {
-  body * { visibility: hidden; }
-  .quote-wrapper, .quote-wrapper * { visibility: visible; }
-  .quote-wrapper { position: absolute; left: 0; top: 0; width: 100%; }
-  .modal-overlay { position: absolute; background: none; }
-  .modal-print-btn, .modal-footer { display: none !important; }
+  body > *:not(.modal-overlay) { display: none !important; }
+  .modal-overlay {
+    position: static !important; background: none !important;
+    width: 100% !important; height: auto !important; padding: 0 !important;
+  }
+  .quote-wrapper {
+    position: static !important; width: 100% !important;
+    height: auto !important; padding: 10px !important; margin: 0 !important;
+    box-shadow: none !important;
+  }
+  .quote-outer {
+    width: 100% !important; max-width: 100% !important;
+    overflow: visible !important; height: auto !important;
+    padding: 10px !important;
+  }
+  .modal-print-btn, .quote-footer { display: none !important; }
+  .quote-header { display: block !important; text-align: center !important; position: relative !important; }
+  .quote-title-text { font-size: 32px !important; letter-spacing: 6px !important; text-align: center !important; }
+  .quote-header-logo { position: absolute !important; right: 0 !important; top: 0 !important; }
+  .modal-print-btn { display: none !important; }
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
 }

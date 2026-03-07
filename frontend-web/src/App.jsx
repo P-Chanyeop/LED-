@@ -79,7 +79,7 @@ function Layout() {
 
 function App() {
   return (
-    <Router >
+    <Router basename={import.meta.env.DEV ? '/LED-' : '/'}>
       <Layout />
     </Router>
   )
