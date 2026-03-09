@@ -7,7 +7,7 @@ import modalLogoImg from '../assets/modal-logo2.png'
 import modalLogoImg1 from '../assets/modal-logo.png'
 import printIconImg from '../assets/print-icon.png'
 import stampImg from '../assets/stamp.png'
-function QuoteModal({formData, products, vxProducts, onClose, readOnly}) {
+function QuoteModal({formData, products, vxProducts, managers, onClose, readOnly}) {
     const prod = products?.find(p => p.name === formData.productName)
     const vx = vxProducts?.find(v => v.modelName === formData.processorModel)
     const unitPrice = formData.unitPrice || 0
@@ -74,7 +74,7 @@ function QuoteModal({formData, products, vxProducts, onClose, readOnly}) {
                             )}
                             <div className="modal-row-group"><div className="modal-row"><div className="modal-label">납품 설치 장소</div><div className="modal-value modal-value-cyan">{formData.installPlace}</div></div><div className="modal-row"><div className="modal-label">지방 출장비 외</div><div className="modal-value modal-value-cyan">₩ {formData.travelCost?.toLocaleString()}</div></div></div>
                             <div className="modal-row-group"><div className="modal-row"><div className="modal-label">설치인원</div><div className="modal-value modal-value-cyan">{formData.installPersonnel}명</div></div><div className="modal-row"><div className="modal-label">기타 재료비 외</div><div className="modal-value modal-value-cyan">₩ {formData.materialCost?.toLocaleString()}</div></div></div>
-                            <div className="modal-preview-wrap"><div className="modal-preview-inner"><div className="modal-preview-grid-wrap"><div className="modal-preview-v-dim"><div className="modal-preview-v-line"><span className="modal-preview-v-text">{formData.ledSizeH}mm</span></div></div><div><div className="modal-led-grid" style={{gridTemplateColumns:`repeat(${formData.width},${panelW}px)`,gridTemplateRows:`repeat(${formData.height},${panelH}px)`,width:maxGridW,height:maxGridH}}>{Array.from({length:formData.totalPanels}).map((_,i)=>(<div key={i} className="modal-led-panel"></div>))}</div><div className="modal-preview-h-dim" style={{width:maxGridW}}><div className="modal-preview-h-line"><span className="modal-preview-h-text">{formData.ledSizeW}mm</span></div></div></div></div></div></div>
+                            <div className="modal-preview-wrap"><div className="modal-preview-inner"><div className="modal-preview-grid-wrap"><div className="modal-preview-v-dim"><div className="modal-preview-v-line"><span className="modal-preview-v-text">{formData.ledSizeH}mm</span></div></div><div><div style={{position:'relative'}}><div className="modal-led-grid" style={{gridTemplateColumns:`repeat(${formData.width},${panelW}px)`,gridTemplateRows:`repeat(${formData.height},${panelH}px)`,width:maxGridW,height:maxGridH}}>{Array.from({length:formData.totalPanels}).map((_,i)=>(<div key={i} className="modal-led-panel"></div>))}</div><svg style={{position:'absolute',top:0,left:0,width:'100%',height:'100%',pointerEvents:'none',overflow:'visible'}}><defs><marker id="ahPcPdf" markerWidth="8" markerHeight="6" refX="1" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#3BC1CC"/></marker><marker id="ahPcPdfR" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="8 0, 0 3, 8 6" fill="#3BC1CC"/></marker></defs><line x1="2%" y1="98%" x2="98%" y2="2%" stroke="#3BC1CC" strokeWidth="2.5" markerStart="url(#ahPcPdfR)" markerEnd="url(#ahPcPdf)"/></svg><div style={{position:'absolute',top:'50%',left:'50%',transform:'translate(-50%,-50%)',background:'#3BC1CC',borderRadius:'4px',padding:'3px 10px',whiteSpace:'nowrap'}}><span style={{color:'white',fontWeight:'bold',fontSize:'16px'}}>{Math.round(Math.sqrt(Math.pow(Number(formData.ledSizeW)||0,2)+Math.pow(Number(formData.ledSizeH)||0,2))/25.4)}"</span></div></div><div className="modal-preview-h-dim" style={{width:maxGridW}}><div className="modal-preview-h-line"><span className="modal-preview-h-text">{formData.ledSizeW}mm</span></div></div></div></div></div></div>
                         </div>
                     </div>
                 </div>
@@ -543,18 +543,26 @@ function ViewModal({formData, onClose, onQuote}) {
                                             </div>
                                         </div>
                                         <div>
-                                            <div
-                                                className="modal-led-grid"
-                                                style={{
-                                                    gridTemplateColumns: `repeat(${formData.width}, ${panelW}px)`,
-                                                    gridTemplateRows: `repeat(${formData.height}, ${panelH}px)`,
-                                                    width: gridW,
-                                                    height: gridH,
-                                                }}
-                                            >
-                                                {Array.from({length: formData.totalPanels}).map((_, i) => (
-                                                    <div key={i} className="modal-led-panel"></div>
-                                                ))}
+                                            <div style={{position: 'relative'}}>
+                                                <div
+                                                    className="modal-led-grid"
+                                                    style={{
+                                                        gridTemplateColumns: `repeat(${formData.width}, ${panelW}px)`,
+                                                        gridTemplateRows: `repeat(${formData.height}, ${panelH}px)`,
+                                                        width: gridW,
+                                                        height: gridH,
+                                                    }}
+                                                >
+                                                    {Array.from({length: formData.totalPanels}).map((_, i) => (
+                                                        <div key={i} className="modal-led-panel"></div>
+                                                    ))}
+                                                </div>
+                                                <svg style={{position:'absolute',top:0,left:0,width:'100%',height:'100%',pointerEvents:'none',overflow:'visible'}}>
+                                                    <defs><marker id="ah4" markerWidth="8" markerHeight="6" refX="1" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#3BC1CC"/></marker><marker id="ah4r" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="8 0, 0 3, 8 6" fill="#3BC1CC"/></marker></defs>
+                                                    <line x1="2%" y1="98%" x2="98%" y2="2%" stroke="#3BC1CC" strokeWidth="3" markerStart="url(#ah4r)" markerEnd="url(#ah4)"/>
+                                                    <rect x="50%" y="50%" width="80" height="30" rx="4" fill="#3BC1CC" transform="translate(-40,-15)"/>
+                                                    <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="white" fontSize="18" fontWeight="bold">{Math.round(Math.sqrt(Math.pow(Number(formData.ledSizeW)||0,2)+Math.pow(Number(formData.ledSizeH)||0,2))/25.4)}"</text>
+                                                </svg>
                                             </div>
                                             <div className="modal-preview-h-dim" style={{width: gridW}}>
                                                 <div className="modal-preview-h-line">
@@ -586,7 +594,7 @@ function EstimateForm() {
         date: new Date().toISOString().slice(0,10).replace(/-/g,'.'),
         manager: '', managerName: '', department: '', companyPhone: '', mobilePhone: '', email: '', companyAddress: '', attachment: '',
         clientCompany: '', clientDepartment: '', clientManager: '', clientPhone: '', clientMobile: '', clientEmail: '', businessCard: '',
-        installDate: '', installPeriod: '', installLocation: '', installDetailLocation: '', etcContent: '',
+        installDate: new Date().toISOString().slice(0,10).replace(/-/g,'.'), installPeriod: '1일', installLocation: '', installDetailLocation: '', etcContent: '',
         productName: '', unitPrice: 0, productImage: '', productSize: '', pixel: '', brightness: '', power: '', resolution: '',
         width: 1, height: 1, totalPanels: 0, ledSizeW: '', ledSizeH: '', ledResW: '', ledResH: '', totalPower: 0,
         installPersonnel: 1, laborPrice: 300000, processorModel: '', processorQuantity: 1, processorPrice: 0, processorImage: '',
@@ -742,7 +750,7 @@ function EstimateForm() {
                 setShowModal(false);
                 setShowQuote(true)
             }}/>}
-            {showQuote && <QuoteModal formData={formData} products={products} vxProducts={vxProducts} onClose={() => setShowQuote(false)}/>}
+            {showQuote && <QuoteModal formData={formData} products={products} vxProducts={vxProducts} managers={managers} onClose={() => setShowQuote(false)}/>}
             <div className="main-content-area">
                 {/* ===== LEFT COLUMN ===== */}
                 <div className="left-column">
@@ -1183,17 +1191,25 @@ function EstimateForm() {
                                             <div className="led-preview-line-v-bottom"></div>
                                         </div>
                                         <div style={{display: 'flex', flexDirection: 'column', gap: '15px', alignItems: 'center'}}>
-                                            <div className="led-grid" style={{
-                                                gridTemplateColumns: `repeat(${formData.width}, 1fr)`,
-                                                gridTemplateRows: `repeat(${formData.height}, 1fr)`,
-                                                width: '600px',
-                                                height: '350px',
-                                                display: 'grid',
-                                                gap: '2px'
-                                            }}>
-                                                {Array.from({length: formData.totalPanels}).map((_, i) => (
-                                                    <div key={i} className="led-panel"></div>
-                                                ))}
+                                            <div style={{position: 'relative'}}>
+                                                <div className="led-grid" style={{
+                                                    gridTemplateColumns: `repeat(${formData.width}, 1fr)`,
+                                                    gridTemplateRows: `repeat(${formData.height}, 1fr)`,
+                                                    width: '600px',
+                                                    height: '350px',
+                                                    display: 'grid',
+                                                    gap: '2px'
+                                                }}>
+                                                    {Array.from({length: formData.totalPanels}).map((_, i) => (
+                                                        <div key={i} className="led-panel"></div>
+                                                    ))}
+                                                </div>
+                                                <svg style={{position:'absolute',top:0,left:0,width:'100%',height:'100%',pointerEvents:'none',overflow:'visible'}}>
+                                                    <defs><marker id="ah3" markerWidth="8" markerHeight="6" refX="1" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#3BC1CC"/></marker><marker id="ah3r" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="8 0, 0 3, 8 6" fill="#3BC1CC"/></marker></defs>
+                                                    <line x1="2%" y1="98%" x2="98%" y2="2%" stroke="#3BC1CC" strokeWidth="3" markerStart="url(#ah3r)" markerEnd="url(#ah3)"/>
+                                                    <rect x="50%" y="50%" width="100" height="36" rx="4" fill="#3BC1CC" transform="translate(-50,-18)"/>
+                                                    <text x="50%" y="50%" textAnchor="middle" dominantBaseline="central" fill="white" fontSize="22" fontWeight="bold">{Math.round(Math.sqrt(Math.pow(Number(formData.ledSizeW)||0,2)+Math.pow(Number(formData.ledSizeH)||0,2))/25.4)}"</text>
+                                                </svg>
                                             </div>
                                             <div style={{display: 'flex', alignItems: 'center', gap: '0', width: '600px'}}>
                                                 <div className="led-preview-line-h-left"></div>

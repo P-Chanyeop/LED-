@@ -4,11 +4,9 @@ import com.led.estimate.dto.ApiResponse;
 import com.led.estimate.entity.Manager;
 import com.led.estimate.repository.ManagerRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,8 +21,7 @@ public class ManagerController {
 
     private final ManagerRepository managerRepository;
 
-    @Value("${file.upload-dir}")
-    private String uploadDir;
+    private static final String UPLOAD_DIR = "uploads/business-cards/";
 
     @GetMapping
     public ApiResponse<List<Manager>> getAll() {
@@ -59,11 +56,11 @@ public class ManagerController {
         manager.setEmailBody(emailBody);
 
         if (file != null && !file.isEmpty()) {
+            Path uploadPath = Paths.get(UPLOAD_DIR);
+            if (!Files.exists(uploadPath)) Files.createDirectories(uploadPath);
             String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
-            Path path = Paths.get(uploadDir, filename);
-            Files.createDirectories(path.getParent());
-            Files.write(path, file.getBytes());
-            manager.setBusinessCardImage("/files/" + filename);
+            Files.copy(file.getInputStream(), uploadPath.resolve(filename));
+            manager.setBusinessCardImage("/uploads/business-cards/" + filename);
         }
 
         return ApiResponse.success(managerRepository.save(manager));
@@ -99,11 +96,11 @@ public class ManagerController {
         manager.setEmailBody(emailBody);
 
         if (file != null && !file.isEmpty()) {
+            Path uploadPath = Paths.get(UPLOAD_DIR);
+            if (!Files.exists(uploadPath)) Files.createDirectories(uploadPath);
             String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
-            Path path = Paths.get(uploadDir, filename);
-            Files.createDirectories(path.getParent());
-            Files.write(path, file.getBytes());
-            manager.setBusinessCardImage("/files/" + filename);
+            Files.copy(file.getInputStream(), uploadPath.resolve(filename));
+            manager.setBusinessCardImage("/uploads/business-cards/" + filename);
         }
 
         return ApiResponse.success(managerRepository.save(manager));

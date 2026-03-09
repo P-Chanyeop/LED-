@@ -40,7 +40,7 @@ public class OcrController {
 
 
             int idx = body.indexOf("\"text\"");
-            if (idx == -1) return ApiResponse.error("텍스트를 인식할 수 없습니다");
+            if (idx == -1) { System.out.println("Vision API Response: " + body); return ApiResponse.error("텍스트를 인식할 수 없습니다. API 키 또는 응답 확인 필요"); }
 
             // 마지막 "text" 키가 fullTextAnnotation의 text
             int lastIdx = body.lastIndexOf("\"text\"");

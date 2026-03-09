@@ -43,14 +43,23 @@ public class EmailController {
 
             JavaMailSenderImpl sender = new JavaMailSenderImpl();
             sender.setHost(settings.getOrDefault("smtpServer", "smtp.gmail.com"));
-            sender.setPort(Integer.parseInt(settings.getOrDefault("smtpPort", "587")));
+            int port = Integer.parseInt(settings.getOrDefault("smtpPort", "587"));
+            sender.setPort(port);
             sender.setUsername(settings.get("emailAccount"));
             sender.setPassword(password);
 
             Properties props = sender.getJavaMailProperties();
             props.put("mail.smtp.auth", "true");
-            props.put("mail.smtp.starttls.enable", "true");
             props.put("mail.smtp.timeout", "10000");
+            props.put("mail.smtp.connectiontimeout", "10000");
+            
+            // 포트에 따라 SSL/TLS 설정
+            if (port == 465) {
+                props.put("mail.smtp.ssl.enable", "true");
+                props.put("mail.smtp.ssl.trust", "*");
+            } else {
+                props.put("mail.smtp.starttls.enable", "true");
+            }
 
             MimeMessage message = sender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -59,12 +68,26 @@ public class EmailController {
             helper.setSubject(subject);
             
             // HTML 본문 생성
-            String htmlBody = body.replace("\n", "<br>");
+            String htmlBody = "<html><body>" + body.replace("\n", "<br>");
+            
+            // 명함 이미지를 인라인으로 첨부
             if (businessCardImage != null && !businessCardImage.isEmpty()) {
-                String baseUrl = "http://localhost:8080";
-                htmlBody += "<br><br><img src='" + baseUrl + businessCardImage + "' style='max-width: 500px; height: auto;' />";
+                try {
+                    String imagePath = businessCardImage.replace("/uploads/", "uploads/");
+                    File imageFile = new File(imagePath);
+                    if (imageFile.exists()) {
+                        htmlBody += "<br><br><img src='cid:businessCard' style='max-width: 500px; height: auto;' />";
+                        helper.setText(htmlBody + "</body></html>", true);
+                        helper.addInline("businessCard", imageFile);
+                    } else {
+                        helper.setText(htmlBody + "</body></html>", true);
+                    }
+                } catch (Exception e) {
+                    helper.setText(htmlBody + "</body></html>", true);
+                }
+            } else {
+                helper.setText(htmlBody + "</body></html>", true);
             }
-            helper.setText(htmlBody, true);
 
             if (file != null && !file.isEmpty()) {
                 helper.addAttachment(file.getOriginalFilename(), file);

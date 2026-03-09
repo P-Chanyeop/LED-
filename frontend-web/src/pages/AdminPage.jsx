@@ -1291,7 +1291,7 @@ function AdminPage() {
                   <div style={{padding: '10px', display: 'flex', flexDirection: 'column', gap: '10px'}}>
                     <input type="file" accept="image/*" onChange={e => setManagerImageFile(e.target.files[0])} />
                     {managerForm.businessCardImage && !managerImageFile && (
-                      <img src={`${API_BASE.replace('/api', '')}${managerForm.businessCardImage}`} alt="명함" style={{maxWidth: '200px', maxHeight: '150px'}} />
+                      <img src={`${import.meta.env.VITE_API_URL}${managerForm.businessCardImage}`} alt="명함" style={{maxWidth: '200px', maxHeight: '150px'}} />
                     )}
                   </div>
                 </div>

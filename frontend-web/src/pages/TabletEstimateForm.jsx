@@ -27,7 +27,7 @@ function TabletEstimateForm() {
         managerEmail: '', companyAddress: '', attachment: '',
         clientName: '', clientDepartment: '', clientManager: '',
         clientPhone: '', clientMobile: '', clientEmail: '', businessCard: '',
-        installDate: '', installPeriod: '', installLocation: '', installDetail: '', installNote: '',
+        installDate: new Date().toISOString().split('T')[0], installPeriod: '1일', installLocation: '', installDetail: '', installNote: '',
         productName: '', productSize: '', pixel: '',
         brightness: '', power: '', resolution: '',
         ledWidth: 1, ledHeight: 1, ledSizeW: 0, ledSizeH: 0,
@@ -518,10 +518,19 @@ function TabletEstimateForm() {
                                             <div className="tb-preview-label-v">{formData.ledSizeH}mm</div>
                                             <div className="tb-preview-line-v-bottom"></div>
                                         </div>
-                                        <div className="tb-grid-container" style={{gridTemplateColumns: `repeat(${formData.ledWidth}, 1fr)`, gridTemplateRows: `repeat(${formData.ledHeight}, 1fr)`, margin: '0 auto'}}>
-                                            {Array.from({length: formData.ledHeight * formData.ledWidth}).map((_, i) => (
-                                                <div key={i} className="tb-panel"></div>
-                                            ))}
+                                        <div style={{position: 'relative', margin: '0 auto'}}>
+                                            <div className="tb-grid-container" style={{gridTemplateColumns: `repeat(${formData.ledWidth}, 1fr)`, gridTemplateRows: `repeat(${formData.ledHeight}, 1fr)`}}>
+                                                {Array.from({length: formData.ledHeight * formData.ledWidth}).map((_, i) => (
+                                                    <div key={i} className="tb-panel"></div>
+                                                ))}
+                                            </div>
+                                            <svg style={{position:'absolute',top:0,left:0,width:'100%',height:'100%',pointerEvents:'none',overflow:'visible'}}>
+                                                <defs><marker id="ah1" markerWidth="8" markerHeight="6" refX="1" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#3BC1CC"/></marker><marker id="ah1r" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="8 0, 0 3, 8 6" fill="#3BC1CC"/></marker></defs>
+                                                <line x1="2%" y1="98%" x2="98%" y2="2%" stroke="#3BC1CC" strokeWidth="2.5" markerStart="url(#ah1r)" markerEnd="url(#ah1)"/>
+                                            </svg>
+                                            <div style={{position:'absolute',top:'50%',left:'50%',transform:'translate(-50%,-50%)',background:'#3BC1CC',borderRadius:'4px',padding:'0.4vw 1.5vw',whiteSpace:'nowrap'}}>
+                                                <span style={{color:'white',fontWeight:'bold',fontSize:'2.5vw'}}>{Math.round(Math.sqrt(Math.pow(Number(formData.ledSizeW)||0,2)+Math.pow(Number(formData.ledSizeH)||0,2))/25.4)}"</span>
+                                            </div>
                                         </div>
                                     </div>
                                     <div style={{display: 'flex', alignItems: 'center', gap: '0', width: '60vw', marginLeft: 'auto', marginRight: 'auto'}}>
@@ -619,10 +628,19 @@ function TabletEstimateForm() {
                                             <div className="tb-preview-label-v">{formData.ledSizeH}mm</div>
                                             <div className="tb-preview-line-v-bottom"></div>
                                         </div>
-                                        <div className="tb-grid-container" style={{gridTemplateColumns: `repeat(${formData.ledWidth}, 1fr)`, gridTemplateRows: `repeat(${formData.ledHeight}, 1fr)`, margin: '0 auto'}}>
-                                            {Array.from({length: formData.ledHeight * formData.ledWidth}).map((_, i) => (
-                                                <div key={i} className="tb-panel"></div>
-                                            ))}
+                                        <div style={{position: 'relative', margin: '0 auto'}}>
+                                            <div className="tb-grid-container" style={{gridTemplateColumns: `repeat(${formData.ledWidth}, 1fr)`, gridTemplateRows: `repeat(${formData.ledHeight}, 1fr)`}}>
+                                                {Array.from({length: formData.ledHeight * formData.ledWidth}).map((_, i) => (
+                                                    <div key={i} className="tb-panel"></div>
+                                                ))}
+                                            </div>
+                                            <svg style={{position:'absolute',top:0,left:0,width:'100%',height:'100%',pointerEvents:'none',overflow:'visible'}}>
+                                                <defs><marker id="ah2" markerWidth="8" markerHeight="6" refX="1" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#3BC1CC"/></marker><marker id="ah2r" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="8 0, 0 3, 8 6" fill="#3BC1CC"/></marker></defs>
+                                                <line x1="2%" y1="98%" x2="98%" y2="2%" stroke="#3BC1CC" strokeWidth="2.5" markerStart="url(#ah2r)" markerEnd="url(#ah2)"/>
+                                            </svg>
+                                            <div style={{position:'absolute',top:'50%',left:'50%',transform:'translate(-50%,-50%)',background:'#3BC1CC',borderRadius:'4px',padding:'0.4vw 1.5vw',whiteSpace:'nowrap'}}>
+                                                <span style={{color:'white',fontWeight:'bold',fontSize:'2.5vw'}}>{Math.round(Math.sqrt(Math.pow(Number(formData.ledSizeW)||0,2)+Math.pow(Number(formData.ledSizeH)||0,2))/25.4)}"</span>
+                                            </div>
                                         </div>
                                     </div>
                                     <div style={{display: 'flex', alignItems: 'center', gap: '0', width: '60vw', marginLeft: 'auto', marginRight: 'auto'}}>
@@ -675,6 +693,39 @@ function TabletEstimateForm() {
                                 )}
                                 <div className="tb-row"><div className="tb-lbl">납품 설치 장소</div><div className="tb-val">{formData.deliveryLocation}</div><div className="tb-lbl">지방 출장비 외</div><div className="tb-val">₩ {fmt(formData.regionalTravelCost)}</div></div>
                                 <div className="tb-row"><div className="tb-lbl">설치인원</div><div className="tb-val">{formData.installWorkers}명</div><div className="tb-lbl">기타 재료비 외</div><div className="tb-val">₩ {fmt(formData.materialCost)}</div></div>
+                            </div>
+                        </div>
+                        {/* LED Display 예상도 - PDF 캡처용 */}
+                        <div className="tb-section">
+                            <div className="tb-sb">
+                                <div style={{padding:'20px', background:'white'}}>
+                                    <div style={{display:'flex', gap:'20px', alignItems:'center', width:'100%', position:'relative'}}>
+                                        <div style={{display:'flex', flexDirection:'column', alignItems:'center', position:'absolute', left:'10px', top:0, bottom:0}}>
+                                            <div style={{width:'1px', flex:1, background:'#3BC1CC'}}></div>
+                                            <div style={{background:'#3BC1CC', color:'white', padding:'2px 8px', borderRadius:'3px', fontSize:'12px', whiteSpace:'nowrap'}}>{formData.ledSizeH}mm</div>
+                                            <div style={{width:'1px', flex:1, background:'#3BC1CC'}}></div>
+                                        </div>
+                                        <div style={{position:'relative', margin:'0 auto', width:'600px', height:'300px'}}>
+                                            <div style={{display:'grid', gridTemplateColumns:`repeat(${formData.ledWidth}, 1fr)`, gridTemplateRows:`repeat(${formData.ledHeight}, 1fr)`, gap:'2px', width:'100%', height:'100%'}}>
+                                                {Array.from({length: formData.ledHeight * formData.ledWidth}).map((_, i) => (
+                                                    <div key={i} style={{background:'#333', border:'1px solid #444'}}></div>
+                                                ))}
+                                            </div>
+                                            <svg style={{position:'absolute',top:0,left:0,width:'100%',height:'100%',pointerEvents:'none',overflow:'visible'}}>
+                                                <defs><marker id="ahPdf" markerWidth="8" markerHeight="6" refX="1" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#3BC1CC"/></marker><marker id="ahPdfR" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="8 0, 0 3, 8 6" fill="#3BC1CC"/></marker></defs>
+                                                <line x1="2%" y1="98%" x2="98%" y2="2%" stroke="#3BC1CC" strokeWidth="2.5" markerStart="url(#ahPdfR)" markerEnd="url(#ahPdf)"/>
+                                            </svg>
+                                            <div style={{position:'absolute',top:'50%',left:'50%',transform:'translate(-50%,-50%)',background:'#3BC1CC',borderRadius:'4px',padding:'4px 12px',whiteSpace:'nowrap'}}>
+                                                <span style={{color:'white',fontWeight:'bold',fontSize:'18px'}}>{Math.round(Math.sqrt(Math.pow(Number(formData.ledSizeW)||0,2)+Math.pow(Number(formData.ledSizeH)||0,2))/25.4)}"</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style={{display:'flex', alignItems:'center', width:'600px', margin:'10px auto 0'}}>
+                                        <div style={{flex:1, height:'1px', background:'#3BC1CC'}}></div>
+                                        <div style={{background:'#3BC1CC', color:'white', padding:'2px 8px', borderRadius:'3px', fontSize:'12px', whiteSpace:'nowrap'}}>{formData.ledSizeW}mm</div>
+                                        <div style={{flex:1, height:'1px', background:'#3BC1CC'}}></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
