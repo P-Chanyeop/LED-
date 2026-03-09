@@ -390,9 +390,10 @@ function AdminPage() {
   const [laborCost, setLaborCost] = useState(300000)
 
   const [managers, setManagers] = useState([])
-  const [managerForm, setManagerForm] = useState({ name: '', department: '', phone: '', mobile: '', email: '', address: '' })
+  const [managerForm, setManagerForm] = useState({ name: '', department: '', phone: '', mobile: '', email: '', address: '', businessCardImage: null, emailSubject: '', emailBody: '' })
   const [showManagerModal, setShowManagerModal] = useState(false)
   const [editingManagerId, setEditingManagerId] = useState(null)
+  const [managerImageFile, setManagerImageFile] = useState(null)
 
   const [settingsForm, setSettingsForm] = useState({
     companyName: '', companyAddress: '', companyPhone: '', companyEmail: '',
@@ -1173,19 +1174,33 @@ function AdminPage() {
       if (!managerForm.email?.trim()) return alert('이메일을 입력하세요')
       if (!emailRegex.test(managerForm.email)) return alert('이메일 형식이 올바르지 않습니다.')
       try {
+        const formData = new FormData()
+        formData.append('name', managerForm.name)
+        formData.append('department', managerForm.department || '')
+        formData.append('phone', managerForm.phone || '')
+        formData.append('mobile', managerForm.mobile)
+        formData.append('email', managerForm.email)
+        formData.append('address', managerForm.address || '')
+        formData.append('emailSubject', managerForm.emailSubject || '')
+        formData.append('emailBody', managerForm.emailBody || '')
+        if (managerImageFile) {
+          formData.append('businessCardImage', managerImageFile)
+        }
+
         if (editingManagerId) {
-          await fetch(`${API_BASE}/managers/${editingManagerId}`, {
-            method: 'PUT', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(managerForm)
+          await fetch(`${API_BASE}/managers/${editingManagerId}/with-image`, {
+            method: 'PUT',
+            body: formData
           })
         } else {
-          await fetch(`${API_BASE}/managers`, {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(managerForm)
+          await fetch(`${API_BASE}/managers/with-image`, {
+            method: 'POST',
+            body: formData
           })
         }
         fetchManagers()
-        setManagerForm({ name: '', department: '', phone: '', mobile: '', email: '', address: '' })
+        setManagerForm({ name: '', department: '', phone: '', mobile: '', email: '', address: '', businessCardImage: null, emailSubject: '', emailBody: '' })
+        setManagerImageFile(null)
         setEditingManagerId(null)
         setShowManagerModal(false)
       } catch (e) { console.error('Failed to save manager:', e) }
@@ -1205,7 +1220,8 @@ function AdminPage() {
         <div className="section-title-bar">
           <h3>이지텍 담당자 목록</h3>
           <button className="btn-cyan" onClick={() => {
-            setManagerForm({ name: '', department: '', phone: '', mobile: '', email: '', address: '' })
+            setManagerForm({ name: '', department: '', phone: '', mobile: '', email: '', address: '', businessCardImage: null, emailSubject: '', emailBody: '' })
+            setManagerImageFile(null)
             setEditingManagerId(null)
             setShowManagerModal(true)
           }}>담당자 추가</button>
@@ -1233,7 +1249,8 @@ function AdminPage() {
                 <td>{m.email}</td>
                 <td>
                   <button className="btn-small btn-cyan" onClick={() => {
-                    setManagerForm({ name: m.name, department: m.department, phone: m.phone, mobile: m.mobile, email: m.email, address: m.address })
+                    setManagerForm({ name: m.name, department: m.department, phone: m.phone, mobile: m.mobile, email: m.email, address: m.address, businessCardImage: m.businessCardImage, emailSubject: m.emailSubject || '', emailBody: m.emailBody || '' })
+                    setManagerImageFile(null)
                     setEditingManagerId(m.id)
                     setShowManagerModal(true)
                   }}>수정</button>
@@ -1268,6 +1285,23 @@ function AdminPage() {
                 <div className="register-row-full">
                   <div className="register-label">회사 주소</div>
                   <input type="text" className="register-input-full" placeholder="경기도 남양주시 화도읍 재재기로 190번길 32" value={managerForm.address} onChange={e => setManagerForm({...managerForm, address: e.target.value})} />
+                </div>
+                <div className="register-row-full">
+                  <div className="register-label">명함 이미지</div>
+                  <div style={{padding: '10px', display: 'flex', flexDirection: 'column', gap: '10px'}}>
+                    <input type="file" accept="image/*" onChange={e => setManagerImageFile(e.target.files[0])} />
+                    {managerForm.businessCardImage && !managerImageFile && (
+                      <img src={`${API_BASE.replace('/api', '')}${managerForm.businessCardImage}`} alt="명함" style={{maxWidth: '200px', maxHeight: '150px'}} />
+                    )}
+                  </div>
+                </div>
+                <div className="register-row-full">
+                  <div className="register-label">메일 제목</div>
+                  <input type="text" className="register-input-full" placeholder="견적서 발송 드립니다" value={managerForm.emailSubject} onChange={e => setManagerForm({...managerForm, emailSubject: e.target.value})} />
+                </div>
+                <div className="register-row-full">
+                  <div className="register-label">메일 내용</div>
+                  <textarea className="register-input-full" placeholder="안녕하세요. LED 견적서를 보내드립니다." value={managerForm.emailBody} onChange={e => setManagerForm({...managerForm, emailBody: e.target.value})} style={{minHeight: '100px', resize: 'vertical', padding: '10px'}} />
                 </div>
                 <div className="register-buttons">
                   <button type="button" className="register-btn-cancel" onClick={() => setShowManagerModal(false)}>취소</button>

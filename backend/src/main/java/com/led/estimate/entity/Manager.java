@@ -17,4 +17,11 @@ public class Manager {
     private String mobile;
     private String email;
     private String address;
+    private String businessCardImage;
+    
+    @Column(length = 500)
+    private String emailSubject;
+    
+    @Column(length = 2000)
+    private String emailBody;
 }

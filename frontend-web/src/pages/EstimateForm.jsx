@@ -20,8 +20,7 @@ function QuoteModal({formData, products, vxProducts, onClose, readOnly}) {
     const laborPrice = formData.laborPrice || 300000
     
     const laborQty = formData.installPersonnel
-    const sqmTotal = Math.round(sqmPrice * ledSqm)
-    const sub1 = readOnly ? (formData._ledPrice || ledTotal + sqmTotal) : ledTotal + sqmTotal
+    const sub1 = readOnly ? (formData._ledPrice || ledTotal) : ledTotal
     const sub2 = readOnly ? (formData._processorPrice || processorPrice) : processorPrice
     const sub3 = readOnly ? (formData._installPrice || laborPrice * laborQty) : laborPrice * laborQty
     const sub4 = formData.materialCost || 0
@@ -70,7 +69,9 @@ function QuoteModal({formData, products, vxProducts, onClose, readOnly}) {
                             <div className="modal-row full"><div className="modal-label">LED 사이즈</div><div className="modal-value modal-value-cyan">{formData.ledSizeW} × {formData.ledSizeH}</div></div>
                             <div className="modal-row full"><div className="modal-label">LED 해상도</div><div className="modal-value modal-value-cyan">{formData.ledResW} × {formData.ledResH}</div></div>
                             <div className="modal-row full"><div className="modal-label">전체 전력</div><div className="modal-value modal-value-cyan">{formData.totalPower * 1000} W</div></div>
+                            {formData.processorModel && (
                             <div className="modal-row-group"><div className="modal-row"><div className="modal-label">프로세스 사양</div><div className="modal-value modal-value-cyan">{formData.processorModel}</div></div><div className="modal-row"><div className="modal-label">프로세스 수량</div><div className="modal-value modal-value-cyan">{formData.processorQuantity}</div></div></div>
+                            )}
                             <div className="modal-row-group"><div className="modal-row"><div className="modal-label">납품 설치 장소</div><div className="modal-value modal-value-cyan">{formData.installPlace}</div></div><div className="modal-row"><div className="modal-label">지방 출장비 외</div><div className="modal-value modal-value-cyan">₩ {formData.travelCost?.toLocaleString()}</div></div></div>
                             <div className="modal-row-group"><div className="modal-row"><div className="modal-label">설치인원</div><div className="modal-value modal-value-cyan">{formData.installPersonnel}명</div></div><div className="modal-row"><div className="modal-label">기타 재료비 외</div><div className="modal-value modal-value-cyan">₩ {formData.materialCost?.toLocaleString()}</div></div></div>
                             <div className="modal-preview-wrap"><div className="modal-preview-inner"><div className="modal-preview-grid-wrap"><div className="modal-preview-v-dim"><div className="modal-preview-v-line"><span className="modal-preview-v-text">{formData.ledSizeH}mm</span></div></div><div><div className="modal-led-grid" style={{gridTemplateColumns:`repeat(${formData.width},${panelW}px)`,gridTemplateRows:`repeat(${formData.height},${panelH}px)`,width:maxGridW,height:maxGridH}}>{Array.from({length:formData.totalPanels}).map((_,i)=>(<div key={i} className="modal-led-panel"></div>))}</div><div className="modal-preview-h-dim" style={{width:maxGridW}}><div className="modal-preview-h-line"><span className="modal-preview-h-text">{formData.ledSizeW}mm</span></div></div></div></div></div></div>
@@ -149,6 +150,8 @@ function QuoteModal({formData, products, vxProducts, onClose, readOnly}) {
                                 <td colSpan={2} className="qi-right">₩      {fmt(sub1)}</td>
                             </tr>
                             {/* 2. 프로세서 */}
+                            {formData.processorModel && (
+                            <>
                             <tr className="qi-item-after-subtotal" style={{height: '60px'}}>
                                 <td className="qi-center">2</td>
                                 <td className="qi-product" style={{textAlign:"center"}}>{vx?.imageUrl && <img src={`${import.meta.env.VITE_API_URL}${vx.imageUrl}`} alt={formData.processorModel} style={{maxWidth:"100%",maxHeight:"40px"}}/>}<br/><span style={{fontSize:"11px"}}>{formData.processorModel}</span></td>
@@ -161,9 +164,11 @@ function QuoteModal({formData, products, vxProducts, onClose, readOnly}) {
                                 <td colSpan={4} className="qi-center">소계</td>
                                 <td colSpan={2} className="qi-right">₩      {fmt(sub2)}</td>
                             </tr>
+                            </>
+                            )}
                             {/* 3. 시공 인건비 */}
                             <tr className="qi-item-after-subtotal" style={{height: '60px'}}>
-                                <td className="qi-center">3</td>
+                                <td className="qi-center">{formData.processorModel ? 3 : 2}</td>
                                 <td className="qi-product">시공 인건비</td>
                                 <td className="qi-center">인</td>
                                 <td className="qi-center">{laborQty}</td>
@@ -176,7 +181,7 @@ function QuoteModal({formData, products, vxProducts, onClose, readOnly}) {
                             </tr>
                             {/* 4. 기타 비용 */}
                             <tr className="qi-item-after-subtotal" style={{height: '60px'}}>
-                                <td className="qi-center">4</td>
+                                <td className="qi-center">{formData.processorModel ? 4 : 3}</td>
                                 <td className="qi-product">기타 비용</td>
                                 <td className="qi-center">EA</td>
                                 <td className="qi-center">1</td>
@@ -189,7 +194,7 @@ function QuoteModal({formData, products, vxProducts, onClose, readOnly}) {
                             </tr>
                             {/* 5. 지방 출장비 */}
                             <tr className="qi-item-after-subtotal" style={{height: '60px'}}>
-                                <td className="qi-center">5</td>
+                                <td className="qi-center">{formData.processorModel ? 5 : 4}</td>
                                 <td className="qi-product">지방 출장비 [{formData.installPlace}]<br/><span style={{fontSize: '10px', color: '#666'}}>(운송비,숙박,기타)</span></td>
                                 <td className="qi-center">지역</td>
                                 <td className="qi-center">1</td>
@@ -257,6 +262,11 @@ function QuoteModal({formData, products, vxProducts, onClose, readOnly}) {
                                 if (!to) return
                                 setIsSendingEmail(true)
                                 try {
+                                    // 담당자 정보 가져오기
+                                    const manager = managers.find(m => m.name === formData.managerName)
+                                    const emailSubject = manager?.emailSubject || '이지텍인터내셔널 - LED Display 견적 송부의 건'
+                                    const emailBody = manager?.emailBody || `안녕하십니까.\n\nLED 디스플레이 전문업체 이지텍인터내셔널입니다.\n\nLED Display 견적 송부 드리오니 확인 부탁드리겠습니다.\n\n감사합니다.\n\n${formData.managerName || ''} 드림.`
+                                    
                                     // 1) 전체내용보기 캡처
                                     const viewEl = viewRef.current
                                     await new Promise(r => setTimeout(r, 200))
@@ -282,7 +292,8 @@ function QuoteModal({formData, products, vxProducts, onClose, readOnly}) {
                                     overlay.scrollTop = saved.scrollTop
                                     if (footer) footer.style.display = ''
                                     if (pb) pb.style.visibility = ''
-                                    // 3) 2페이지 PDF 생성
+                                    
+                                    // 3) PDF 생성
                                     const imgW = 210
                                     const vH = viewCanvas.height * imgW / viewCanvas.width
                                     const qH = quoteCanvas.height * imgW / quoteCanvas.width
@@ -290,11 +301,15 @@ function QuoteModal({formData, products, vxProducts, onClose, readOnly}) {
                                     pdf.addImage(viewCanvas.toDataURL('image/jpeg', 0.85), 'JPEG', 0, 0, imgW, vH)
                                     pdf.addPage([imgW, qH])
                                     pdf.addImage(quoteCanvas.toDataURL('image/jpeg', 0.85), 'JPEG', 0, 0, imgW, qH)
+                                    
                                     const pdfBlob = pdf.output('blob')
                                     const fd = new FormData()
                                     fd.append('to', to)
-                                    fd.append('subject', '이지텍인터내셔널 - LED Display 견적 송부의 건')
-                                    fd.append('body', `안녕하십니까.\n\nLED 디스플레이 전문업체 이지텍인터내셔널입니다.\n\nLED Display 견적 송부 드리오니 확인 부탁드리겠습니다.\n\n감사합니다.\n\n${formData.managerName || ''} 드림.`)
+                                    fd.append('subject', emailSubject)
+                                    fd.append('body', emailBody)
+                                    if (manager?.businessCardImage) {
+                                        fd.append('businessCardImage', manager.businessCardImage)
+                                    }
                                     const pdfDate = formData.date ? formData.date.slice(2).replace(/-/g, '.') : ''
                                     fd.append('file', pdfBlob, `${formData.clientCompany || '업체'}_${formData.productName || '제품'} 견적서_${pdfDate}.pdf`)
                                     const res = await fetch(import.meta.env.VITE_API_URL + '/api/email/send', {method: 'POST', body: fd})
@@ -484,6 +499,7 @@ function ViewModal({formData, onClose, onQuote}) {
                                 <div className="modal-value modal-value-cyan">{formData.totalPower * 1000} W</div>
                             </div>
                             {/* 프로세스 사양 / 프로세스 수량 */}
+                            {formData.processorModel && (
                             <div className="modal-row-group">
                                 <div className="modal-row">
                                     <div className="modal-label">프로세스 사양</div>
@@ -494,6 +510,7 @@ function ViewModal({formData, onClose, onQuote}) {
                                     <div className="modal-value modal-value-cyan">{formData.processorQuantity}</div>
                                 </div>
                             </div>
+                            )}
                             {/* 납품 설치 장소 / 지방 출장비 외 */}
                             <div className="modal-row-group">
                                 <div className="modal-row">
@@ -1124,7 +1141,7 @@ function EstimateForm() {
                                     <div className="form-label" style={labelCyan}>지방 출장비 외</div>
                                     <div className="form-input">
                                         <input type="text" value={'₩ ' + (formData.travelCost ?? 0).toLocaleString()} 
-                                               onChange={(e) => handleChange('travelCost', parseInt(e.target.value.replace(/[^\d]/g, '')) || 0)}/>
+                                               onChange={(e) => {const v = e.target.value.replace(/[^\d]/g, '').replace(/^0+/, ''); handleChange('travelCost', parseInt(v) || 0)}}/>
                                     </div>
                                 </div>
                             </div>
@@ -1145,7 +1162,7 @@ function EstimateForm() {
                                     <div className="form-label" style={labelCyan}>기타 재료비 외</div>
                                     <div className="form-input">
                                         <input type="text" value={'₩ ' + (formData.materialCost ?? 0).toLocaleString()} 
-                                               onChange={(e) => handleChange('materialCost', parseInt(e.target.value.replace(/[^\d]/g, '')) || 0)}/>
+                                               onChange={(e) => {const v = e.target.value.replace(/[^\d]/g, '').replace(/^0+/, ''); handleChange('materialCost', parseInt(v) || 0)}}/>
                                     </div>
                                 </div>
                             </div>
@@ -1193,7 +1210,7 @@ function EstimateForm() {
             </div>
             <div className="bottom-actions">
                 <button className="btn-view-saved" onClick={() => setShowModal(true)}>전체 내용 보기</button>
-                <button className="btn-view-quote" onClick={() => { if (!formData.productName) return alert('제품명을 선택해주세요'); if (!formData.processorModel) return alert('프로세서 사양을 선택해주세요'); if (!formData.installPlace) return alert('납품 설치 장소를 선택해주세요'); setShowQuote(true) }}>견적서 보기</button>
+                <button className="btn-view-quote" onClick={() => { if (!formData.productName) return alert('제품명을 선택해주세요'); if (!formData.installPlace) return alert('납품 설치 장소를 선택해주세요'); setShowQuote(true) }}>견적서 보기</button>
             </div>
         </div>
     )

@@ -30,6 +30,7 @@ public class EmailController {
             @RequestParam String to,
             @RequestParam(defaultValue = "LED 견적서") String subject,
             @RequestParam(defaultValue = "") String body,
+            @RequestParam(required = false) String businessCardImage,
             @RequestParam(required = false) MultipartFile file) {
         try {
             Map<String, String> settings = settingRepository.findAll().stream()
@@ -56,7 +57,14 @@ public class EmailController {
             helper.setFrom(settings.get("emailAccount"));
             helper.setTo(to);
             helper.setSubject(subject);
-            helper.setText(body, false);
+            
+            // HTML 본문 생성
+            String htmlBody = body.replace("\n", "<br>");
+            if (businessCardImage != null && !businessCardImage.isEmpty()) {
+                String baseUrl = "http://localhost:8080";
+                htmlBody += "<br><br><img src='" + baseUrl + businessCardImage + "' style='max-width: 500px; height: auto;' />";
+            }
+            helper.setText(htmlBody, true);
 
             if (file != null && !file.isEmpty()) {
                 helper.addAttachment(file.getOriginalFilename(), file);

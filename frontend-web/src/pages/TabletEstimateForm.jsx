@@ -220,7 +220,14 @@ function TabletEstimateForm() {
         }
     }
 
-    const panelPrice = 950000, processorPrice = 3000000, workerPrice = 300000
+    const currentProduct = products.find(p => p.name === formData.productName)
+    const currentVx = vxProducts.find(v => v.modelName === formData.processorModel)
+    const productImageUrl = currentProduct?.imageUrl && currentProduct.imageUrl.trim() ? `${import.meta.env.VITE_API_URL}${currentProduct.imageUrl}` : null
+    const processorImageUrl = currentVx?.imageUrl && currentVx.imageUrl.trim() ? `${import.meta.env.VITE_API_URL}${currentVx.imageUrl}` : null
+
+    const panelPrice = currentProduct?.unitPrice || 950000
+    const processorPrice = currentVx?.unitPrice || 3000000
+    const workerPrice = 300000
     const ledSqm = Math.round((formData.ledSizeW * formData.ledSizeH) / 1000000 * 100) / 100
     const panelSqm = formData.productSize ? formData.productSize.split('x').map(Number).reduce((a,b) => a * b) / 1000000 : 0
     const sqmPrice = panelSqm > 0 ? Math.round(Math.floor(1 / panelSqm * 100000) / 100000 * panelPrice) : 0
@@ -238,11 +245,6 @@ function TabletEstimateForm() {
         if (savedRef.current) return; savedRef.current = true
         fetch(import.meta.env.VITE_API_URL + '/api/estimates', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:formData.date,managerName:formData.managerName,department:formData.department,companyPhone:formData.companyPhone,mobilePhone:formData.mobilePhone,email:formData.email,companyAddress:formData.companyAddress,clientCompanyName:formData.clientCompany,clientDepartment:formData.clientDepartment,clientManager:formData.clientManager,clientPhone:formData.clientPhone,clientMobile:formData.clientMobile,clientEmail:formData.clientEmail,installDate:formData.installDate,installPeriod:formData.installPeriod,installLocation:formData.installPlace,installDetailLocation:formData.installDetailPlace,etcContent:formData.etcContent,productName:formData.productName,width:formData.width,height:formData.height,quantity:formData.totalPanels,ledSize:(formData.ledSizeW||0)+'x'+(formData.ledSizeH||0),ledResolution:formData.resolution||'',totalPower:formData.totalPower,installPersonnel:formData.installWorkers,processorModel:formData.processorModel,processorQuantity:formData.processorQuantity,ledPrice:salesTotal,processorPrice:processorTotal,installPrice:laborTotal,etcPrice:materialTotal,travelCost:travelTotal,totalPrice:grandTotal})}).catch(e=>console.error(e))
     }, [])
-
-    const currentProduct = products.find(p => p.name === formData.productName)
-    const currentVx = vxProducts.find(v => v.modelName === formData.processorModel)
-    const productImageUrl = currentProduct?.imageUrl && currentProduct.imageUrl.trim() ? `${import.meta.env.VITE_API_URL}${currentProduct.imageUrl}` : null
-    const processorImageUrl = currentVx?.imageUrl && currentVx.imageUrl.trim() ? `${import.meta.env.VITE_API_URL}${currentVx.imageUrl}` : null
 
     return (
         <div className="tb-container">
@@ -490,7 +492,7 @@ function TabletEstimateForm() {
                                 <div className="tb-lbl">지방 출장비 외</div>
                                 <div className="tb-inp" style={{gap:'4px'}}>
                                     <span style={{fontSize:'2.4vw',fontWeight:700,whiteSpace:'nowrap'}}>₩</span>
-                                    <input type="number" value={formData.regionalTravelCost} onChange={e=>h('regionalTravelCost',Number(e.target.value))} style={{flex:1}} />
+                                    <input type="text" value={formData.regionalTravelCost} onChange={e=>{const v=e.target.value.replace(/^0+/,'');h('regionalTravelCost',Number(v)||0)}} style={{flex:1}} />
                                 </div>
                             </div>
                             <div className="tb-row">
@@ -499,7 +501,7 @@ function TabletEstimateForm() {
                                 <div className="tb-lbl">기타 재료비 외</div>
                                 <div className="tb-inp" style={{gap:'4px'}}>
                                     <span style={{fontSize:'2.4vw',fontWeight:700,whiteSpace:'nowrap'}}>₩</span>
-                                    <input type="number" value={formData.materialCost} onChange={e=>h('materialCost',Number(e.target.value))} style={{flex:1}} />
+                                    <input type="text" value={formData.materialCost} onChange={e=>{const v=e.target.value.replace(/^0+/,'');h('materialCost',Number(v)||0)}} style={{flex:1}} />
                                 </div>
                             </div>
                         </div>
@@ -589,10 +591,12 @@ function TabletEstimateForm() {
                             <div className="tb-row"><div className="tb-lbl">LED 사이즈</div><div className="tb-val" style={{flex:3}}>{formData.ledSizeW} x {formData.ledSizeH}</div></div>
                             <div className="tb-row"><div className="tb-lbl">LED 해상도</div><div className="tb-val" style={{flex:3}}>{formData.ledResolutionW} x {formData.ledResolutionH}</div></div>
                             <div className="tb-row"><div className="tb-lbl">전체 전력</div><div className="tb-val">{formData.totalPower}</div><div style={{flex:1}}></div></div>
+                            {formData.processorModel && (
                             <div className="tb-row">
                                 <div className="tb-lbl">프로세스 사양</div><div className="tb-val">{formData.processorModel}</div>
                                 <div className="tb-lbl">프로세스 수량</div><div className="tb-val">{formData.processorQuantity}EA</div>
                             </div>
+                            )}
                             <div className="tb-row">
                                 <div className="tb-lbl">납품 설치 장소</div><div className="tb-val">{formData.deliveryLocation}</div>
                                 <div className="tb-lbl">지방 출장비 외</div><div className="tb-val">₩ {fmt(formData.regionalTravelCost)}</div>
@@ -633,7 +637,7 @@ function TabletEstimateForm() {
 
                     <div className="tb-footer">
                         <button className="tb-btn-next" onClick={() => { setStep(1); window.scrollTo(0,0); }}>수정하기</button>
-                        <button className="tb-btn-next" style={{background:'#8BC53E'}} onClick={() => { if (!formData.productName) return alert('제품명을 선택해주세요'); if (!formData.processorModel) return alert('프로세서 사양을 선택해주세요'); if (!formData.installLocation) return alert('납품 설치 장소를 선택해주세요'); setShowQuote(true); window.scrollTo(0, 0); }}>견적서 보기</button>
+                        <button className="tb-btn-next" style={{background:'#8BC53E'}} onClick={() => { if (!formData.productName) return alert('제품명을 선택해주세요'); if (!formData.installLocation) return alert('납품 설치 장소를 선택해주세요'); setShowQuote(true); window.scrollTo(0, 0); }}>견적서 보기</button>
                     </div>
                 </div>
             )}
@@ -666,7 +670,9 @@ function TabletEstimateForm() {
                                 <div className="tb-row"><div className="tb-lbl">LED 사이즈</div><div className="tb-val" style={{flex:3}}>{formData.ledSizeW} x {formData.ledSizeH}</div></div>
                                 <div className="tb-row"><div className="tb-lbl">LED 해상도</div><div className="tb-val" style={{flex:3}}>{formData.ledResolutionW} x {formData.ledResolutionH}</div></div>
                                 <div className="tb-row"><div className="tb-lbl">전체 전력</div><div className="tb-val">{formData.totalPower}</div><div style={{flex:1}}></div></div>
+                                {formData.processorModel && (
                                 <div className="tb-row"><div className="tb-lbl">프로세스 사양</div><div className="tb-val">{formData.processorModel}</div><div className="tb-lbl">프로세스 수량</div><div className="tb-val">{formData.processorQuantity}EA</div></div>
+                                )}
                                 <div className="tb-row"><div className="tb-lbl">납품 설치 장소</div><div className="tb-val">{formData.deliveryLocation}</div><div className="tb-lbl">지방 출장비 외</div><div className="tb-val">₩ {fmt(formData.regionalTravelCost)}</div></div>
                                 <div className="tb-row"><div className="tb-lbl">설치인원</div><div className="tb-val">{formData.installWorkers}명</div><div className="tb-lbl">기타 재료비 외</div><div className="tb-val">₩ {fmt(formData.materialCost)}</div></div>
                             </div>
@@ -728,6 +734,8 @@ function TabletEstimateForm() {
                                     <td colSpan={4} className="tb-it-center">소계</td>
                                     <td colSpan={2} className="tb-it-right">₩ {fmt(ledTotal)}</td>
                                 </tr>
+                                {formData.processorModel && (
+                                <>
                                 <tr className="tb-it-after-sub">
                                     <td className="tb-it-center">2</td>
                                     <td className="tb-it-product">
@@ -743,8 +751,10 @@ function TabletEstimateForm() {
                                     <td colSpan={4} className="tb-it-center">소계</td>
                                     <td colSpan={2} className="tb-it-right">₩ {fmt(processorTotal)}</td>
                                 </tr>
+                                </>
+                                )}
                                 <tr className="tb-it-after-sub">
-                                    <td className="tb-it-center">3</td>
+                                    <td className="tb-it-center">{formData.processorModel ? 3 : 2}</td>
                                     <td className="tb-it-product"><span style={{fontSize:'2vw'}}>시공 인건비</span></td>
                                     <td className="tb-it-center">인</td>
                                     <td className="tb-it-center">{formData.installWorkers}</td>
@@ -756,7 +766,7 @@ function TabletEstimateForm() {
                                     <td colSpan={2} className="tb-it-right">₩ {fmt(laborTotal)}</td>
                                 </tr>
                                 <tr className="tb-it-after-sub">
-                                    <td className="tb-it-center">4</td>
+                                    <td className="tb-it-center">{formData.processorModel ? 4 : 3}</td>
                                     <td className="tb-it-product"><span style={{fontSize:'2vw'}}>기타 재료 비용 외</span></td>
                                     <td className="tb-it-center">EA</td>
                                     <td className="tb-it-center">1</td>
@@ -768,7 +778,7 @@ function TabletEstimateForm() {
                                     <td colSpan={2} className="tb-it-right">₩ {fmt(materialTotal)}</td>
                                 </tr>
                                 <tr className="tb-it-after-sub">
-                                    <td className="tb-it-center">5</td>
+                                    <td className="tb-it-center">{formData.processorModel ? 5 : 4}</td>
                                     <td className="tb-it-product"><span style={{fontSize:'2vw'}}>지방 출장비 [{formData.deliveryLocation}]<br/><span style={{color:'#0066CC'}}>(운송비,숙박,기타)</span></span></td>
                                     <td className="tb-it-center">지역</td>
                                     <td className="tb-it-center">1</td>
@@ -828,6 +838,11 @@ function TabletEstimateForm() {
                             if (!to) return
                             setIsSendingEmail(true)
                             try {
+                                // 담당자 정보 가져오기
+                                const manager = managerList.find(m => m.name === formData.managerName)
+                                const emailSubject = manager?.emailSubject || '이지텍인터내셔널 - LED Display 견적 송부의 건'
+                                const emailBody = manager?.emailBody || `안녕하십니까.\n\nLED 디스플레이 전문업체 이지텍인터내셔널입니다.\n\nLED Display 견적 송부 드리오니 확인 부탁드리겠습니다.\n\n감사합니다.\n\n${formData.managerName || ''} 드림.`
+                                
                                 // 1) 전체내용보기 캡처
                                 const viewEl = viewContentRef.current
                                 await new Promise(r => setTimeout(r, 200))
@@ -845,7 +860,8 @@ function TabletEstimateForm() {
                                 const quoteCanvas = await html2canvas(el, {scale: 2, useCORS: true, allowTaint: true, scrollX: 0, scrollY: 0, width: rect.width, height: rect.height - 14, windowWidth: rect.width + 50, windowHeight: rect.height + 50})
                                 Object.assign(el.style, saved)
                                 if (footer) footer.style.display = ''
-                                // 3) 2페이지 PDF
+                                
+                                // 3) PDF 생성
                                 const imgW = 210
                                 const vH = viewCanvas.height * imgW / viewCanvas.width
                                 const qH = quoteCanvas.height * imgW / quoteCanvas.width
@@ -853,11 +869,15 @@ function TabletEstimateForm() {
                                 pdf.addImage(viewCanvas.toDataURL('image/jpeg', 0.85), 'JPEG', 0, 0, imgW, vH)
                                 pdf.addPage([imgW, qH])
                                 pdf.addImage(quoteCanvas.toDataURL('image/jpeg', 0.85), 'JPEG', 0, 0, imgW, qH)
+                                
                                 const pdfBlob = pdf.output('blob')
                                 const fd = new FormData()
                                 fd.append('to', to)
-                                fd.append('subject', '이지텍인터내셔널 - LED Display 견적 송부의 건')
-                                fd.append('body', `안녕하십니까.\n\nLED 디스플레이 전문업체 이지텍인터내셔널입니다.\n\nLED Display 견적 송부 드리오니 확인 부탁드리겠습니다.\n\n감사합니다.\n\n${formData.managerName || ''} 드림.`)
+                                fd.append('subject', emailSubject)
+                                fd.append('body', emailBody)
+                                if (manager?.businessCardImage) {
+                                    fd.append('businessCardImage', manager.businessCardImage)
+                                }
                                 const pdfDate = formData.date ? formData.date.slice(2).replace(/-/g, '.') : ''
                                 fd.append('file', pdfBlob, `${formData.clientName || '업체'}_${formData.productName || '제품'} 견적서_${pdfDate}.pdf`)
                                 const res = await fetch(import.meta.env.VITE_API_URL + '/api/email/send', {method: 'POST', body: fd})
