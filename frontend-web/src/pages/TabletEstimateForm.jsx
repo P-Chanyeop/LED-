@@ -918,7 +918,7 @@ function TabletEstimateForm() {
                                 el.style.boxSizing = 'border-box'
                                 await new Promise(r => setTimeout(r, 200))
                                 const rect = el.getBoundingClientRect()
-                                const quoteCanvas = await html2canvas(el, {scale: 2, useCORS: true, allowTaint: true, scrollX: 0, scrollY: 0, width: rect.width, height: rect.height, windowWidth: rect.width + 50, windowHeight: rect.height + 50})
+                                const quoteCanvas = await html2canvas(el, {scale: 2, useCORS: true, allowTaint: true, scrollX: 0, scrollY: 0, width: rect.width, height: el.scrollHeight, windowWidth: rect.width + 50, windowHeight: el.scrollHeight + 50})
                                 Object.assign(el.style, saved)
                                 if (footer) footer.style.display = ''
                                 
