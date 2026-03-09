@@ -896,8 +896,31 @@ function TabletEstimateForm() {
                                 
                                 // 1) 전체내용보기 캡처
                                 const viewEl = viewContentRef.current
-                                await new Promise(r => setTimeout(r, 200))
-                                const viewCanvas = await html2canvas(viewEl, {scale: 2, useCORS: true, allowTaint: true, width: viewEl.scrollWidth, height: viewEl.scrollHeight, windowWidth: viewEl.scrollWidth + 50, windowHeight: viewEl.scrollHeight + 50})
+                                const origStyle = viewEl.style.cssText
+                                viewEl.style.cssText = 'position:absolute;left:-9999px;top:0;width:1000px;font-size:22px;'
+                                await new Promise(r => setTimeout(r, 300))
+                                const viewH = viewEl.querySelector('.tb-step').getBoundingClientRect().height
+                                let viewCanvas = await html2canvas(viewEl, {scale: 2, useCORS: true, allowTaint: true, width: 1000, height: Math.ceil(viewH), windowWidth: 1000, windowHeight: Math.ceil(viewH) + 50})
+                                viewEl.style.cssText = origStyle
+                                // 하단 빈 공간 제거
+                                const vCtx = viewCanvas.getContext('2d')
+                                const vData = vCtx.getImageData(0, 0, viewCanvas.width, viewCanvas.height)
+                                let trimH = viewCanvas.height
+                                for (let y = viewCanvas.height - 1; y > 0; y--) {
+                                    let blank = true
+                                    for (let x = 0; x < viewCanvas.width; x += 10) {
+                                        const i = (y * viewCanvas.width + x) * 4
+                                        if (vData.data[i] < 250 || vData.data[i+1] < 250 || vData.data[i+2] < 250) { blank = false; break }
+                                    }
+                                    if (!blank) { trimH = y + 20; break }
+                                }
+                                if (trimH < viewCanvas.height) {
+                                    const trimmed = document.createElement('canvas')
+                                    trimmed.width = viewCanvas.width
+                                    trimmed.height = trimH
+                                    trimmed.getContext('2d').drawImage(viewCanvas, 0, 0)
+                                    viewCanvas = trimmed
+                                }
                                 // 2) 견적서 캡처
                                 const el = document.getElementById('tb-quote-step')
                                 const footer = el.querySelector('.tb-footer')

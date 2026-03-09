@@ -270,7 +270,7 @@ function QuoteModal({formData, products, vxProducts, managers, onClose, readOnly
                                     // 1) 전체내용보기 캡처
                                     const viewEl = viewRef.current
                                     await new Promise(r => setTimeout(r, 200))
-                                    const viewCanvas = await html2canvas(viewEl, {scale: 2, useCORS: true, allowTaint: true, width: viewEl.scrollWidth, height: viewEl.scrollHeight, windowWidth: viewEl.scrollWidth + 50, windowHeight: viewEl.scrollHeight + 50})
+                                    const viewCanvas = await html2canvas(viewEl, {scale: 2, useCORS: true, allowTaint: true, width: viewEl.scrollWidth, height: viewEl.scrollHeight + 5, windowWidth: viewEl.scrollWidth + 50, windowHeight: viewEl.scrollHeight + 50})
                                     // 2) 견적서 캡처
                                     const el = document.querySelector('.quote-outer')
                                     const overlay = el.closest('.modal-overlay')
