@@ -918,9 +918,27 @@ function TabletEstimateForm() {
                                 el.style.boxSizing = 'border-box'
                                 await new Promise(r => setTimeout(r, 200))
                                 const rect = el.getBoundingClientRect()
-                                const quoteCanvas = await html2canvas(el, {scale: 2, useCORS: true, allowTaint: true, scrollX: 0, scrollY: 0, width: rect.width, height: el.scrollHeight, windowWidth: rect.width + 50, windowHeight: el.scrollHeight + 50})
+                                let quoteCanvas = await html2canvas(el, {scale: 2, useCORS: true, allowTaint: true, scrollX: 0, scrollY: 0, width: rect.width, height: el.scrollHeight + 50, windowWidth: rect.width + 50, windowHeight: el.scrollHeight + 200})
                                 Object.assign(el.style, saved)
                                 if (footer) footer.style.display = ''
+                                // 견적서 하단 빈 공간 트림
+                                const qCtx = quoteCanvas.getContext('2d')
+                                const qData = qCtx.getImageData(0, 0, quoteCanvas.width, quoteCanvas.height)
+                                let qTrimH = quoteCanvas.height
+                                for (let y = quoteCanvas.height - 1; y > 0; y--) {
+                                    let blank = true
+                                    for (let x = 0; x < quoteCanvas.width; x += 10) {
+                                        const i = (y * quoteCanvas.width + x) * 4
+                                        if (qData.data[i] < 250 || qData.data[i+1] < 250 || qData.data[i+2] < 250) { blank = false; break }
+                                    }
+                                    if (!blank) { qTrimH = y + 20; break }
+                                }
+                                if (qTrimH < quoteCanvas.height) {
+                                    const t = document.createElement('canvas')
+                                    t.width = quoteCanvas.width; t.height = qTrimH
+                                    t.getContext('2d').drawImage(quoteCanvas, 0, 0)
+                                    quoteCanvas = t
+                                }
                                 
                                 // 3) PDF 생성
                                 const imgW = 210
