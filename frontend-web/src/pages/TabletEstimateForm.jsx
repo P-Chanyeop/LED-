@@ -226,7 +226,7 @@ function TabletEstimateForm() {
     const processorImageUrl = currentVx?.imageUrl && currentVx.imageUrl.trim() ? `${import.meta.env.VITE_API_URL}${currentVx.imageUrl}` : null
 
     const panelPrice = currentProduct?.unitPrice || 950000
-    const processorPrice = currentVx?.unitPrice || 3000000
+    const processorPrice = formData.processorModel ? (currentVx?.unitPrice || 3000000) : 0
     const workerPrice = 300000
     const ledSqm = Math.round((formData.ledSizeW * formData.ledSizeH) / 1000000 * 100) / 100
     const panelSqm = formData.productSize ? formData.productSize.split('x').map(Number).reduce((a,b) => a * b) / 1000000 : 0
