@@ -265,32 +265,19 @@ function TabletEstimateForm() {
                             </div>
                             <div className="tb-row">
                                 <div className="tb-lbl">담당자</div>
-                                <div className="tb-inp tb-inp--dropdown">
-                                    <input 
-                                        type="text" 
-                                        value={formData.managerName} 
-                                        onChange={e=>h('managerName',e.target.value)}
-                                        onFocus={() => setShowManagerDropdown(true)}
-                                    />
-                                    <button 
-                                        className="tb-dropdown-btn"
-                                        onClick={() => setShowManagerDropdown(!showManagerDropdown)}
+                                <div className="tb-inp">
+                                    <select 
+                                        value={formData.managerName}
+                                        onChange={e => {
+                                            const manager = managerList.find(m => m.name === e.target.value)
+                                            if (manager) selectManager(manager)
+                                        }}
                                     >
-                                        ▼
-                                    </button>
-                                    {showManagerDropdown && managerList.length > 0 && (
-                                        <div className="tb-dropdown-list">
-                                            {managerList.map((manager, idx) => (
-                                                <div 
-                                                    key={idx} 
-                                                    className="tb-dropdown-item"
-                                                    onClick={() => selectManager(manager)}
-                                                >
-                                                    {manager.name} ({manager.department})
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
+                                        <option value="">선택</option>
+                                        {managerList.map((manager, idx) => (
+                                            <option key={idx} value={manager.name}>{manager.name} ({manager.department})</option>
+                                        ))}
+                                    </select>
                                 </div>
                                 <div className="tb-lbl">부서</div>
                                 <div className="tb-inp"><input type="text" value={formData.department} onChange={e=>h('department',e.target.value)} /></div>
@@ -931,7 +918,7 @@ function TabletEstimateForm() {
                                 el.style.boxSizing = 'border-box'
                                 await new Promise(r => setTimeout(r, 200))
                                 const rect = el.getBoundingClientRect()
-                                const quoteCanvas = await html2canvas(el, {scale: 2, useCORS: true, allowTaint: true, scrollX: 0, scrollY: 0, width: rect.width, height: rect.height - 14, windowWidth: rect.width + 50, windowHeight: rect.height + 50})
+                                const quoteCanvas = await html2canvas(el, {scale: 2, useCORS: true, allowTaint: true, scrollX: 0, scrollY: 0, width: rect.width, height: rect.height, windowWidth: rect.width + 50, windowHeight: rect.height + 50})
                                 Object.assign(el.style, saved)
                                 if (footer) footer.style.display = ''
                                 
