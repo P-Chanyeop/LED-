@@ -683,23 +683,21 @@ function AdminPage() {
         <table className="data-table">
           <thead>
             <tr>
-              <th>견적번호</th>
               <th>날짜</th>
               <th>고객명</th>
               <th>담당자</th>
+              <th>의뢰명</th>
               <th>금액</th>
-              <th>상태</th>
             </tr>
           </thead>
           <tbody>
             {estimates.slice(0, 5).map(est => (
               <tr key={est.id}>
-                <td>{est.id}</td>
                 <td>{est.date}</td>
                 <td>{est.customer}</td>
                 <td>{est.manager}</td>
+                <td>{est.request?.productName || ''}</td>
                 <td>₩ {(est.amount || 0).toLocaleString()}</td>
-                <td><span className={`status-badge ${est.status}`}>{est.status}</span></td>
               </tr>
             ))}
           </tbody>
