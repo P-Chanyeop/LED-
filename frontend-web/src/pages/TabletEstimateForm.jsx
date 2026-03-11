@@ -243,9 +243,14 @@ function TabletEstimateForm() {
     const fmt = (n) => n.toLocaleString()
     const savedRef = useRef(false)
     useEffect(() => {
-        if (savedRef.current) return; savedRef.current = true
-        fetch(import.meta.env.VITE_API_URL + '/api/estimates', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:formData.date,managerName:formData.managerName,department:formData.department,companyPhone:formData.managerPhone,mobilePhone:formData.managerMobile,email:formData.managerEmail,companyAddress:formData.companyAddress,clientCompanyName:formData.clientName,clientDepartment:formData.clientDepartment,clientManager:formData.clientManager,clientPhone:formData.clientPhone,clientMobile:formData.clientMobile,clientEmail:formData.clientEmail,installDate:formData.installDate,installPeriod:formData.installPeriod,installLocation:formData.deliveryLocation,installDetailLocation:formData.installDetail,etcContent:formData.installNote,productName:formData.productName,width:formData.ledWidth,height:formData.ledHeight,quantity:formData.totalPanels,ledSize:(formData.ledSizeW||0)+'x'+(formData.ledSizeH||0),ledResolution:formData.resolution||'',totalPower:formData.totalPower,installPersonnel:formData.installWorkers,processorModel:formData.processorModel,processorQuantity:formData.processorQuantity,ledPrice:salesTotal,processorPrice:processorTotal,installPrice:laborTotal,etcPrice:materialTotal,travelCost:travelTotal,totalPrice:grandTotal})}).catch(e=>console.error(e))
-    }, [])
+        if (!showQuote) return
+        if (savedRef.current) return
+        savedRef.current = true
+        console.log('견적 저장 시도:', formData.productName, formData.clientName)
+        fetch(import.meta.env.VITE_API_URL + '/api/estimates', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:formData.date,managerName:formData.managerName,department:formData.department,companyPhone:formData.managerPhone,mobilePhone:formData.managerMobile,email:formData.managerEmail,companyAddress:formData.companyAddress,clientCompanyName:formData.clientName,clientDepartment:formData.clientDepartment,clientManager:formData.clientManager,clientPhone:formData.clientPhone,clientMobile:formData.clientMobile,clientEmail:formData.clientEmail,installDate:formData.installDate,installPeriod:formData.installPeriod,installLocation:formData.deliveryLocation,installDetailLocation:formData.installDetail,etcContent:formData.installNote,productName:formData.productName,width:formData.ledWidth,height:formData.ledHeight,quantity:formData.totalPanels,ledSize:(formData.ledSizeW||0)+'x'+(formData.ledSizeH||0),ledResolution:formData.resolution||'',totalPower:parseFloat(formData.totalPower)||0,installPersonnel:formData.installWorkers,processorModel:formData.processorModel,processorQuantity:formData.processorQuantity,ledPrice:salesTotal,processorPrice:processorTotal,installPrice:laborTotal,etcPrice:materialTotal,travelCost:travelTotal,totalPrice:grandTotal})})
+        .then(r => r.json()).then(d => console.log('견적 저장 결과:', d))
+        .catch(e=>console.error('견적 저장 실패:', e))
+    }, [showQuote])
 
     return (
         <div className="tb-container">
