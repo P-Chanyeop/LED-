@@ -96,14 +96,6 @@ public class EmailController {
                 helper.addAttachment(file.getOriginalFilename(), file);
             }
 
-            String defaultAttachment = settings.get("defaultAttachment");
-            if (defaultAttachment != null && !defaultAttachment.isEmpty()) {
-                File attachFile = new File(defaultAttachment.startsWith("/") ? defaultAttachment.substring(1) : defaultAttachment);
-                if (attachFile.exists()) {
-                    helper.addAttachment(attachFile.getName().replaceFirst("^[^_]*_", ""), attachFile);
-                }
-            }
-
             // 담당자별 첨부파일
             if (managerAttachment != null && !managerAttachment.isEmpty()) {
                 File mFile = new File(managerAttachment.startsWith("/") ? managerAttachment.substring(1) : managerAttachment);

@@ -717,7 +717,7 @@ function EstimateForm() {
     const handleFileUpload = async (e) => {
         const files = Array.from(e.target.files)
         if (!files.length) return
-        if (files.length > 3) { alert('첨부파일은 최대 3개까지 가능합니다.'); e.target.value = ''; return }
+        if (files.length > 5) { alert('첨부파일은 최대 5개까지 가능합니다.'); e.target.value = ''; return }
         const uploaded = []
         for (const file of files) {
             const fd = new FormData()
