@@ -972,6 +972,7 @@ function TabletEstimateForm() {
                                 const pdfDate = formData.date ? formData.date.slice(2).replace(/-/g, '.') : ''
                                 fd.append('file', pdfBlob, `${formData.clientName || '업체'}_${formData.productName || '제품'} 견적서_${pdfDate}.pdf`)
                                 const res = await fetch(import.meta.env.VITE_API_URL + '/api/email/send', {method: 'POST', body: fd})
+                                if (!res.ok) throw new Error(`서버 오류 (${res.status}). 첨부파일 용량을 확인해주세요.`)
                                 const data = await res.json()
                                 alert(data.success ? '메일이 발송되었습니다.' : data.message)
                             } catch (e) { alert('메일 발송 실패: ' + e.message) }
