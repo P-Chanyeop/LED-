@@ -27,4 +27,10 @@ public class Manager {
     
     @Column(length = 500)
     private String attachmentFile;
+    
+    private String smtpServer;
+    private Integer smtpPort;
+    private String smtpAccount;
+    @Column(length = 500)
+    private String smtpPassword;
 }

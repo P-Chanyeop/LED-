@@ -44,6 +44,10 @@ public class ManagerController {
             @RequestParam("address") String address,
             @RequestParam(value = "emailSubject", required = false) String emailSubject,
             @RequestParam(value = "emailBody", required = false) String emailBody,
+            @RequestParam(value = "smtpServer", required = false) String smtpServer,
+            @RequestParam(value = "smtpPort", required = false) Integer smtpPort,
+            @RequestParam(value = "smtpAccount", required = false) String smtpAccount,
+            @RequestParam(value = "smtpPassword", required = false) String smtpPassword,
             @RequestParam(value = "businessCardImage", required = false) MultipartFile file,
             @RequestParam(value = "attachmentFile", required = false) MultipartFile attachFile) throws IOException {
         
@@ -56,6 +60,10 @@ public class ManagerController {
         manager.setAddress(address);
         manager.setEmailSubject(emailSubject);
         manager.setEmailBody(emailBody);
+        manager.setSmtpServer(smtpServer);
+        manager.setSmtpPort(smtpPort);
+        manager.setSmtpAccount(smtpAccount);
+        manager.setSmtpPassword(smtpPassword);
 
         if (file != null && !file.isEmpty()) {
             Path uploadPath = Paths.get(UPLOAD_DIR);
@@ -93,6 +101,10 @@ public class ManagerController {
             @RequestParam("address") String address,
             @RequestParam(value = "emailSubject", required = false) String emailSubject,
             @RequestParam(value = "emailBody", required = false) String emailBody,
+            @RequestParam(value = "smtpServer", required = false) String smtpServer,
+            @RequestParam(value = "smtpPort", required = false) Integer smtpPort,
+            @RequestParam(value = "smtpAccount", required = false) String smtpAccount,
+            @RequestParam(value = "smtpPassword", required = false) String smtpPassword,
             @RequestParam(value = "businessCardImage", required = false) MultipartFile file,
             @RequestParam(value = "attachmentFile", required = false) MultipartFile attachFile) throws IOException {
         
@@ -105,6 +117,10 @@ public class ManagerController {
         manager.setAddress(address);
         manager.setEmailSubject(emailSubject);
         manager.setEmailBody(emailBody);
+        manager.setSmtpServer(smtpServer);
+        manager.setSmtpPort(smtpPort);
+        manager.setSmtpAccount(smtpAccount);
+        manager.setSmtpPassword(smtpPassword);
 
         if (file != null && !file.isEmpty()) {
             Path uploadPath = Paths.get(UPLOAD_DIR);

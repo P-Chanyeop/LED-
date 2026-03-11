@@ -960,6 +960,7 @@ function TabletEstimateForm() {
                                 fd.append('to', to)
                                 fd.append('subject', emailSubject)
                                 fd.append('body', emailBody)
+                                fd.append('managerName', formData.managerName || '')
                                 if (manager?.businessCardImage) {
                                     fd.append('businessCardImage', manager.businessCardImage)
                                 }

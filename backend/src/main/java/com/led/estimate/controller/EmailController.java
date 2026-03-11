@@ -1,7 +1,9 @@
 package com.led.estimate.controller;
 
 import com.led.estimate.dto.ApiResponse;
+import com.led.estimate.entity.Manager;
 import com.led.estimate.entity.Setting;
+import com.led.estimate.repository.ManagerRepository;
 import com.led.estimate.repository.SettingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
 public class EmailController {
 
     private final SettingRepository settingRepository;
+    private final ManagerRepository managerRepository;
     private static final String AES_KEY = "LedEstimate2026!";
     private static final String ENCRYPT_PREFIX = "ENC:";
 
@@ -32,24 +35,37 @@ public class EmailController {
             @RequestParam(defaultValue = "") String body,
             @RequestParam(required = false) String businessCardImage,
             @RequestParam(required = false) String managerAttachment,
+            @RequestParam(required = false) String managerName,
             @RequestParam(required = false) MultipartFile file,
             @RequestParam(required = false) List<MultipartFile> extraFiles,
             @RequestParam(required = false) List<String> extraAttachPaths) {
         try {
-            Map<String, String> settings = settingRepository.findAll().stream()
-                    .collect(Collectors.toMap(Setting::getSettingKey, Setting::getSettingValue));
+            // 담당자별 SMTP 사용
+            Manager mgr = null;
+            if (managerName != null && !managerName.isEmpty()) {
+                mgr = managerRepository.findAll().stream()
+                        .filter(m -> m.getName().equals(managerName))
+                        .findFirst().orElse(null);
+            }
 
-            String password = settings.getOrDefault("emailPassword", "");
-            if (password.startsWith(ENCRYPT_PREFIX)) {
-                password = decrypt(password.substring(ENCRYPT_PREFIX.length()));
+            if (mgr == null || mgr.getSmtpAccount() == null || mgr.getSmtpAccount().isEmpty()) {
+                return ApiResponse.error("담당자의 SMTP 설정이 없습니다. 관리자 페이지에서 담당자 SMTP를 설정해주세요.");
+            }
+
+            String smtpHost = mgr.getSmtpServer();
+            int port = mgr.getSmtpPort() != null ? mgr.getSmtpPort() : 587;
+            String smtpUser = mgr.getSmtpAccount();
+            String smtpPass = mgr.getSmtpPassword() != null ? mgr.getSmtpPassword() : "";
+
+            if (smtpPass.startsWith(ENCRYPT_PREFIX)) {
+                smtpPass = decrypt(smtpPass.substring(ENCRYPT_PREFIX.length()));
             }
 
             JavaMailSenderImpl sender = new JavaMailSenderImpl();
-            sender.setHost(settings.getOrDefault("smtpServer", "smtp.gmail.com"));
-            int port = Integer.parseInt(settings.getOrDefault("smtpPort", "587"));
+            sender.setHost(smtpHost);
             sender.setPort(port);
-            sender.setUsername(settings.get("emailAccount"));
-            sender.setPassword(password);
+            sender.setUsername(smtpUser);
+            sender.setPassword(smtpPass);
 
             Properties props = sender.getJavaMailProperties();
             props.put("mail.smtp.auth", "true");
@@ -66,7 +82,7 @@ public class EmailController {
 
             MimeMessage message = sender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-            helper.setFrom(settings.get("emailAccount"));
+            helper.setFrom(smtpUser);
             helper.setTo(to);
             helper.setSubject(subject);
             

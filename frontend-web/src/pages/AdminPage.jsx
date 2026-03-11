@@ -1017,26 +1017,6 @@ function AdminPage() {
     <div className="admin-section">
       <h2>설정</h2>
       
-      <div className="settings-card">
-        <h3>이메일 설정</h3>
-        <div className="setting-row">
-          <label>SMTP 서버</label>
-          <input type="text" value={sf.smtpServer} onChange={e => set('smtpServer', e.target.value)} />
-        </div>
-        <div className="setting-row">
-          <label>포트</label>
-          <input type="text" value={sf.smtpPort} onChange={e => set('smtpPort', e.target.value)} />
-        </div>
-        <div className="setting-row">
-          <label>이메일</label>
-          <input type="text" value={sf.emailAccount} onChange={e => set('emailAccount', e.target.value)} />
-        </div>
-        <div className="setting-row">
-          <label>앱 비밀번호</label>
-          <input type="password" value={sf.emailPassword} onChange={e => set('emailPassword', e.target.value)} placeholder="변경 시에만 입력" />
-        </div>
-      </div>
-
       <button className="btn-cyan btn-large" onClick={handleSaveSettings}>저장</button>
     </div>
     )
@@ -1212,6 +1192,10 @@ function AdminPage() {
         formData.append('address', managerForm.address || '')
         formData.append('emailSubject', managerForm.emailSubject || '')
         formData.append('emailBody', managerForm.emailBody || '')
+        if (managerForm.smtpServer) formData.append('smtpServer', managerForm.smtpServer)
+        if (managerForm.smtpPort) formData.append('smtpPort', managerForm.smtpPort)
+        if (managerForm.smtpAccount) formData.append('smtpAccount', managerForm.smtpAccount)
+        if (managerForm.smtpPassword) formData.append('smtpPassword', managerForm.smtpPassword)
         if (managerImageFile) {
           formData.append('businessCardImage', managerImageFile)
         }
@@ -1282,7 +1266,7 @@ function AdminPage() {
                 <td>{m.email}</td>
                 <td>
                   <button className="btn-small btn-cyan" onClick={() => {
-                    setManagerForm({ name: m.name, department: m.department, phone: m.phone, mobile: m.mobile, email: m.email, address: m.address, businessCardImage: m.businessCardImage, attachmentFile: m.attachmentFile || '', emailSubject: m.emailSubject || '', emailBody: m.emailBody || '' })
+                    setManagerForm({ name: m.name, department: m.department, phone: m.phone, mobile: m.mobile, email: m.email, address: m.address, businessCardImage: m.businessCardImage, attachmentFile: m.attachmentFile || '', emailSubject: m.emailSubject || '', emailBody: m.emailBody || '', smtpServer: m.smtpServer || '', smtpPort: m.smtpPort || '', smtpAccount: m.smtpAccount || m.email || '', smtpPassword: m.smtpPassword || '' })
                     setManagerImageFile(null)
                     setManagerAttachFile(null)
                     setEditingManagerId(m.id)
@@ -1345,6 +1329,21 @@ function AdminPage() {
                       <span style={{fontSize:'13px',color:'#666'}}>현재: {managerForm.attachmentFile.split('/').pop().replace(/^[^_]*_/,'')}</span>
                     )}
                   </div>
+                </div>
+                <div className="register-row-full" style={{borderTop:'2px solid #4ECDC4',paddingTop:'15px',marginTop:'15px'}}>
+                  <div style={{fontSize:'18px',fontWeight:'bold',color:'#333',marginBottom:'10px'}}>SMTP 설정</div>
+                </div>
+                <div className="register-row">
+                  <div className="register-label">SMTP 서버</div>
+                  <input type="text" className="register-input" placeholder="smtp.gmail.com" value={managerForm.smtpServer||''} onChange={e => setManagerForm({...managerForm, smtpServer: e.target.value})} />
+                  <div className="register-label">포트</div>
+                  <input type="text" className="register-input" placeholder="587" value={managerForm.smtpPort||''} onChange={e => setManagerForm({...managerForm, smtpPort: e.target.value})} />
+                </div>
+                <div className="register-row">
+                  <div className="register-label">메일 계정</div>
+                  <input type="text" className="register-input" placeholder="user@gmail.com" value={managerForm.smtpAccount||''} onChange={e => setManagerForm({...managerForm, smtpAccount: e.target.value})} />
+                  <div className="register-label">비밀번호</div>
+                  <input type="password" className="register-input" placeholder="앱 비밀번호" value={managerForm.smtpPassword||''} onChange={e => setManagerForm({...managerForm, smtpPassword: e.target.value})} />
                 </div>
                 <div className="register-buttons">
                   <button type="button" className="register-btn-cancel" onClick={() => setShowManagerModal(false)}>취소</button>
@@ -1763,12 +1762,6 @@ function AdminPage() {
           >
             담당자 관리
           </button>
-          <button 
-            className={activeTab === 'settings' ? 'active' : ''}
-            onClick={() => setActiveTab('settings')}
-          >
-            설정
-          </button>
         </nav>
       </aside>
 
@@ -1780,7 +1773,6 @@ function AdminPage() {
           {activeTab === 'product-register' && renderProductRegister()}
           {activeTab === 'pricing' && renderPricing()}
           {activeTab === 'managers' && renderManagers()}
-          {activeTab === 'settings' && renderSettings()}
           {activeTab === 'accounts' && renderAccounts()}
         </div>
       </main>
