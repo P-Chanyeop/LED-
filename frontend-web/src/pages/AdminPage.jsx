@@ -1700,6 +1700,7 @@ function AdminPage() {
           formData={toFormData(selectedEstimate)}
           products={products}
           vxProducts={vxProducts}
+          managers={managers}
           readOnly
           onClose={() => setShowQuoteModal(false)}
         />
