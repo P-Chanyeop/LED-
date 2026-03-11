@@ -59,9 +59,7 @@ function TabletEstimateForm() {
             .catch(e => console.error('Failed to fetch vx products:', e))
         fetch(import.meta.env.VITE_API_URL + '/api/settings')
             .then(r => r.json())
-            .then(data => {
-                if (data.success && data.data.defaultAttachment) setFormData(prev => prev.attachment ? prev : ({...prev, attachment: data.data.defaultAttachment}))
-            })
+            .then(data => {})
             .catch(e => console.error('Failed to fetch settings:', e))
     }, [])
 

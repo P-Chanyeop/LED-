@@ -642,7 +642,6 @@ function EstimateForm() {
             .then(data => {
                 if (data.success) {
                     if (data.data.laborCostPerDay) setFormData(prev => ({...prev, laborPrice: parseInt(data.data.laborCostPerDay) || 300000}))
-                    if (data.data.defaultAttachment) setFormData(prev => prev.attachment ? prev : ({...prev, attachment: data.data.defaultAttachment}))
                 }
             })
             .catch(e => console.error('Failed to fetch settings:', e))
