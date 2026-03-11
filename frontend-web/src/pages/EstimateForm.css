@@ -179,6 +179,8 @@
   flex: 1;
   border-bottom: 1px solid #eee;
   height: 34px;
+  overflow: hidden;
+  min-width: 0;
 }
 
 .file-input input {

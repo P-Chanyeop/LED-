@@ -22,6 +22,7 @@ public class ManagerController {
     private final ManagerRepository managerRepository;
 
     private static final String UPLOAD_DIR = "uploads/business-cards/";
+    private static final String ATTACH_DIR = "uploads/manager-attachments/";
 
     @GetMapping
     public ApiResponse<List<Manager>> getAll() {
@@ -43,7 +44,8 @@ public class ManagerController {
             @RequestParam("address") String address,
             @RequestParam(value = "emailSubject", required = false) String emailSubject,
             @RequestParam(value = "emailBody", required = false) String emailBody,
-            @RequestParam(value = "businessCardImage", required = false) MultipartFile file) throws IOException {
+            @RequestParam(value = "businessCardImage", required = false) MultipartFile file,
+            @RequestParam(value = "attachmentFile", required = false) MultipartFile attachFile) throws IOException {
         
         Manager manager = new Manager();
         manager.setName(name);
@@ -61,6 +63,14 @@ public class ManagerController {
             String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
             Files.copy(file.getInputStream(), uploadPath.resolve(filename));
             manager.setBusinessCardImage("/uploads/business-cards/" + filename);
+        }
+
+        if (attachFile != null && !attachFile.isEmpty()) {
+            Path attachPath = Paths.get(ATTACH_DIR);
+            if (!Files.exists(attachPath)) Files.createDirectories(attachPath);
+            String filename = UUID.randomUUID() + "_" + attachFile.getOriginalFilename();
+            Files.copy(attachFile.getInputStream(), attachPath.resolve(filename));
+            manager.setAttachmentFile("/uploads/manager-attachments/" + filename);
         }
 
         return ApiResponse.success(managerRepository.save(manager));
@@ -83,7 +93,8 @@ public class ManagerController {
             @RequestParam("address") String address,
             @RequestParam(value = "emailSubject", required = false) String emailSubject,
             @RequestParam(value = "emailBody", required = false) String emailBody,
-            @RequestParam(value = "businessCardImage", required = false) MultipartFile file) throws IOException {
+            @RequestParam(value = "businessCardImage", required = false) MultipartFile file,
+            @RequestParam(value = "attachmentFile", required = false) MultipartFile attachFile) throws IOException {
         
         Manager manager = managerRepository.findById(id).orElseThrow();
         manager.setName(name);
@@ -101,6 +112,14 @@ public class ManagerController {
             String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
             Files.copy(file.getInputStream(), uploadPath.resolve(filename));
             manager.setBusinessCardImage("/uploads/business-cards/" + filename);
+        }
+
+        if (attachFile != null && !attachFile.isEmpty()) {
+            Path attachPath = Paths.get(ATTACH_DIR);
+            if (!Files.exists(attachPath)) Files.createDirectories(attachPath);
+            String filename = UUID.randomUUID() + "_" + attachFile.getOriginalFilename();
+            Files.copy(attachFile.getInputStream(), attachPath.resolve(filename));
+            manager.setAttachmentFile("/uploads/manager-attachments/" + filename);
         }
 
         return ApiResponse.success(managerRepository.save(manager));

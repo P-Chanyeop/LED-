@@ -24,4 +24,7 @@ public class Manager {
     
     @Column(length = 2000)
     private String emailBody;
+    
+    @Column(length = 500)
+    private String attachmentFile;
 }

@@ -403,6 +403,7 @@ function AdminPage() {
   const [showManagerModal, setShowManagerModal] = useState(false)
   const [editingManagerId, setEditingManagerId] = useState(null)
   const [managerImageFile, setManagerImageFile] = useState(null)
+  const [managerAttachFile, setManagerAttachFile] = useState(null)
 
   const [settingsForm, setSettingsForm] = useState({
     companyName: '', companyAddress: '', companyPhone: '', companyEmail: '',
@@ -700,7 +701,7 @@ function AdminPage() {
             </tr>
           </thead>
           <tbody>
-            {estimates.slice(0, 5).map(est => (
+            {[...estimates].sort((a, b) => b.id - a.id).slice(0, 5).map(est => (
               <tr key={est.id}>
                 <td>{est.date}</td>
                 <td>{est.customer}</td>
@@ -1036,28 +1037,6 @@ function AdminPage() {
         </div>
       </div>
 
-      <div className="settings-card">
-        <h3>기본 첨부파일</h3>
-        <div className="setting-row">
-          <label>현재 파일</label>
-          <span>{sf.defaultAttachment ? sf.defaultAttachment.split('/').pop().replace(/^[^_]*_/, '') : '없음'}</span>
-        </div>
-        <div className="setting-row">
-          <label>파일 변경</label>
-          <input type="file" onChange={async (e) => {
-            const file = e.target.files[0]
-            if (!file) return
-            const fd = new FormData()
-            fd.append('file', file)
-            try {
-              const res = await fetch(`${API_BASE}/products/upload`, {method: 'POST', body: fd})
-              const data = await res.json()
-              if (data.success) set('defaultAttachment', data.data)
-            } catch (err) { console.error('Upload failed:', err) }
-          }} />
-        </div>
-      </div>
-
       <button className="btn-cyan btn-large" onClick={handleSaveSettings}>저장</button>
     </div>
     )
@@ -1236,6 +1215,9 @@ function AdminPage() {
         if (managerImageFile) {
           formData.append('businessCardImage', managerImageFile)
         }
+        if (managerAttachFile) {
+          formData.append('attachmentFile', managerAttachFile)
+        }
 
         if (editingManagerId) {
           await fetch(`${API_BASE}/managers/${editingManagerId}/with-image`, {
@@ -1249,8 +1231,9 @@ function AdminPage() {
           })
         }
         fetchManagers()
-        setManagerForm({ name: '', department: '', phone: '', mobile: '', email: '', address: '', businessCardImage: null, emailSubject: '', emailBody: '' })
+        setManagerForm({ name: '', department: '', phone: '', mobile: '', email: '', address: '', businessCardImage: null, attachmentFile: '', emailSubject: '', emailBody: '' })
         setManagerImageFile(null)
+        setManagerAttachFile(null)
         setEditingManagerId(null)
         setShowManagerModal(false)
       } catch (e) { console.error('Failed to save manager:', e) }
@@ -1299,8 +1282,9 @@ function AdminPage() {
                 <td>{m.email}</td>
                 <td>
                   <button className="btn-small btn-cyan" onClick={() => {
-                    setManagerForm({ name: m.name, department: m.department, phone: m.phone, mobile: m.mobile, email: m.email, address: m.address, businessCardImage: m.businessCardImage, emailSubject: m.emailSubject || '', emailBody: m.emailBody || '' })
+                    setManagerForm({ name: m.name, department: m.department, phone: m.phone, mobile: m.mobile, email: m.email, address: m.address, businessCardImage: m.businessCardImage, attachmentFile: m.attachmentFile || '', emailSubject: m.emailSubject || '', emailBody: m.emailBody || '' })
                     setManagerImageFile(null)
+                    setManagerAttachFile(null)
                     setEditingManagerId(m.id)
                     setShowManagerModal(true)
                   }}>수정</button>
@@ -1352,6 +1336,15 @@ function AdminPage() {
                 <div className="register-row-full">
                   <div className="register-label">메일 내용</div>
                   <textarea className="register-input-full" placeholder="안녕하세요. LED 견적서를 보내드립니다." value={managerForm.emailBody} onChange={e => setManagerForm({...managerForm, emailBody: e.target.value})} style={{minHeight: '100px', resize: 'vertical', padding: '10px'}} />
+                </div>
+                <div className="register-row-full">
+                  <div className="register-label">추가 첨부파일</div>
+                  <div style={{padding: '10px', display: 'flex', flexDirection: 'column', gap: '10px'}}>
+                    <input type="file" onChange={e => setManagerAttachFile(e.target.files[0])} />
+                    {managerForm.attachmentFile && !managerAttachFile && (
+                      <span style={{fontSize:'13px',color:'#666'}}>현재: {managerForm.attachmentFile.split('/').pop().replace(/^[^_]*_/,'')}</span>
+                    )}
+                  </div>
                 </div>
                 <div className="register-buttons">
                   <button type="button" className="register-btn-cancel" onClick={() => setShowManagerModal(false)}>취소</button>

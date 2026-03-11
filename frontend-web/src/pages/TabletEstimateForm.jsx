@@ -15,7 +15,7 @@ function TabletEstimateForm() {
     const [showQuote, setShowQuote] = useState(false)
     const [managerList, setManagerList] = useState([])
     const [showManagerDropdown, setShowManagerDropdown] = useState(false)
-    const [attachmentFile, setAttachmentFile] = useState(null)
+    const [attachmentFile, setAttachmentFile] = useState([])
     const [showPhotoOptions, setShowPhotoOptions] = useState(false)
     const [isSendingEmail, setIsSendingEmail] = useState(false)
     const viewContentRef = useRef(null)
@@ -93,11 +93,13 @@ function TabletEstimateForm() {
     }
 
     const handleAttachmentChange = (e) => {
-        const file = e.target.files[0]
-        if (file) {
-            setAttachmentFile(file)
-            h('attachment', file.name)
+        const files = Array.from(e.target.files)
+        if (files.length > 3) { alert('첨부파일은 최대 3개까지 가능합니다.'); e.target.value = ''; return }
+        if (files.length) {
+            setAttachmentFile(files)
+            h('attachment', files.map(f => f.name).join(', '))
         }
+        e.target.value = ''
     }
 
     const handlePhotoClick = () => {
@@ -304,15 +306,15 @@ function TabletEstimateForm() {
                             </div>
                             <div className="tb-row">
                                 <div className="tb-lbl">첨부파일</div>
-                                <div className="tb-inp" style={{flex:2}}>
-                                    <input type="text" value={(formData.attachment || '').split('/').pop().replace(/^[^_]*_/, '')} readOnly placeholder="파일을 선택하세요" />
+                                <div className="tb-inp" style={{flex:2,overflow:'hidden'}}>
+                                    <input type="text" value={(formData.attachment || '')} readOnly placeholder="파일을 선택하세요" style={{textOverflow:'ellipsis'}} />
                                 </div>
                                 <input 
                                     type="file" 
                                     id="attachment-input" 
                                     style={{display: 'none'}}
                                     onChange={handleAttachmentChange}
-                                    
+                                    multiple
                                 />
                                 <button className="tb-btn-action" onClick={handleAttachmentClick}>첨부하기</button>
                             </div>
@@ -962,6 +964,12 @@ function TabletEstimateForm() {
                                 fd.append('body', emailBody)
                                 if (manager?.businessCardImage) {
                                     fd.append('businessCardImage', manager.businessCardImage)
+                                }
+                                if (manager?.attachmentFile) {
+                                    fd.append('managerAttachment', manager.attachmentFile)
+                                }
+                                if (attachmentFile?.length) {
+                                    attachmentFile.forEach(f => fd.append('extraFiles', f))
                                 }
                                 const pdfDate = formData.date ? formData.date.slice(2).replace(/-/g, '.') : ''
                                 fd.append('file', pdfBlob, `${formData.clientName || '업체'}_${formData.productName || '제품'} 견적서_${pdfDate}.pdf`)

@@ -310,6 +310,12 @@ function QuoteModal({formData, products, vxProducts, managers, onClose, readOnly
                                     if (manager?.businessCardImage) {
                                         fd.append('businessCardImage', manager.businessCardImage)
                                     }
+                                    if (manager?.attachmentFile) {
+                                        fd.append('managerAttachment', manager.attachmentFile)
+                                    }
+                                    if (formData.attachments?.length) {
+                                        formData.attachments.forEach(p => fd.append('extraAttachPaths', p))
+                                    }
                                     const pdfDate = formData.date ? formData.date.slice(2).replace(/-/g, '.') : ''
                                     fd.append('file', pdfBlob, `${formData.clientCompany || '업체'}_${formData.productName || '제품'} 견적서_${pdfDate}.pdf`)
                                     const res = await fetch(import.meta.env.VITE_API_URL + '/api/email/send', {method: 'POST', body: fd})
@@ -592,7 +598,7 @@ function ViewModal({formData, onClose, onQuote}) {
 function EstimateForm() {
     const initialFormData = {
         date: new Date().toISOString().slice(0,10).replace(/-/g,'.'),
-        manager: '', managerName: '', department: '', companyPhone: '', mobilePhone: '', email: '', companyAddress: '', attachment: '',
+        manager: '', managerName: '', department: '', companyPhone: '', mobilePhone: '', email: '', companyAddress: '', attachment: '', attachments: [],
         clientCompany: '', clientDepartment: '', clientManager: '', clientPhone: '', clientMobile: '', clientEmail: '', businessCard: '',
         installDate: new Date().toISOString().slice(0,10).replace(/-/g,'.'), installPeriod: '1일', installLocation: '', installDetailLocation: '', etcContent: '',
         productName: '', unitPrice: 0, productImage: '', productSize: '', pixel: '', brightness: '', power: '', resolution: '',
@@ -709,15 +715,21 @@ function EstimateForm() {
     const fileInputRef = useRef(null)
     const businessCardRef = useRef(null)
     const handleFileUpload = async (e) => {
-        const file = e.target.files[0]
-        if (!file) return
-        const fd = new FormData()
-        fd.append('file', file)
-        try {
-            const res = await fetch(import.meta.env.VITE_API_URL + '/api/products/upload', {method: 'POST', body: fd})
-            const data = await res.json()
-            if (data.success) setFormData(prev => ({...prev, attachment: data.data}))
-        } catch (err) { console.error('Upload failed:', err) }
+        const files = Array.from(e.target.files)
+        if (!files.length) return
+        if (files.length > 3) { alert('첨부파일은 최대 3개까지 가능합니다.'); e.target.value = ''; return }
+        const uploaded = []
+        for (const file of files) {
+            const fd = new FormData()
+            fd.append('file', file)
+            try {
+                const res = await fetch(import.meta.env.VITE_API_URL + '/api/products/upload', {method: 'POST', body: fd})
+                const data = await res.json()
+                if (data.success) uploaded.push(data.data)
+            } catch (err) { console.error('Upload failed:', err) }
+        }
+        setFormData(prev => ({...prev, attachments: uploaded}))
+        e.target.value = ''
     }
     const handleBusinessCard = async (e) => {
         const file = e.target.files[0]
@@ -839,10 +851,10 @@ function EstimateForm() {
                             </div>
                             <div className="form-row file-row">
                                 <div className="form-label" style={labelCyan}>첨부파일</div>
-                                <div className="form-input file-input">
-                                    <input type="text" value={((formData.attachment || '').split('/').pop().replace(/^[^_]*_/, ''))} readOnly/>
+                                <div className="form-input file-input" style={{overflow:'hidden'}}>
+                                    <input type="text" readOnly value={(formData.attachments||[]).map(a=>a.split('/').pop().replace(/^[^_]*_/,'')).join(', ') || ''} placeholder="파일을 선택하세요" />
                                     <button className="attach-btn" onClick={() => fileInputRef.current.click()}>첨부하기</button>
-                                    <input type="file" ref={fileInputRef} style={{display:'none'}} onChange={handleFileUpload}/>
+                                    <input type="file" ref={fileInputRef} style={{display:'none'}} multiple onChange={handleFileUpload}/>
                                 </div>
                             </div>
                         </div>

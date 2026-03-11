@@ -31,7 +31,10 @@ public class EmailController {
             @RequestParam(defaultValue = "LED 견적서") String subject,
             @RequestParam(defaultValue = "") String body,
             @RequestParam(required = false) String businessCardImage,
-            @RequestParam(required = false) MultipartFile file) {
+            @RequestParam(required = false) String managerAttachment,
+            @RequestParam(required = false) MultipartFile file,
+            @RequestParam(required = false) List<MultipartFile> extraFiles,
+            @RequestParam(required = false) List<String> extraAttachPaths) {
         try {
             Map<String, String> settings = settingRepository.findAll().stream()
                     .collect(Collectors.toMap(Setting::getSettingKey, Setting::getSettingValue));
@@ -98,6 +101,35 @@ public class EmailController {
                 File attachFile = new File(defaultAttachment.startsWith("/") ? defaultAttachment.substring(1) : defaultAttachment);
                 if (attachFile.exists()) {
                     helper.addAttachment(attachFile.getName().replaceFirst("^[^_]*_", ""), attachFile);
+                }
+            }
+
+            // 담당자별 첨부파일
+            if (managerAttachment != null && !managerAttachment.isEmpty()) {
+                File mFile = new File(managerAttachment.startsWith("/") ? managerAttachment.substring(1) : managerAttachment);
+                if (mFile.exists()) {
+                    helper.addAttachment(mFile.getName().replaceFirst("^[^_]*_", ""), mFile);
+                }
+            }
+
+            // 추가 첨부파일 (MultipartFile)
+            if (extraFiles != null) {
+                for (MultipartFile ef : extraFiles) {
+                    if (ef != null && !ef.isEmpty()) {
+                        helper.addAttachment(ef.getOriginalFilename(), ef);
+                    }
+                }
+            }
+
+            // 추가 첨부파일 (서버 경로)
+            if (extraAttachPaths != null) {
+                for (String path : extraAttachPaths) {
+                    if (path != null && !path.isEmpty()) {
+                        File ef = new File(path.startsWith("/") ? path.substring(1) : path);
+                        if (ef.exists()) {
+                            helper.addAttachment(ef.getName().replaceFirst("^[^_]*_", ""), ef);
+                        }
+                    }
                 }
             }
 
