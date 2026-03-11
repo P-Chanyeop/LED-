@@ -730,21 +730,28 @@ function AdminPage() {
     } catch (e) { console.error('Failed to delete estimates:', e) }
   }
 
+  const [estPage, setEstPage] = useState(1)
+  const estPerPage = 10
+  const sortedEstimates = [...filteredEstimates].sort((a, b) => b.id - a.id)
+  const estTotalPages = Math.max(1, Math.ceil(sortedEstimates.length / estPerPage))
+  const pagedEstimates = sortedEstimates.slice((estPage - 1) * estPerPage, estPage * estPerPage)
+
   const renderEstimates = () => (
     <div className="admin-section">
       <h2>등록 자료 보기</h2>
       <div className="search-bar" style={{display:'flex',gap:'8px',alignItems:'center',flexWrap:'wrap'}}>
-        <input type="date" value={estDateFrom} onChange={e => setEstDateFrom(e.target.value)} style={{padding:'6px 10px',border:'1px solid #ddd',borderRadius:'4px',fontFamily:"'Malgun Gothic','맑은 고딕',sans-serif"}} />
+        <input type="date" value={estDateFrom} onChange={e => { setEstDateFrom(e.target.value); setEstPage(1) }} style={{padding:'6px 10px',border:'1px solid #ddd',borderRadius:'4px',fontFamily:"'Malgun Gothic','맑은 고딕',sans-serif",width:'130px',flex:'none'}} />
         <span>~</span>
-        <input type="date" value={estDateTo} onChange={e => setEstDateTo(e.target.value)} style={{padding:'6px 10px',border:'1px solid #ddd',borderRadius:'4px',fontFamily:"'Malgun Gothic','맑은 고딕',sans-serif"}} />
-        <input type="text" placeholder="이지텍 담당자 / 업체 담당자 / 업체명 검색" value={estSearchText} onChange={e => setEstSearchText(e.target.value)} />
+        <input type="date" value={estDateTo} onChange={e => { setEstDateTo(e.target.value); setEstPage(1) }} style={{padding:'6px 10px',border:'1px solid #ddd',borderRadius:'4px',fontFamily:"'Malgun Gothic','맑은 고딕',sans-serif",width:'130px',flex:'none'}} />
+        <input type="text" placeholder="이지텍 담당자 / 업체 담당자 / 업체명 검색" value={estSearchText} onChange={e => { setEstSearchText(e.target.value); setEstPage(1) }} />
         <button className="btn-cyan" onClick={() => setEstSearchText(estSearchText)}>검색</button>
-        <button className="btn-cyan" style={{background:'#dc3545',marginLeft:'8px'}} onClick={deleteSelectedEstimates}>선택 삭제 ({selectedEstIds.length})</button>
+        <button style={{background:'#dc3545',color:'white',border:'none',borderRadius:'4px',padding:'10px 20px',fontSize:'14px',fontWeight:500,cursor:'pointer',marginLeft:'8px'}} onClick={deleteSelectedEstimates}>선택 삭제 ({selectedEstIds.length})</button>
+        <button style={{background:'#333',color:'white',border:'none',borderRadius:'4px',padding:'10px 20px',fontSize:'14px',fontWeight:500,cursor:'pointer',marginLeft:'4px'}} onClick={async()=>{if(!estimates.length)return alert('삭제할 항목이 없습니다.');if(!window.confirm(`전체 ${estimates.length}건을 삭제하시겠습니까?`))return;try{await Promise.all(estimates.map(e=>fetch(`${API_BASE}/estimates/${e.id}`,{method:'DELETE'})));setSelectedEstIds([]);setEstPage(1);fetchEstimates()}catch(e){console.error(e)}}}>전체 삭제 ({estimates.length})</button>
       </div>
       <table className="data-table">
         <thead>
           <tr>
-            <th><input type="checkbox" checked={selectedEstIds.length === filteredEstimates.length && filteredEstimates.length > 0} onChange={toggleAllEst} /></th>
+            <th><input type="checkbox" checked={selectedEstIds.length === pagedEstimates.length && pagedEstimates.length > 0} onChange={() => setSelectedEstIds(prev => prev.length === pagedEstimates.length ? [] : pagedEstimates.map(e => e.id))} /></th>
             <th>날짜</th>
             <th>이지텍 담당자</th>
             <th>업체명</th>
@@ -759,7 +766,7 @@ function AdminPage() {
           </tr>
         </thead>
         <tbody>
-          {filteredEstimates.map(est => (
+          {pagedEstimates.map(est => (
             <tr key={est.id}>
               <td><input type="checkbox" checked={selectedEstIds.includes(est.id)} onChange={() => toggleEstId(est.id)} /></td>
               <td>{est.date}</td>
@@ -789,6 +796,13 @@ function AdminPage() {
           ))}
         </tbody>
       </table>
+      <div style={{display:'flex',justifyContent:'center',alignItems:'center',gap:'8px',marginTop:'16px'}}>
+        <button disabled={estPage<=1} onClick={()=>setEstPage(1)} style={{padding:'4px 10px',border:'1px solid #ddd',borderRadius:'4px',cursor:'pointer'}}>«</button>
+        <button disabled={estPage<=1} onClick={()=>setEstPage(p=>p-1)} style={{padding:'4px 10px',border:'1px solid #ddd',borderRadius:'4px',cursor:'pointer'}}>‹</button>
+        <span style={{fontSize:'14px'}}>{estPage} / {estTotalPages} ({sortedEstimates.length}건)</span>
+        <button disabled={estPage>=estTotalPages} onClick={()=>setEstPage(p=>p+1)} style={{padding:'4px 10px',border:'1px solid #ddd',borderRadius:'4px',cursor:'pointer'}}>›</button>
+        <button disabled={estPage>=estTotalPages} onClick={()=>setEstPage(estTotalPages)} style={{padding:'4px 10px',border:'1px solid #ddd',borderRadius:'4px',cursor:'pointer'}}>»</button>
+      </div>
     </div>
   )
 
