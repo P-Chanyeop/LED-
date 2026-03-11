@@ -227,18 +227,27 @@ function ViewModal({formData, onClose, onQuote}) {
                                             </div>
                                         </div>
                                         <div>
-                                            <div
-                                                className="modal-led-grid"
-                                                style={{
-                                                    gridTemplateColumns: `repeat(${formData.width}, ${panelW}px)`,
-                                                    gridTemplateRows: `repeat(${formData.height}, ${panelH}px)`,
-                                                    width: gridW,
-                                                    height: gridH,
-                                                }}
-                                            >
-                                                {Array.from({length: formData.totalPanels}).map((_, i) => (
-                                                    <div key={i} className="modal-led-panel"></div>
-                                                ))}
+                                            <div style={{position:'relative'}}>
+                                                <div
+                                                    className="modal-led-grid"
+                                                    style={{
+                                                        gridTemplateColumns: `repeat(${formData.width}, ${panelW}px)`,
+                                                        gridTemplateRows: `repeat(${formData.height}, ${panelH}px)`,
+                                                        width: gridW,
+                                                        height: gridH,
+                                                    }}
+                                                >
+                                                    {Array.from({length: formData.totalPanels}).map((_, i) => (
+                                                        <div key={i} className="modal-led-panel"></div>
+                                                    ))}
+                                                </div>
+                                                <svg style={{position:'absolute',top:0,left:0,width:'100%',height:'100%',pointerEvents:'none',overflow:'visible'}}>
+                                                    <defs><marker id="ahView" markerWidth="8" markerHeight="6" refX="1" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#3BC1CC"/></marker><marker id="ahViewR" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="8 0, 0 3, 8 6" fill="#3BC1CC"/></marker></defs>
+                                                    <line x1="2%" y1="98%" x2="98%" y2="2%" stroke="#3BC1CC" strokeWidth="3" markerStart="url(#ahViewR)" markerEnd="url(#ahView)"/>
+                                                </svg>
+                                                <div style={{position:'absolute',top:'50%',left:'50%',transform:'translate(-50%,-50%)',background:'#3BC1CC',borderRadius:'4px',padding:'4px 12px',whiteSpace:'nowrap'}}>
+                                                    <span style={{color:'white',fontWeight:'bold',fontSize:'18px'}}>{Math.round(Math.sqrt(Math.pow(Number(formData.ledSizeW)||0,2)+Math.pow(Number(formData.ledSizeH)||0,2))/25.4)}"</span>
+                                                </div>
                                             </div>
                                             <div className="modal-preview-h-dim" style={{width: gridW}}>
                                                 <div className="modal-preview-h-line">
