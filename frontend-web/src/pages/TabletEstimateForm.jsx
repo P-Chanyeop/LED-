@@ -184,12 +184,13 @@ function TabletEstimateForm() {
             }
             if (field === 'ledWidth' || field === 'ledHeight') {
                 const w = field === 'ledWidth' ? value : prev.ledWidth
-                const ht = field === 'ledHeight' ? value : prev.ledHeight
+                const ht = field === 'ledWidth' ? value : (field === 'ledHeight' ? value : prev.ledHeight)
                 const cp = products.find(pr => pr.name === prev.productName)
                 const [sW, sH] = (cp?.size || '600x337.5').split('x').map(Number)
                 const [rW, rH] = (cp?.resolution || '480x270').split('x').map(Number)
                 const maxPower = parseFloat((cp?.power || '75/25').split('/')[0])
                 updated.totalPanels = w * ht
+                if (field === 'ledWidth') updated.ledHeight = value
                 updated.ledSizeW = w * sW
                 updated.ledSizeH = Math.round(ht * sH)
                 updated.ledResolutionW = w * rW

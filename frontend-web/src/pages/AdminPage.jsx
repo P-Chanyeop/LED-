@@ -709,16 +709,44 @@ function AdminPage() {
     )
   }
 
+  const [selectedEstIds, setSelectedEstIds] = useState([])
+  const [estSearchText, setEstSearchText] = useState('')
+  const [estDateFrom, setEstDateFrom] = useState('')
+  const [estDateTo, setEstDateTo] = useState('')
+  const filteredEstimates = estimates.filter(est => {
+    if (!estSearchText.trim() && !estDateFrom && !estDateTo) return true
+    const q = estSearchText.trim().toLowerCase()
+    const nameMatch = !q || (est.manager || '').toLowerCase().includes(q) || (est.clientManager || '').toLowerCase().includes(q) || (est.customer || '').toLowerCase().includes(q)
+    const dateMatch = (!estDateFrom || est.date >= estDateFrom) && (!estDateTo || est.date <= estDateTo)
+    return nameMatch && dateMatch
+  })
+  const toggleEstId = (id) => setSelectedEstIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id])
+  const toggleAllEst = () => setSelectedEstIds(prev => prev.length === filteredEstimates.length ? [] : filteredEstimates.map(e => e.id))
+  const deleteSelectedEstimates = async () => {
+    if (selectedEstIds.length === 0) return alert('선택된 항목이 없습니다.')
+    if (!window.confirm(`${selectedEstIds.length}건을 삭제하시겠습니까?`)) return
+    try {
+      await Promise.all(selectedEstIds.map(id => fetch(`${API_BASE}/estimates/${id}`, { method: 'DELETE' })))
+      setSelectedEstIds([])
+      fetchEstimates()
+    } catch (e) { console.error('Failed to delete estimates:', e) }
+  }
+
   const renderEstimates = () => (
     <div className="admin-section">
       <h2>등록 자료 보기</h2>
-      <div className="search-bar">
-        <input type="text" placeholder="견적번호 또는 고객명 검색" />
-        <button className="btn-cyan">검색</button>
+      <div className="search-bar" style={{display:'flex',gap:'8px',alignItems:'center',flexWrap:'wrap'}}>
+        <input type="date" value={estDateFrom} onChange={e => setEstDateFrom(e.target.value)} style={{padding:'6px 10px',border:'1px solid #ddd',borderRadius:'4px',fontFamily:"'Malgun Gothic','맑은 고딕',sans-serif"}} />
+        <span>~</span>
+        <input type="date" value={estDateTo} onChange={e => setEstDateTo(e.target.value)} style={{padding:'6px 10px',border:'1px solid #ddd',borderRadius:'4px',fontFamily:"'Malgun Gothic','맑은 고딕',sans-serif"}} />
+        <input type="text" placeholder="이지텍 담당자 / 업체 담당자 / 업체명 검색" value={estSearchText} onChange={e => setEstSearchText(e.target.value)} />
+        <button className="btn-cyan" onClick={() => setEstSearchText(estSearchText)}>검색</button>
+        <button className="btn-cyan" style={{background:'#dc3545',marginLeft:'8px'}} onClick={deleteSelectedEstimates}>선택 삭제 ({selectedEstIds.length})</button>
       </div>
       <table className="data-table">
         <thead>
           <tr>
+            <th><input type="checkbox" checked={selectedEstIds.length === filteredEstimates.length && filteredEstimates.length > 0} onChange={toggleAllEst} /></th>
             <th>날짜</th>
             <th>이지텍 담당자</th>
             <th>업체명</th>
@@ -733,8 +761,9 @@ function AdminPage() {
           </tr>
         </thead>
         <tbody>
-          {estimates.map(est => (
+          {filteredEstimates.map(est => (
             <tr key={est.id}>
+              <td><input type="checkbox" checked={selectedEstIds.includes(est.id)} onChange={() => toggleEstId(est.id)} /></td>
               <td>{est.date}</td>
               <td>{est.manager}</td>
               <td>{est.customer}</td>

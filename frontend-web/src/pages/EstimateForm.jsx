@@ -688,7 +688,8 @@ function EstimateForm() {
             }
             if (field === 'width' || field === 'height') {
                 const w = field === 'width' ? parseInt(value) || 0 : prev.width
-                const h = field === 'height' ? parseInt(value) || 0 : prev.height
+                const h = field === 'width' ? parseInt(value) || 0 : (field === 'height' ? parseInt(value) || 0 : prev.height)
+                if (field === 'width') newData.height = parseInt(value) || 0
                 const cp = products.find(pr => pr.name === prev.productName)
                 const [sW, sH] = (cp?.size || '600x337.5').split('x').map(Number)
                 const [rW, rH] = (cp?.resolution || '480x270').split('x').map(Number)
