@@ -54,7 +54,7 @@ function QuoteModal({formData, products, vxProducts, managers, onClose, readOnly
                             <div className="modal-row-group"><div className="modal-row"><div className="modal-label">회사 연락처</div><div className="modal-value modal-value-cyan">{formData.companyPhone}</div></div><div className="modal-row"><div className="modal-label">핸드폰 번호</div><div className="modal-value modal-value-cyan">{formData.mobilePhone}</div></div></div>
                             <div className="modal-row full"><div className="modal-label">E-mail</div><div className="modal-value modal-value-cyan">{formData.email}</div></div>
                             <div className="modal-row full"><div className="modal-label">회사 주소</div><div className="modal-value modal-value-cyan">{formData.companyAddress}</div></div>
-                            <div className="modal-row full"><div className="modal-label">첨부파일</div><div className="modal-value modal-value-cyan">{(formData.attachment||'').split('/').pop().replace(/^[^_]*_/,'')}</div></div>
+                            <div className="modal-row full"><div className="modal-label">첨부파일</div><div className="modal-value modal-value-cyan">{(() => { const base = (formData.attachment||'').split('/').pop().replace(/^[^_]*_/,''); const extra = (formData.attachments||[]).length; if (!base && !extra) return ''; if (!base && extra) return (formData.attachments||[]).map(a=>a.split('/').pop().replace(/^[^_]*_/,'')).join(', '); return extra > 0 ? `${base} 외 ${extra}건` : base })()}</div></div>
                             <div className="modal-divider"></div>
                             <div className="modal-row-group"><div className="modal-row"><div className="modal-label modal-label-blue">예상 설치날짜</div><div className="modal-value modal-value-blue">{formData.installDate}</div></div><div className="modal-row"><div className="modal-label modal-label-blue">예상 설치기간</div><div className="modal-value modal-value-blue">{formData.installPeriod}</div></div></div>
                             <div className="modal-row-group"><div className="modal-row"><div className="modal-label modal-label-blue">설치 장소</div><div className="modal-value modal-value-blue">{formData.installLocation}</div></div><div className="modal-row"><div className="modal-label modal-label-blue">세부 장소</div><div className="modal-value modal-value-blue">{formData.installDetailLocation}</div></div></div>
@@ -415,7 +415,7 @@ function ViewModal({formData, onClose, onQuote}) {
                                 <div className="modal-label">첨부파일</div>
                                 <div className="modal-value modal-value-cyan">
                                     <a href="#"
-                                       style={{color: '#25CAD2', textDecoration: 'underline'}}>{(formData.attachment || '').split('/').pop().replace(/^[^_]*_/, '')}</a>
+                                       style={{color: '#25CAD2', textDecoration: 'underline'}}>{(() => { const base = (formData.attachment||'').split('/').pop().replace(/^[^_]*_/,''); const extra = (formData.attachments||[]).length; if (!base && !extra) return ''; if (!base && extra) return (formData.attachments||[]).map(a=>a.split('/').pop().replace(/^[^_]*_/,'')).join(', '); return extra > 0 ? `${base} 외 ${extra}건` : base })()}</a>
                                 </div>
                             </div>
                             <div className="modal-divider"></div>
@@ -648,9 +648,17 @@ function EstimateForm() {
             .catch(e => console.error('Failed to fetch settings:', e))
     }, [])
     const handleManagerSelect = (name) => {
-        if (!name) { setFormData(prev => ({...prev, manager: '', managerName: '', department: '', companyPhone: '', mobilePhone: '', email: '', companyAddress: ''})); return }
+        if (!name) { setFormData(prev => ({...prev, manager: '', managerName: '', department: '', companyPhone: '', mobilePhone: '', email: '', companyAddress: '', attachment: '', attachments: []})); return }
         const m = managers.find(mg => mg.name === name)
-        if (m) setFormData(prev => ({...prev, manager: m.name, managerName: m.name, department: m.department, companyPhone: m.phone, mobilePhone: m.mobile, email: m.email, companyAddress: m.address}))
+        if (m) setFormData(prev => ({...prev, manager: m.name, managerName: m.name, department: m.department, companyPhone: m.phone, mobilePhone: m.mobile, email: m.email, companyAddress: m.address, attachment: m.attachmentFile || '', attachments: []}))
+    }
+    const getAttachmentDisplay = () => {
+        const base = (formData.attachment || '').split('/').pop().replace(/^[^_]*_/, '')
+        const extraCount = (formData.attachments || []).length
+        if (!base && !extraCount) return ''
+        if (!base && extraCount) return (formData.attachments || []).map(a => a.split('/').pop().replace(/^[^_]*_/, '')).join(', ')
+        if (extraCount > 0) return `${base} 외 ${extraCount}건`
+        return base
     }
     const handleChange = (field, value) => {
         setFormData(prev => {
@@ -852,7 +860,7 @@ function EstimateForm() {
                             <div className="form-row file-row">
                                 <div className="form-label" style={labelCyan}>첨부파일</div>
                                 <div className="form-input file-input" style={{overflow:'hidden'}}>
-                                    <input type="text" readOnly value={(formData.attachments||[]).map(a=>a.split('/').pop().replace(/^[^_]*_/,'')).join(', ') || ''} placeholder="파일을 선택하세요" />
+                                    <input type="text" readOnly value={getAttachmentDisplay()} placeholder="파일을 선택하세요" />
                                     <button className="attach-btn" onClick={() => fileInputRef.current.click()}>첨부하기</button>
                                     <input type="file" ref={fileInputRef} style={{display:'none'}} multiple onChange={handleFileUpload}/>
                                 </div>

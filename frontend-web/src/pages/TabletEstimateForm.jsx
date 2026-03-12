@@ -81,9 +81,20 @@ function TabletEstimateForm() {
             managerPhone: manager.phone,
             managerMobile: manager.mobile,
             managerEmail: manager.email,
-            companyAddress: manager.address
+            companyAddress: manager.address,
+            attachment: manager.attachmentFile ? manager.attachmentFile.split('/').pop().replace(/^[^_]*_/, '') : ''
         }))
+        setAttachmentFile([])
         setShowManagerDropdown(false)
+    }
+
+    const getAttachmentDisplay = () => {
+        const base = (formData.attachment || '').split('/').pop().replace(/^[^_]*_/, '')
+        const extraCount = attachmentFile.length
+        if (!base && !extraCount) return ''
+        if (!base && extraCount) return attachmentFile.map(f => f.name).join(', ')
+        if (extraCount > 0) return `${base} 외 ${extraCount}건`
+        return base
     }
 
     const handleAttachmentClick = () => {
@@ -95,7 +106,6 @@ function TabletEstimateForm() {
         if (files.length > 5) { alert('첨부파일은 최대 5개까지 가능합니다.'); e.target.value = ''; return }
         if (files.length) {
             setAttachmentFile(files)
-            h('attachment', files.map(f => f.name).join(', '))
         }
         e.target.value = ''
     }
@@ -305,7 +315,7 @@ function TabletEstimateForm() {
                             <div className="tb-row">
                                 <div className="tb-lbl">첨부파일</div>
                                 <div className="tb-inp" style={{flex:2,overflow:'hidden'}}>
-                                    <input type="text" value={(formData.attachment || '')} readOnly placeholder="파일을 선택하세요" style={{textOverflow:'ellipsis'}} />
+                                    <input type="text" value={getAttachmentDisplay()} readOnly placeholder="파일을 선택하세요" style={{textOverflow:'ellipsis'}} />
                                 </div>
                                 <input 
                                     type="file" 
@@ -560,7 +570,7 @@ function TabletEstimateForm() {
                             </div>
                             <div className="tb-row"><div className="tb-lbl">E-mail</div><div className="tb-val" style={{flex:3}}>{formData.managerEmail}</div></div>
                             <div className="tb-row"><div className="tb-lbl">회사 주소</div><div className="tb-val" style={{flex:3}}>{formData.companyAddress}</div></div>
-                            <div className="tb-row"><div className="tb-lbl">첨부파일</div><div className="tb-val" style={{flex:3}}>{(formData.attachment || '').split('/').pop().replace(/^[^_]*_/, '')}</div></div>
+                            <div className="tb-row"><div className="tb-lbl">첨부파일</div><div className="tb-val" style={{flex:3}}>{getAttachmentDisplay()}</div></div>
 
                             <div className="tb-divider"></div>
 
@@ -666,7 +676,7 @@ function TabletEstimateForm() {
                                 <div className="tb-row"><div className="tb-lbl">회사 연락처</div><div className="tb-val"><span style={{fontSize:'1.5vw'}}>{formData.managerPhone}</span></div><div className="tb-lbl">핸드폰 번호</div><div className="tb-val"><span style={{fontSize:'1.5vw'}}>{formData.managerMobile}</span></div></div>
                                 <div className="tb-row"><div className="tb-lbl">E-mail</div><div className="tb-val" style={{flex:3}}>{formData.managerEmail}</div></div>
                                 <div className="tb-row"><div className="tb-lbl">회사 주소</div><div className="tb-val" style={{flex:3}}>{formData.companyAddress}</div></div>
-                                <div className="tb-row"><div className="tb-lbl">첨부파일</div><div className="tb-val" style={{flex:3}}>{(formData.attachment||'').split('/').pop().replace(/^[^_]*_/,'')}</div></div>
+                                <div className="tb-row"><div className="tb-lbl">첨부파일</div><div className="tb-val" style={{flex:3}}>{getAttachmentDisplay()}</div></div>
                                 <div className="tb-divider"></div>
                                 <div className="tb-row"><div className="tb-lbl tb-lbl--blue">예상 설치날짜</div><div className="tb-val">{formData.installDate.replace(/^(\d{4})-(\d{2})-(\d{2})$/,(m,y,mo,d)=>`${y.slice(2)}.${mo}.${d}`)}</div><div className="tb-lbl tb-lbl--blue">예상 설치기간</div><div className="tb-val">{formData.installPeriod}</div></div>
                                 <div className="tb-row"><div className="tb-lbl tb-lbl--blue">설치 장소</div><div className="tb-val">{formData.installLocation}</div><div className="tb-lbl tb-lbl--blue">세부 장소</div><div className="tb-val">{formData.installDetail}</div></div>
